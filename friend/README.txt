@@ -20,10 +20,8 @@ The first table is where the details of the users in the system are stored and r
 
 When a user sends a friend request by clicking on the Add as Friend button, this button will automatically change to Request Sent on successful sending of the request with an option to Cancel the sent request in case the user who sent the request wishes to stop the request.
 
-Once a user who has been sent a friend request logs into the system or accesses the system, a notification for the request will be shown 
-to this user from the top of the page with options to Accept the sent request or Decline the request depending on the user's choice of action.
+Once a user who has been sent a friend request logs into the system or accesses the system, a notification for the request will be shown to this user from the top of the page with options to Accept the sent request or Decline the request depending on the user's choice of action.
 
-If the user who has been sent a friend request chooses to accept the request, the request will be deleted from the Friends Request table 
-and be stored in the Confirmed Friends table and both the user who sent the request and the user who the request was sent to will now see each other in their friends list.
+If the user who has been sent a friend request chooses to accept the request, the request will be deleted from the Friends Request table and be stored in the Confirmed Friends table and both the user who sent the request and the user who the request was sent to will now see each other in their friends list.
 
 If a user who has been sent a friend request chooses to decline the request, the request will be deleted from the Friends Request table.
