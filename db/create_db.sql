@@ -9,3 +9,19 @@ CREATE TABLE public.user_mst (
 ;
 ALTER TABLE "public"."user_mst"
 	ADD COLUMN "id" serial NOT NULL
+
+CREATE TABLE "public"."friends" ( 
+	"requestor"	numeric(7,0) NULL,
+	"acceptor" 	numeric(7,0) NULL 
+	)
+ALTER TABLE "public"."friends"
+	ADD CONSTRAINT "fdk_user_mst"
+	FOREIGN KEY("requestor")
+	REFERENCES "public"."user_mst"("user_id")
+
+ALTER TABLE "public"."friends"
+	ADD CONSTRAINT "fk_user_mst"
+	FOREIGN KEY("requestor")
+	REFERENCES "public"."user_mst"("user_id")
+ALTER TABLE "public"."friends"
+	ADD CONSTRAINT "fk_user_mst"
