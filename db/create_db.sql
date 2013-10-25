@@ -7,3 +7,5 @@ CREATE TABLE public.user_mst (
     role     	varchar(100) NOT NULL 
     )
 ;
+ALTER TABLE "public"."user_mst"
+	ADD COLUMN "id" serial NOT NULL
