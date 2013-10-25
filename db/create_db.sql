@@ -15,12 +15,12 @@ CREATE TABLE "public"."friends" (
 	)
 
 ALTER TABLE "public"."friends"
-	ADD CONSTRAINT "fk_user_mst"
+	ADD CONSTRAINT "fk_user_mst_req"
 	FOREIGN KEY("requestor")
 	REFERENCES "public"."user_mst"("user_id")
 
 ALTER TABLE "public"."friends"
-	ADD CONSTRAINT "fk_user_mst_req"
-	FOREIGN KEY("requestor")
+	ADD CONSTRAINT "fk_user_mst_acc"
+	FOREIGN KEY("acceptor")
 	REFERENCES "public"."user_mst"("user_id")	
 	
