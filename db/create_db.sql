@@ -25,3 +25,8 @@ ALTER TABLE "public"."friends"
 	REFERENCES "public"."user_mst"("user_id")
 ALTER TABLE "public"."friends"
 	ADD CONSTRAINT "fk_user_mst"
+
+ALTER TABLE "public"."friends"
+	DROP CONSTRAINT "fdk_user_mst" CASCADE 
+	
+	
