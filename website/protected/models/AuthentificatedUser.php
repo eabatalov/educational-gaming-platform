@@ -7,11 +7,26 @@
  */
 class AuthentificatedUser extends User {
     
-    function __construct($id, $email, $name, $surname, $isActive,
+    protected function __construct($id, $email, $name, $surname, $isActive,
                             $userDesc, $role, $password) {
         parent::__construct($id, $email, $name, $surname, $isActive,
                             $userDesc, $role);
         $this->setPassword($password);
+    }
+
+    public static function create($email, $name, $surname, $isActive, $userDesc,
+                            $role, $password) {
+        return new AuthentificatedUser(0, $email, $name, $surname, $isActive,
+                $userDesc, $role, $password);
+    }
+
+    /*
+     * Almost for internal data provider usage and for testing purposes
+     */
+    public static function createWithId($id, $email, $name, $surname, $isActive,
+                                       $userDesc, $role, $password) {
+        return new AuthentificatedUser($id, $email, $name, $surname, $isActive,
+                $userDesc, $role, $password);
     }
 
     public function getPassword() {

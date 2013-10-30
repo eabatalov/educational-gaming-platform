@@ -9,7 +9,7 @@
  */
 class User {
     
-    function __construct($id, $email, $name, $surname, $isActive,
+    protected function __construct($id, $email, $name, $surname, $isActive,
                             $userDesc, $role) {
         $this->setId($id);
         $this->setEmail($email);
@@ -18,6 +18,21 @@ class User {
         $this->setIsActive($isActive);
         $this->setUserDesc($userDesc);
         $this->setRole($role);
+    }
+
+    public static function create($email, $name, $surname, $isActive,
+                            $userDesc, $role) {
+        return new User(0, $email, $name, $surname, $isActive,
+                        $userDesc, $role);
+    }
+
+    /*
+     * Almost for internal data provider usage and for testing purposes
+     */
+    public static function createWithId($id, $email, $name, $surname, $isActive,
+                            $userDesc, $role) {
+        return new User($id, $email, $name, $surname, $isActive,
+                        $userDesc, $role);
     }
 
     public function getId() {
@@ -48,7 +63,7 @@ class User {
         return $this->role;
     }
 
-    public function setId($id) {
+    private function setId($id) {
         assert(is_numeric($id));
         $this->id = $id;
     }
