@@ -1,7 +1,5 @@
 <?php
 
-namespace model;
-
 /**
  * Basic immutable user description.
  * Can be used, passed everywhere on the
@@ -11,8 +9,9 @@ namespace model;
  */
 class User {
     
-    function __construct($email, $name, $surname, $isActive,
+    function __construct($id, $email, $name, $surname, $isActive,
                             $userDesc, $role) {
+        $this->setId($id);
         $this->setEmail($email);
         $this->setName($name);
         $this->setSurname($surname);
@@ -49,6 +48,11 @@ class User {
         return $this->role;
     }
 
+    public function setId($id) {
+        assert(is_numeric($id));
+        $this->id = $id;
+    }
+
     protected function setEmail($email) {
         assert(is_string($email));
         $this->email = $email;
@@ -71,11 +75,6 @@ class User {
     protected function setUserDesc($userDesc) {
         assert(is_string($userDesc));
         $this->userDesc = $userDesc;
-    }
-
-    protected function setPassword($password) {
-        assert(is_string($password));
-        $this->password = $password;
     }
 
     protected function setRole($role) {

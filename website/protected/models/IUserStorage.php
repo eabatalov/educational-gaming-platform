@@ -1,6 +1,5 @@
 <?php
 
-namespace model;
 /**
  * Description of IUserStorage
  * Class which provides access to persistent storage of user information.
@@ -10,8 +9,9 @@ namespace model;
  */
 Interface IUserStorage {
     /*
+     * adds user to persistent storage, sets its id
      * @param user: instance of User class
-     * @param password: passwrod of new user
+     * @param password: password of new user
      * @returns: void
      */
     public function addUser($user, $password);
@@ -43,5 +43,5 @@ Interface IUserStorage {
      * @param authUser: instance of AuthentificatedUser to save
      * @returns TRUE if succeeded, FALSE otherwise
      */
-    public function saveUser($authUser);
+    public function saveAuthUser($authUser);
 }

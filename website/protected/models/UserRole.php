@@ -1,7 +1,5 @@
 <?php
 
-namespace model;
-
 /**
  * Description of UserRole
  *

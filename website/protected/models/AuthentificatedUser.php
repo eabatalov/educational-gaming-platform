@@ -1,7 +1,5 @@
 <?php
 
-namespace model;
-
 /**
  * This user was authorized on server and is current user,
  * Beeing him we are able to change info and set/get password.
@@ -9,9 +7,9 @@ namespace model;
  */
 class AuthentificatedUser extends User {
     
-    function __construct($email, $name, $surname, $isActive,
+    function __construct($id, $email, $name, $surname, $isActive,
                             $userDesc, $role, $password) {
-        parent::__construct($email, $name, $surname, $isActive,
+        parent::__construct($id, $email, $name, $surname, $isActive,
                             $userDesc, $role);
         $this->setPassword($password);
     }
@@ -33,7 +31,8 @@ class AuthentificatedUser extends User {
     }
 
     protected function setPassword($password) {
-        parent::setPassword($password);
+        assert(is_string($password));
+        $this->password = $password;
     }
 
     protected function setRole($role) {
