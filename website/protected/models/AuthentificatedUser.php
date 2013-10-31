@@ -7,59 +7,50 @@
  */
 class AuthentificatedUser extends User {
     
-    protected function __construct($id, $email, $name, $surname, $isActive,
-                            $userDesc, $role, $password) {
-        parent::__construct($id, $email, $name, $surname, $isActive,
-                            $userDesc, $role);
-        $this->setPassword($password);
-    }
-
-    public static function create($email, $name, $surname, $isActive, $userDesc,
-                            $role, $password) {
-        return new AuthentificatedUser(0, $email, $name, $surname, $isActive,
-                $userDesc, $role, $password);
-    }
-
     /*
-     * Almost for internal data provider usage and for testing purposes
+     * $id arguments is used for internal data provider and testing purposes
      */
-    public static function createWithId($id, $email, $name, $surname, $isActive,
-                                       $userDesc, $role, $password) {
-        return new AuthentificatedUser($id, $email, $name, $surname, $isActive,
-                $userDesc, $role, $password);
+    public function __construct($email, $name, $surname, $isActive,
+                            $userDesc, $role, $password, $id = NULL) {
+        parent::__construct($email, $name, $surname, $isActive,
+                            $userDesc, $role, $id);
+        $this->dsChangeTracking();
+        $this->setPassword($password);
+        $this->enChangeTracking();
     }
 
     public function getPassword() {
         return $this->password;
     }
 
-    protected function setEmail($email) {
-        parent::setEmail($email);
-    }
-
-    protected function setIsActive($isActive) {
-        parent::setIsActive($isActive);
-    }
-
-    protected function setName($name) {
-        parent::setName($name);
-    }
-
-    protected function setPassword($password) {
+    public function setPassword($password) {
         assert(is_string($password));
+        $this->valueChanged("password", $this->password, $password);
         $this->password = $password;
     }
 
-    protected function setRole($role) {
+    public function setEmail($email) {
+        parent::setEmail($email);
+    }
+
+    public function setIsActive($isActive) {
+        parent::setIsActive($isActive);
+    }
+
+    public function setName($name) {
+        parent::setName($name);
+    }
+
+    public function setRole($role) {
         parent::setRole($role);
     }
 
-    protected function setSurname($surname) {
+    public function setSurname($surname) {
         parent::setSurname($surname);
     }
 
-    protected function setUserDesc($userDesc) {
-        parent::setUserDesc($userDesc);
+    public function setDescription($userDesc) {
+        parent::setDescription($userDesc);
     }
 
     //Str[100]

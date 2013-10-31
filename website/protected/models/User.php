@@ -7,32 +7,25 @@
  * To change user's info you need his AuthentificatedUser instance,
  * @author eugene
  */
-class User {
-    
-    protected function __construct($id, $email, $name, $surname, $isActive,
-                            $userDesc, $role) {
-        $this->setId($id);
+class User extends ModelObject {
+
+    /*
+    * Almost for internal data provider usage and for testing purposes
+    */
+    public function __construct($email, $name, $surname, $isActive,
+                            $userDesc, $role, $id = NULL) {
+        parent::__construct();
+        $this->dsChangeTracking();
+        if ($id != NULL) {
+            $this->setId($id);
+        }
         $this->setEmail($email);
         $this->setName($name);
         $this->setSurname($surname);
         $this->setIsActive($isActive);
-        $this->setUserDesc($userDesc);
+        $this->setDescription($userDesc);
         $this->setRole($role);
-    }
-
-    public static function create($email, $name, $surname, $isActive,
-                            $userDesc, $role) {
-        return new User(0, $email, $name, $surname, $isActive,
-                        $userDesc, $role);
-    }
-
-    /*
-     * Almost for internal data provider usage and for testing purposes
-     */
-    public static function createWithId($id, $email, $name, $surname, $isActive,
-                            $userDesc, $role) {
-        return new User($id, $email, $name, $surname, $isActive,
-                        $userDesc, $role);
+        $this->enChangeTracking();
     }
 
     public function getId() {
@@ -55,8 +48,8 @@ class User {
         return $this->isActive;
     }
 
-    public function getUserDesc() {
-        return $this->userDesc;
+    public function getDescription() {
+        return $this->description;
     }
 
     public function getRole() {
@@ -65,35 +58,42 @@ class User {
 
     private function setId($id) {
         assert(is_numeric($id));
+        $this->valueChanged("id", $this->id, $id);
         $this->id = $id;
     }
 
     protected function setEmail($email) {
         assert(is_string($email));
+        $this->valueChanged("email", $this->email, $email);
         $this->email = $email;
     }
 
     protected function setName($name) {
         assert(is_string($name));
+        $this->valueChanged("name", $this->name, $name);
         $this->name = $name;
     }
 
     protected function setSurname($surname) {
         assert(is_string($surname));
+        $this->valueChanged("surname", $this->surname, $surname);
         $this->surname = $surname;
     }
 
     protected function setIsActive($isActive) {
+        $this->valueChanged("isActive", $this->isActive, $isActive);
         $this->isActive = $isActive;
     }
 
-    protected function setUserDesc($userDesc) {
+    protected function setDescription($userDesc) {
         assert(is_string($userDesc));
-        $this->userDesc = $userDesc;
+        $this->valueChanged("description", $this->description, $userDesc);
+        $this->description = $userDesc;
     }
 
     protected function setRole($role) {
         assert($role instanceof UserRole);
+        $this->valueChanged("role", $this->role, $role);
         $this->role = $role;
     }
 
@@ -108,7 +108,7 @@ class User {
     //Bool
     private $isActive;
     //Str[500]
-    private $userDesc;
+    private $description;
     //UserRole
     private $role;    
 }

@@ -7,11 +7,16 @@
  * To change Customer's info you need his AuthentificatedCustomer instance,
  * @author eugene
  */
-class Customer {
+class Customer extends ModelObject {
 
     function __construct($user, $friends) {
+        parent::__construct();
+        $this->user == NULL;
+        $this->friends == NULL;
+        $this->dsChangeTracking();
         $this->setUser($user);
         $this->setFriends($friends);
+        $this->enChangeTracking();
     }
 
     /*
@@ -27,12 +32,15 @@ class Customer {
      */
     private function setUser($user) {
         assert($user instanceof User);
+        $this->valueChanged("userId",
+                $this->getUser() != NULL ? $this->getUser()->getId() : $user->getId(),
+                $user->getId());
         $this->user = $user;
     }
 
     /*
      * get immutable array of customer's friends
-     * @returns: array(Cistomer)
+     * @returns: array(Customer)
      */
     public function getFriends() {
         //TODO return immutable iterator here
@@ -44,7 +52,11 @@ class Customer {
      * @returns: nothing
      */
     protected function setFriends($friends) {
-        $this->friends = array();
+        assert(is_array($friends));
+        if ($this->friends != NULL) {
+            foreach ($this->friends as $friend)
+                $this->delFriend($friend);
+        }
         foreach ($friends as $friend)
             $this->addFriend($friend);
     }
@@ -55,6 +67,9 @@ class Customer {
     protected function addFriend($friend) {
         assert($friend instanceof Customer);
         assert($friend->getUser()->getId() != $this->getUser()->getId());
+        $this->valueChanged("friendId" . strval($friend->getUser()->getId()),
+                ModelChangeRecord::REMOVED, ModelChangeRecord::ADDED,
+                $friend->getUser()->getId());
         $this->friends[$friend->getUser()->getId()] = $friend;
     }
 
@@ -64,9 +79,12 @@ class Customer {
      */
     protected function delFriend($friend) {
         assert($friend instanceof Customer);
+        $this->valueChanged("friendId" . strval($friend->getUser()->getId()),
+                ModelChangeRecord::ADDED, ModelChangeRecord::REMOVED,
+                $friend->getUser()->getId());
         unset($this->friends[$friend->getUser()->getId()]);
-        
     }
+
     //User object
     private $user;
     //Array of Customer objects
