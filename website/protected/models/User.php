@@ -10,7 +10,8 @@
 class User extends ModelObject {
 
     /*
-    * Almost for internal data provider usage and for testing purposes
+    * @arg id: optional,
+    * almost for internal data provider usage and for testing purposes
     */
     public function __construct($email, $name, $surname, $isActive,
                             $userDesc, $role, $id = NULL) {
