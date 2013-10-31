@@ -8,7 +8,7 @@
 class AuthentificatedUser extends User {
     
     /*
-     * $id arguments is used for internal data provider and testing purposes
+     * @param id: optional, used for internal data provider and testing purposes
      */
     public function __construct($email, $name, $surname, $isActive,
                             $userDesc, $role, $password, $id = NULL) {
