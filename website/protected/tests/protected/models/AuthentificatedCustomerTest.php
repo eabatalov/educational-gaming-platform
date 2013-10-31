@@ -5,7 +5,7 @@
  */
 class AuthentificatedCustomerTest extends PHPUnit_Framework_TestCase {
 
-    protected function mkCustomer($id, $friends, &$user = NULL) {
+    protected function mkCustomer($id, $friends) {
         $user = new AuthentificatedUser($id . "@example.com",
                 "name" . $id, "surname" . $id, FALSE, $id,
                 new UserRole(UserRole::CUSTOMER),
@@ -23,7 +23,7 @@ class AuthentificatedCustomerTest extends PHPUnit_Framework_TestCase {
         $customer->addFriend($this->mkCustomer("3", array()));
         assert($customer->getFriends() ==
                 array(
-                    "1" => $this->mkCustomer("1", array()),
+                    "1" =>$this->mkCustomer("1", array()),
                     "2" => $this->mkCustomer("2", array()),
                     "3" => $this->mkCustomer("3", array()),
                 ));
@@ -50,7 +50,7 @@ class AuthentificatedCustomerTest extends PHPUnit_Framework_TestCase {
      * @covers AuthentificatedCustomer::addFriend
      * @covers AuthentificatedCustomer::delFriend
      */
-    public function testChangesTracking() {
+    public function testChangesTrackingAddDelFriend() {
         $friends = array(
             "1" => $this->mkCustomer("1", array()),
             "2" => $this->mkCustomer("2", array()),
@@ -60,6 +60,22 @@ class AuthentificatedCustomerTest extends PHPUnit_Framework_TestCase {
         $customer->delFriend($this->mkCustomer("1", array()));
         $customer->delFriend($this->mkCustomer("3", array()));
         $customer->delFriend($this->mkCustomer("2", array()));
-        //TODO play with add/delete here
+
+        $customer->addFriend($this->mkCustomer("10", array()));
+        $customer->addFriend($this->mkCustomer("11", array()));
+
+        foreach ($customer->getValueChanges() as $change) {
+            $field = $change->getField();
+
+            if ($field == AuthentificatedCustomer::CH_FRIENDS) {
+                assert($change->getOldVal() == $friends);
+                assert($change->getNewVal() == array(
+                    "10" => $this->mkCustomer("10", array()),
+                    "11" => $this->mkCustomer("11", array())
+                ), "Invalid change set: " . var_export($change->getNewVal(), true));
+            } else {
+                assert(FALSE, "Only friends should be changed");
+            }
+        }
     }
 }

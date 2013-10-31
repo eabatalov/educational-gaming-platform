@@ -59,42 +59,42 @@ class User extends ModelObject {
 
     private function setId($id) {
         assert(is_numeric($id));
-        $this->valueChanged("id", $this->id, $id);
+        $this->valueChanged(self::CH_ID, $this->id, $id);
         $this->id = $id;
     }
 
     protected function setEmail($email) {
         assert(is_string($email));
-        $this->valueChanged("email", $this->email, $email);
+        $this->valueChanged(self::CH_EMAIL, $this->email, $email);
         $this->email = $email;
     }
 
     protected function setName($name) {
         assert(is_string($name));
-        $this->valueChanged("name", $this->name, $name);
+        $this->valueChanged(self::CH_NAME, $this->name, $name);
         $this->name = $name;
     }
 
     protected function setSurname($surname) {
         assert(is_string($surname));
-        $this->valueChanged("surname", $this->surname, $surname);
+        $this->valueChanged(self::CH_SURNAME, $this->surname, $surname);
         $this->surname = $surname;
     }
 
     protected function setIsActive($isActive) {
-        $this->valueChanged("isActive", $this->isActive, $isActive);
+        $this->valueChanged(self::CH_ISACTIVE, $this->isActive, $isActive);
         $this->isActive = $isActive;
     }
 
     protected function setDescription($userDesc) {
         assert(is_string($userDesc));
-        $this->valueChanged("description", $this->description, $userDesc);
+        $this->valueChanged(self::CH_DESCR, $this->description, $userDesc);
         $this->description = $userDesc;
     }
 
     protected function setRole($role) {
         assert($role instanceof UserRole);
-        $this->valueChanged("role", $this->role, $role);
+        $this->valueChanged(self::CH_ROLE, $this->role, $role);
         $this->role = $role;
     }
 
@@ -111,5 +111,14 @@ class User extends ModelObject {
     //Str[500]
     private $description;
     //UserRole
-    private $role;    
+    private $role;
+    //ModelObject constants for changes supply
+    const CH_ID = 1;
+    const CH_EMAIL = 2;
+    const CH_NAME = 3;
+    const CH_SURNAME = 4;
+    const CH_ISACTIVE = 5;
+    const CH_DESCR = 6;
+    const CH_ROLE = 7;
+    const CH_LAST = 8;
 }

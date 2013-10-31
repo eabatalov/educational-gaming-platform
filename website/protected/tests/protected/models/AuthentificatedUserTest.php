@@ -82,7 +82,6 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
      * @covers All the change tracking setters of AuthentificatedUser class
      */
     public function testRealChangesTracking() {
-        //TODO play with fields assignments here
         $user = $this->mkUser();
 
         $oldEmail = $user->getEmail();
@@ -111,30 +110,32 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         $user->setRole($newRole);
 
         $changes = $user->getValueChanges();
-        //TODO need to share names of changes not to use hardcode everywhere
+        assert(!empty($changes), "Changes were made to the object");
+
         foreach ($changes as $change) {
             $field = $change->getField();
-            if ($field == "id") {
+
+            if ($field == AuthentificatedUser::CH_ID) {
                 assert(FALSE, "id shouldn't change");
-            } else if ($field == "name") {
+            } else if ($field == AuthentificatedUser::CH_NAME) {
                 assert($change->getOldVal() == $oldName &&
                         $change->getNewVal() == $newName);
-            } else if ($field == "surname") {
+            } else if ($field == AuthentificatedUser::CH_SURNAME) {
                 assert($change->getOldVal() == $oldSurname &&
                         $change->getNewVal() == $newSurname);
-            } else if ($field == "email") {
+            } else if ($field == AuthentificatedUser::CH_EMAIL) {
                 assert($change->getOldVal() == $oldEmail &&
                         $change->getNewVal() == $newEmail);
-            } else if ($field == "password") {
+            } else if ($field == AuthentificatedUser::CH_PASS) {
                 assert($change->getOldVal() == $oldPassword &&
                         $change->getNewVal() == $newPassword);
-            } else if ($field == "isActive") {
+            } else if ($field == AuthentificatedUser::CH_ISACTIVE) {
                 assert($change->getOldVal() == $oldIsActive &&
                         $change->getNewVal() == $newIsActive);
-            } else if ($field == "description") {
+            } else if ($field == AuthentificatedUser::CH_DESCR) {
                 assert($change->getOldVal() == $oldUserDesc &&
                         $change->getNewVal() == $newUserDesc);
-            } else if ($field == "role") {
+            } else if ($field == AuthentificatedUser::CH_ROLE) {
                 assert($change->getOldVal() == $oldRole &&
                         $change->getNewVal() == $newRole);
             } else {

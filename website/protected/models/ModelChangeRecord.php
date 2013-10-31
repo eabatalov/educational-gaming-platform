@@ -7,11 +7,10 @@
  */
 class ModelChangeRecord {
 
-    function __construct($field, $oldVal, $newVal, $arg = NULL) {
+    function __construct($field, $oldVal, $newVal) {
         $this->setField($field);
         $this->setOldVal($oldVal);
         $this->setNewVal($newVal);
-        $this->setArg($arg);
     }
 
     public function getField() {
@@ -38,21 +37,7 @@ class ModelChangeRecord {
         $this->newVal = $newVal;
     }
 
-    public function getArg() {
-        return $this->arg;
-    }
-
-    public function setArg($arg) {
-        $this->arg = $arg;
-    }
-
-    //special vals for collection elements
-    const ADDED = "ADDED";
-    const REMOVED = "REMOVED";
-
     private $field;
     private $oldVal;
     private $newVal;
-    //Optional argument which depends on field name
-    private $arg;
 }

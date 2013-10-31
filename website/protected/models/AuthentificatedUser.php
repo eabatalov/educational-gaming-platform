@@ -25,7 +25,7 @@ class AuthentificatedUser extends User {
 
     public function setPassword($password) {
         assert(is_string($password));
-        $this->valueChanged("password", $this->password, $password);
+        $this->valueChanged(self::CH_PASS, $this->password, $password);
         $this->password = $password;
     }
 
@@ -55,4 +55,6 @@ class AuthentificatedUser extends User {
 
     //Str[100]
     private $password;
+    //ModelObject constants for changes supply
+    const CH_PASS = parent::CH_LAST;
 }

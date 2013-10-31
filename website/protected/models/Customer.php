@@ -9,14 +9,39 @@
  */
 class Customer extends ModelObject {
 
-    function __construct($user, $friends) {
+    /*
+     * Create customer instance for $user which have
+     * friends $friends
+     * @param user: User object
+     * @param friends: array of Customer objects
+     */
+    function __construct($user, &$friends = array()) {
         parent::__construct();
-        $this->user == NULL;
-        $this->friends == NULL;
         $this->dsChangeTracking();
-        $this->setUser($user);
-        $this->setFriends($friends);
+        $this->setUser($user);        
+        $this->setFriends($this->mkFriendsArrayCanonical($friends));
         $this->enChangeTracking();
+    }
+
+    /*
+     * @param: array(Customer) of any form
+     * @returns: array(Customer->getUser()->getId() => Customer)
+     */
+    private function &mkFriendsArrayCanonical(&$friends) {
+        $canonicalArray = NULL;
+        foreach ($friends as $userIx => $friend) {
+            if ($userIx != $friend->getUser()->getId()) {
+                if ($canonicalArray == NULL) {
+                    $canonicalArray = array();
+                }
+                $canonicalArray[$friend->getUser()->getId()] = $friend;
+            }
+        }
+        if ($canonicalArray == NULL) {
+            return $friends;
+        } else {
+            return $canonicalArray;
+        }
     }
 
     /*
@@ -32,18 +57,14 @@ class Customer extends ModelObject {
      */
     private function setUser($user) {
         assert($user instanceof User);
-        $this->valueChanged("userId",
-                $this->getUser() != NULL ? $this->getUser()->getId() : $user->getId(),
-                $user->getId());
         $this->user = $user;
     }
 
     /*
-     * get immutable array of customer's friends
-     * @returns: array(Customer)
+     * get copy of array of customer's friends
+     * @returns: array(userID => Customer)
      */
     public function getFriends() {
-        //TODO return immutable iterator here
         return $this->friends;
     }
 
@@ -51,42 +72,39 @@ class Customer extends ModelObject {
      * @param friends: array of Customer objects which are friends
      * @returns: nothing
      */
-    protected function setFriends($friends) {
-        assert(is_array($friends));
-        if ($this->friends != NULL) {
-            foreach ($this->friends as $friend)
-                $this->delFriend($friend);
-        }
-        foreach ($friends as $friend)
-            $this->addFriend($friend);
+    private function setFriends(&$newFriends) {
+        assert(is_array($newFriends));
+        $this->valueChanged(self::CH_FRIENDS, $this->friends, $newFriends);
+        $this->friends =& $newFriends;
     }
 
     /*
      * @param friend: instance of Customer class
+     * @returns: nothing
      */
-    protected function addFriend($friend) {
+    protected function addFriend(&$friend) {
         assert($friend instanceof Customer);
         assert($friend->getUser()->getId() != $this->getUser()->getId());
-        $this->valueChanged("friendId" . strval($friend->getUser()->getId()),
-                ModelChangeRecord::REMOVED, ModelChangeRecord::ADDED,
-                $friend->getUser()->getId());
-        $this->friends[$friend->getUser()->getId()] = $friend;
+        $newFriends = $this->friends;
+        $newFriends[$friend->getUser()->getId()] = $friend;
+        $this->setFriends($newFriends);
     }
 
     /*
      * @param friend: Customer object to add as a friend
      * @returns: nothing
      */
-    protected function delFriend($friend) {
+    protected function delFriend(&$friend) {
         assert($friend instanceof Customer);
-        $this->valueChanged("friendId" . strval($friend->getUser()->getId()),
-                ModelChangeRecord::ADDED, ModelChangeRecord::REMOVED,
-                $friend->getUser()->getId());
-        unset($this->friends[$friend->getUser()->getId()]);
+        $newFriends = $this->friends;
+        unset($newFriends[$friend->getUser()->getId()]);
+        $this->setFriends($newFriends);
     }
 
     //User object
     private $user;
     //Array of Customer objects
     private $friends;
+    //ModelObject constants for changes supply
+    const CH_FRIENDS = 1;
 }

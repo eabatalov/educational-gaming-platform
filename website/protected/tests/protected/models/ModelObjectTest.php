@@ -35,4 +35,18 @@ class ModelObjectTest extends PHPUnit_Framework_TestCase {
             }
         }
     }
+
+    /**
+     * @covers ModelObject::valueChanged
+     * @covers ModelObject::getChanges
+     */
+    public function testValueChangedArrayStructure() {
+        $model = new ModelObject();
+        $model->valueChanged("foo", 1, 2);
+        $model->valueChanged("bar", 2, 3);
+        assert($model->getValueChanges() == array(
+            new ModelChangeRecord("foo", 1, 2),
+            new ModelChangeRecord("bar", 2, 3)
+        ));
+    }
 }

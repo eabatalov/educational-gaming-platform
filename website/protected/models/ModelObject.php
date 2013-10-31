@@ -31,27 +31,28 @@ class ModelObject extends CFormModel {
 
     /*
      * Call when value of field is changed
-     * @param field: string name of field which value is changed
+     * @param fieldId: 
      * @param oldVal:
      * @param newVal:
      * @returns: nothing
      */
-    public function valueChanged($fieldName, $oldVal, $newVal) {
+    public function valueChanged($fieldId, $oldVal, $newVal) {
         if ($this->disableTrackCnt > 0) {
             return;
         }
 
-        if (array_key_exists($fieldName, $this->getChanges())) {
-            $change = &$this->getChanges()[$fieldName];
+        if (array_key_exists($fieldId, $this->getChanges())) {
+            $change = $this->getChanges()[$fieldId];
             if ($newVal == $change->getOldVal()) {
-                unset($change);
+                //wired way to delete array elem in php
+                unset($this->getChanges()[$fieldId]);
             } else {
                 $change->setNewVal($newVal);
             }
         } else {
             if ($newVal != $oldVal) {
-                $this->getChanges()[$fieldName] =
-                    new ModelChangeRecord($fieldName, $oldVal, $newVal);
+                $this->getChanges()[$fieldId] =
+                    new ModelChangeRecord($fieldId, $oldVal, $newVal);
             }
         }
     }
@@ -64,7 +65,7 @@ class ModelObject extends CFormModel {
         return array_values($this->getChanges());
     }
 
-    private function getChanges() {
+    private function &getChanges() {
         if ($this->changes == NULL) {
             $this->changes = array();
         }
