@@ -1,0 +1,130 @@
+body {
+    background: #ededed;
+    font: 14px/1.6 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    text-align: center;   /* Just to center the form in the demo, otherwise not needed */
+}
+
+input[type=submit]::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+::-webkit-input-placeholder {
+    color: #888;
+}
+
+input:-moz-placeholder {
+    color: #888;
+}
+
+.search-form {
+    margin-top: 120px;
+    position: relative;
+    display: inline-block;
+    zoom: 1; /* ie7 hack for display:inline-block */
+    *display: inline;
+}
+
+.search-form.frame {
+    padding: 7px;
+    border: 1px solid #ccc;
+    background-color: #ededed;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f6f6f6), to(#d2d1d0)); /* Saf4+, Chrome */
+    background-image: -webkit-linear-gradient(top, #f6f6f6, #d2d1d0); /* Chrome 10+, Saf5.1+, iOS 5+ */
+    background-image:    -moz-linear-gradient(top, #f6f6f6, #d2d1d0); /* FF3.6 */
+    background-image:     -ms-linear-gradient(top, #f6f6f6, #d2d1d0); /* IE10 */
+    background-image:      -o-linear-gradient(top, #f6f6f6, #d2d1d0); /* Opera 11.10+ */
+    background-image:         linear-gradient(top, #f6f6f6, #d2d1d0);
+    -moz-box-shadow:    0 1px 1px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    box-shadow:         0 1px 1px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    -moz-background-clip:    padding;
+    -webkit-background-clip: padding-box;
+    background-clip:         padding-box;
+}
+
+.search-input {
+    width: 196px;
+    height: 20px;
+    padding: 6px 10px 6px 35px;
+    font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #333;
+    outline: none;
+    position: relative;
+    background-color: #fff;
+    background-position: 10px center;
+    background-repeat: no-repeat;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6Nzc1OEI1RTVFQTg0MTFFMDkxMzA4ODVBRDY1OTFGM0UiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6Nzc1OEI1RTZFQTg0MTFFMDkxMzA4ODVBRDY1OTFGM0UiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo3NzU4QjVFM0VBODQxMUUwOTEzMDg4NUFENjU5MUYzRSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo3NzU4QjVFNEVBODQxMUUwOTEzMDg4NUFENjU5MUYzRSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PrgRaKkAAAFKSURBVHjalJM/KIVRGMY/+uouLFIoJe5yBwajPxMSCotBNqWvSLLaKYsM4iqb0s1EtyhWkTJcbEaFDAZkIXX9Tj1Hb1/nKk/9Ou8533mf7z3/qpIkiYxaYRL6zFgJ9uAmCig2cResqbUagFFYgsO0QbXaQbgIJHvl4AAWQxXUQzE1vg230AiJWqd1OIcra+BKy6j/ompKxmwDTqFT/VXot0uYMJOTVLI3HYMv9d0GN1kDX96j1hnSg0r36rAGZcXf0d/6NHHGGrwrbjHrTMsl9Cgua4N/DU7MxF2oCRjsQ63iM7i3BstmYjtcwzz0wjRcwriZ0wYj9hjvYA62NJbV0VVSMxzBrLsv/irn4VUXpSGQ9KzvOTPmcursWyjAMUxBtzb1SRu2qc1234dMzkqc+tObnPMVyh+GHZhR/yOO/q8FHaV7+oUfAQYAuc4/puJw8KwAAAAASUVORK5CYII=);
+    border: 1px solid #ccc;
+    -moz-box-shadow:    inset 0 0 1px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.5);
+    -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.5);
+    box-shadow:         inset 0 0 1px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.5);
+    -moz-background-clip:    padding;
+    -webkit-background-clip: padding-box;
+    background-clip:         padding-box;
+}
+
+.search-btn {
+    margin-left: 3px;
+    width: 32px;
+    height: 33px;
+    color: #fff;
+    font: bold 12px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+    letter-spacing: 1px;
+    border: 1px solid #b9b9b9;    
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    background-color: #666;
+    -moz-box-shadow:    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow:         inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    -moz-background-clip:    padding;
+    -webkit-background-clip: padding-box;
+    background-clip:         padding-box;
+}
+
+.frame.rbtn .search-btn {
+    -moz-border-radius:    32px;
+    -webkit-border-radius: 32px;
+    border-radius:         32px;
+}
+
+.frame.inbtn .search-input {
+    padding-right: 45px;
+    width: 225px;
+}
+
+.frame.nobtn .search-input {
+    width: 235px;
+    padding-left: 35px;   
+}
+
+.frame.inbtn .search-btn {
+    position: absolute;
+    top: 7px;
+    right: 8px;
+}
+
+.search-form.frame.rlarge, .rlarge .search-input {
+    -moz-border-radius:    28px;
+    -webkit-border-radius: 28px;
+    border-radius:         28px;
+}
+
+.frame.inbtn.rlarge .search-btn, .noframe.inbtn.rlarge .search-btn {
+    -moz-border-radius:    0 28px 28px 0;
+    -webkit-border-radius: 0 28px 28px 0;
+    border-radius:         0 28px 28px 0;
+}
+
+.search-form.frame .search-btn {    
+    background-color: #1d83e2;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#86bdf0), to(#1560a6)); /* Saf4+, Chrome */
+    background-image: -webkit-linear-gradient(top, #86bdf0, #1560a6); /* Chrome 10+, Saf5.1+, iOS 5+ */
+    background-image:    -moz-linear-gradient(top, #86bdf0, #1560a6); /* FF3.6 */
+    background-image:     -ms-linear-gradient(top, #86bdf0, #1560a6); /* IE10 */
+    background-image:      -o-linear-gradient(top, #86bdf0, #1560a6); /* Opera 11.10+ */
+    background-image:         linear-gradient(top, #86bdf0, #1560a6);
+}
