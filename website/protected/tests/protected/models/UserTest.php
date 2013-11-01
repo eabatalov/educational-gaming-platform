@@ -5,38 +5,31 @@
  */
 class UserTest extends \PHPUnit_Framework_TestCase {
 
-    const EMAIL_SUFFIX = "@example.com";
+    const EMAIL_SUFFIX = "email@example.com";
     const NAME_SUFFIX = "name";
     const SURNAME_SUFFIX = "surname";
     const IS_ACTIVE = FALSE;
     const DESCR_SUFFIX = "descr";
     const ROLE = UserRole::CUSTOMER;
 
-    protected function mkUser($id_ = NULL, $email_ = NULL) {
-        $id = $id_ == NULL ? "0" : $id_;
-        $email = $email_ == NULL ? $id . UserTest::EMAIL_SUFFIX : $email_;
-        $name = $id . UserTest::NAME_SUFFIX;
-        $surname = $id . UserTest::SURNAME_SUFFIX;
-        $isActive = UserTest::IS_ACTIVE;
-        $userDesc = $id . UserTest::DESCR_SUFFIX;
-        $role = new UserRole(UserTest::ROLE);
+    protected function mkUser($id = "0", $email = self::EMAIL_SUFFIX) {
+        $fields = array(
+            "id" => $id,
+            "email" => $email
+        );
+        return $this->mkUserFromArray($fields);
+    }
+
+    protected function mkUserFromArray($fields) {
+        $id = array_key_exists("id", $fields) ? $fields['id'] : "0";
+        $email = array_key_exists("email", $fields) ? $fields['email'] : $id . self::EMAIL_SUFFIX;
+        $name = array_key_exists("name", $fields) ? $fields['name'] : $id . self::NAME_SUFFIX;
+        $surname = array_key_exists("surname", $fields) ? $fields['surname'] : $id . self::SURNAME_SUFFIX;
+        $isActive = array_key_exists("isActive", $fields) ? $fields['isActive'] : self::IS_ACTIVE;
+        $description = array_key_exists("description", $fields) ? $fields['description'] : $id . self::DESCR_SUFFIX;
+        $role = array_key_exists("role", $fields) ? $fields['role'] : self::ROLE;
         return new User($email, $name, $surname, $isActive,
-                            $userDesc, $role, $id);
-    }
-
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp() {
-    }
-
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown() {
-        
+                            $description, $role, $id);
     }
 
     /**
@@ -90,12 +83,45 @@ class UserTest extends \PHPUnit_Framework_TestCase {
      */
     public function testGetRole() {
         $id = "0";
-        assert($this->mkUser($id)->getRole() == new UserRole(UserTest::ROLE));
+        assert($this->mkUser($id)->getRole() == self::ROLE);
     }
 
     public function testChangesTracking() {
         $id = "0";
         $changes = $this->mkUser($id)->getValueChanges();
         assert(empty($changes));
+    }
+
+    /*
+     * @covers User::rules()
+     */
+    public function testValidation() {
+        assert($this->mkUser()->validate(),
+                var_export($this->mkUser(), true) .
+                var_export($this->mkUser()->getErrors(), true));
+
+        assert(!$this->mkUserFromArray(array("email" => ""))->validate(),
+                "empty email");
+        assert(!$this->mkUserFromArray(array("email" => "0"))->validate(),
+                "invalid email");
+        assert(!$this->mkUserFromArray(array("name" => ""))->validate(),
+                "empty name");
+        assert(!$this->mkUserFromArray(array("surname" => ""))->validate(),
+                "empty surname");
+        $str240 =
+            "12345678901234567890" . "12345678901234567890" .
+            "12345678901234567890" . "12345678901234567890" .
+            "12345678901234567890" . "12345678901234567890" .
+            "12345678901234567890" . "12345678901234567890" .
+            "12345678901234567890" . "12345678901234567890" .
+            "12345678901234567890" . "12345678901234567890";
+        assert(!$this->mkUserFromArray(array("name" => $str240))->validate(),
+                "too long name");
+        assert(!$this->mkUserFromArray(array("description" => $str240))->validate(),
+                "too long description");
+        assert(!$this->mkUserFromArray(array("isActive" => "No"))->validate(),
+                "isActive is not bool");
+        assert(!$this->mkUserFromArray(array("role" => "No"))->validate(),
+                "invalid type for role");
     }
 }

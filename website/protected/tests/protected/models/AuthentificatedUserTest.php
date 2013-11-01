@@ -14,25 +14,10 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         $surname = $id . UserTest::SURNAME_SUFFIX;
         $isActive = UserTest::IS_ACTIVE;
         $userDesc = $id . UserTest::DESCR_SUFFIX;
-        $role = new UserRole(UserTest::ROLE);
+        $role = UserTest::ROLE;
         $pass = $id . AuthentificatedUserTest::PASS_SUFFIX;
         return new AuthentificatedUser($email, $name, $surname, $isActive,
             $userDesc, $role, $pass, $id);
-    }
-
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp() {
-    }
-
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown() {
-        
     }
 
     /**
@@ -42,6 +27,16 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         $id = "0";
         assert($this->mkUser()->getPassword() ==
             $id . AuthentificatedUserTest::PASS_SUFFIX);
+    }
+
+     /**
+     * @covers AuthentificatedUser::setPassword
+     */
+    public function testSetPassword() {
+        $user = $this->mkUser();
+        $newPassword = "new_password";
+        $user->setPassword($newPassword);
+        assert($user->getPassword() == $newPassword);
     }
 
     /**
@@ -99,7 +94,7 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         $newPassword = $NEW_PREFIX . $oldPassword;
         $newIsActive = !$oldIsActive;
         $newUserDesc = $NEW_PREFIX . $oldUserDesc;
-        $newRole = new UserRole(($oldRole->getVal() + 1) % UserRole::LAST_ROLE);
+        $newRole = ($oldRole + 1) % UserRole::LAST_ROLE;
 
         $user->setEmail($newEmail);
         $user->setName($newName);
@@ -142,5 +137,26 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
                 assert(FALSE, "Unhandled change");
             }
         }
+    }
+
+    /*
+     * @covers AuthentificatedUser::rules()
+     */
+    public function testValidation() {
+        $str240 =
+            "12345678901234567890" . "12345678901234567890" .
+            "12345678901234567890" . "12345678901234567890" .
+            "12345678901234567890" . "12345678901234567890" .
+            "12345678901234567890" . "12345678901234567890" .
+            "12345678901234567890" . "12345678901234567890" .
+            "12345678901234567890" . "12345678901234567890";
+        $user = $this->mkUser();
+        assert($user->validate(), "Normal password" . var_export($this->mkUser(), true));
+
+        $user->setPassword("123");
+        assert(!$user->validate(), "Too short password");
+
+        $user->setPassword($str240);
+        assert(!$user->validate(), "Too long password");
     }
 }

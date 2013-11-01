@@ -53,7 +53,20 @@ class AuthentificatedUser extends User {
         parent::setDescription($userDesc);
     }
 
+    public function rules() {
+        $rules = parent::rules();
+        array_push($rules,
+            array("password" ,'required'),
+            array('password', 'length', 'min' => 6, 'max' => 100,
+                'encoding' => 'utf-8', 'allowEmpty' => FALSE)
+            //array('password_repeat', 'required', 'on'=>'register'),
+            //array('password', 'compare', 'compareAttribute'=>'password_repeat', 'on'=>'register'),
+        );
+        return $rules;
+    }
+
     //Str[100]
+    //TODO add more rules to password validation, add password confirmation
     private $password;
     //ModelObject constants for changes supply
     const CH_PASS = parent::CH_LAST;

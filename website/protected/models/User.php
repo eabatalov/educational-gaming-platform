@@ -58,25 +58,26 @@ class User extends ModelObject {
     }
 
     private function setId($id) {
+        /*
+         * id is not set by user, its validation can't be performed in
+         * this model object validation logic. So leave assert hear.
+         */
         assert(is_numeric($id));
         $this->valueChanged(self::CH_ID, $this->id, $id);
         $this->id = $id;
     }
 
     protected function setEmail($email) {
-        assert(is_string($email));
         $this->valueChanged(self::CH_EMAIL, $this->email, $email);
         $this->email = $email;
     }
 
     protected function setName($name) {
-        assert(is_string($name));
         $this->valueChanged(self::CH_NAME, $this->name, $name);
         $this->name = $name;
     }
 
     protected function setSurname($surname) {
-        assert(is_string($surname));
         $this->valueChanged(self::CH_SURNAME, $this->surname, $surname);
         $this->surname = $surname;
     }
@@ -87,30 +88,42 @@ class User extends ModelObject {
     }
 
     protected function setDescription($userDesc) {
-        assert(is_string($userDesc));
         $this->valueChanged(self::CH_DESCR, $this->description, $userDesc);
         $this->description = $userDesc;
     }
 
     protected function setRole($role) {
-        assert($role instanceof UserRole);
         $this->valueChanged(self::CH_ROLE, $this->role, $role);
         $this->role = $role;
     }
 
-    //Int
+    public function rules() {
+        return array(
+            array('email, name, surname, role', 'required'),
+            //Type checking
+            array('email, name, surname, description', 'type', 'type' => 'string'),
+            array('role', 'numerical', 'integerOnly' => TRUE),
+            array('isActive', 'boolean'),
+            //value checking
+            array('email, name, surname', 'length', 'min' => 1, 'max' => 50, 'encoding' => 'utf-8'),
+            array('description', 'length', 'min' => 0, 'max' => 200, 'encoding' => 'utf-8'),
+            array('email', 'email'),
+        );
+    }
+
+        //Int
     private $id;
     //Str[50]
     private $email;
-    //Str[25]
+    //Str[50]
     private $name;
-    //Str[25]
+    //Str[50]
     private $surname;
     //Bool
     private $isActive;
-    //Str[500]
+    //Str[200]
     private $description;
-    //UserRole
+    //int
     private $role;
     //ModelObject constants for changes supply
     const CH_ID = 1;
