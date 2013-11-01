@@ -68,31 +68,37 @@ class User extends ModelObject {
     }
 
     protected function setEmail($email) {
+        assert(is_string($email));
         $this->valueChanged(self::CH_EMAIL, $this->email, $email);
         $this->email = $email;
     }
 
     protected function setName($name) {
+        assert(is_string($name));
         $this->valueChanged(self::CH_NAME, $this->name, $name);
         $this->name = $name;
     }
 
     protected function setSurname($surname) {
+        assert(is_string($surname));
         $this->valueChanged(self::CH_SURNAME, $this->surname, $surname);
         $this->surname = $surname;
     }
 
     protected function setIsActive($isActive) {
+        assert(is_bool($isActive));
         $this->valueChanged(self::CH_ISACTIVE, $this->isActive, $isActive);
         $this->isActive = $isActive;
     }
 
     protected function setDescription($userDesc) {
+        assert(is_string($userDesc));
         $this->valueChanged(self::CH_DESCR, $this->description, $userDesc);
         $this->description = $userDesc;
     }
 
     protected function setRole($role) {
+        assert(is_numeric($role));
         $this->valueChanged(self::CH_ROLE, $this->role, $role);
         $this->role = $role;
     }
@@ -100,10 +106,6 @@ class User extends ModelObject {
     public function rules() {
         return array(
             array('email, name, surname, role', 'required'),
-            //Type checking
-            array('email, name, surname, description', 'type', 'type' => 'string'),
-            array('role', 'numerical', 'integerOnly' => TRUE),
-            array('isActive', 'boolean'),
             //value checking
             array('email, name, surname', 'length', 'min' => 1, 'max' => 50, 'encoding' => 'utf-8'),
             array('description', 'length', 'min' => 0, 'max' => 200, 'encoding' => 'utf-8'),

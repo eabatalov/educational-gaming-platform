@@ -58,7 +58,7 @@ class AuthentificatedUser extends User {
         array_push($rules,
             array("password" ,'required'),
             array('password', 'length', 'min' => 6, 'max' => 100,
-                'encoding' => 'utf-8', 'allowEmpty' => FALSE)
+                'encoding' => 'utf-8')
             //array('password_repeat', 'required', 'on'=>'register'),
             //array('password', 'compare', 'compareAttribute'=>'password_repeat', 'on'=>'register'),
         );

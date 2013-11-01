@@ -119,9 +119,5 @@ class UserTest extends \PHPUnit_Framework_TestCase {
                 "too long name");
         assert(!$this->mkUserFromArray(array("description" => $str240))->validate(),
                 "too long description");
-        assert(!$this->mkUserFromArray(array("isActive" => "No"))->validate(),
-                "isActive is not bool");
-        assert(!$this->mkUserFromArray(array("role" => "No"))->validate(),
-                "invalid type for role");
     }
 }
