@@ -4,11 +4,6 @@
  * @author eugene
  */
 
-/*
- * Setting up phpunit:
- * sudo pear install pear.phpunit.de/PHPUnit
- * sudo pear install phpunit/PHPUnit_SkeletonGenerator
- */
 //all the paths are relative to website/protected/tests
 set_include_path(get_include_path() . PATH_SEPARATOR .
         "../models/");
