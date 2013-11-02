@@ -28,8 +28,12 @@ class Customer extends ModelObject {
      * @returns: array(Customer->getUser()->getId() => Customer)
      */
     private function &mkFriendsArrayCanonical(&$friends) {
+        TU::throwIfNot(is_array($friends), TU::INVALID_ARGUMENT_EXCEPTION,
+                "friends should be array()");
+
         $canonicalArray = NULL;
         foreach ($friends as $userIx => $friend) {
+            $this->checkFriend($friend);
             if ($userIx != $friend->getUser()->getId()) {
                 if ($canonicalArray == NULL) {
                     $canonicalArray = array();
@@ -56,7 +60,8 @@ class Customer extends ModelObject {
      * @returns: nothing
      */
     private function setUser($user) {
-        assert($user instanceof User);
+        TU::throwIfNot($user instanceof User, TU::INVALID_ARGUMENT_EXCEPTION,
+                "user must be instance of User");
         $this->user = $user;
     }
 
@@ -72,10 +77,12 @@ class Customer extends ModelObject {
      * @param friends: array of Customer objects which are friends
      * @returns: nothing
      */
-    private function setFriends(&$newFriends) {
-        assert(is_array($newFriends));
-        $this->valueChanged(self::CH_FRIENDS, $this->friends, $newFriends);
-        $this->friends =& $newFriends;
+    private function setFriends(&$friends) {
+        TU::throwIfNot(is_array($friends), TU::INVALID_ARGUMENT_EXCEPTION,
+                "friends should be array");
+
+        $this->valueChanged(self::CH_FRIENDS, $this->friends, $friends);
+        $this->friends =& $friends;
     }
 
     /*
@@ -83,10 +90,13 @@ class Customer extends ModelObject {
      * @returns: nothing
      */
     protected function addFriend(&$friend) {
-        assert($friend instanceof Customer);
-        assert($friend->getUser()->getId() != $this->getUser()->getId());
+        $this->checkFriend($friend);
+        $friendId = $friend->getUser()->getId();
+        TU::throwIf(array_key_exists($friendId, $this->friends),
+            TU::INVALID_ARGUMENT_EXCEPTION, "double addition of friend");
+
         $newFriends = $this->friends;
-        $newFriends[$friend->getUser()->getId()] = $friend;
+        $newFriends[$friendId] = $friend;
         $this->setFriends($newFriends);
     }
 
@@ -95,10 +105,37 @@ class Customer extends ModelObject {
      * @returns: nothing
      */
     protected function delFriend(&$friend) {
-        assert($friend instanceof Customer);
+        $this->checkFriend($friend);
+        $friendId = $friend->getUser()->getId();
+        TU::throwIf(!array_key_exists($friendId, $this->friends),
+            TU::INVALID_ARGUMENT_EXCEPTION,
+            "deletion of not existed friend with id " . (string)$friendId);
+
         $newFriends = $this->friends;
         unset($newFriends[$friend->getUser()->getId()]);
         $this->setFriends($newFriends);
+    }
+
+    public function rules() {
+        /*
+         * No user input validation rules for now.
+         */
+        return parent::rules();
+    }
+
+    /* 
+     * performs necessary checks on friend passed from outside
+     * @param friend: instance of Customer to check
+     * @return nothing
+     * @throws InvalidArgumentException if check has failed
+     */
+    protected function checkFriend(&$friend) {
+        TU::throwIfNot($friend instanceof Customer, TU::INVALID_ARGUMENT_EXCEPTION,
+                "friend should be instance of Customer");
+        TU::throwIfNot($friend->getUser()->getRole() == UserRole::CUSTOMER,
+                TU::INVALID_ARGUMENT_EXCEPTION, "friend's role should be CUSTOMER");
+        TU::throwIfNot($friend->getUser()->getId() != $this->getUser()->getId(),
+                TU::INVALID_ARGUMENT_EXCEPTION, "Can't add myself to friends");
     }
 
     //User object

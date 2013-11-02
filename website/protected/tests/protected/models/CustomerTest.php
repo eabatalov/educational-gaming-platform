@@ -14,12 +14,16 @@ class CustomerTest extends \PHPUnit_Framework_TestCase {
     protected $friend2;
     protected $friend3;
 
-    protected function mkCustomer($id, $friends, &$user = NULL) {
-        $user = new AuthentificatedUser($id . "@example.com",
+    protected function mkUser($id) {
+        return new AuthentificatedUser($id . "@example.com",
                 "name" . $id, "surname" . $id, FALSE, $id,
-                new UserRole(UserRole::CUSTOMER),
+                UserRole::CUSTOMER,
                 "password" . $id, $id);
-        return new Customer($user, $friends);
+    }
+
+    protected function mkCustomer($id, $friends) {
+        $this->customerUser = $this->mkUser($id);
+        return new Customer($this->customerUser, $friends);
     }
 
     /**
@@ -31,15 +35,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase {
         $this->friend2 = $this->mkCustomer("2", array());
         $this->friend3 = $this->mkCustomer("3", array());
         $this->customer = $this->mkCustomer("0", array($this->friend1,
-            $this->friend2, $this->friend3), $this->customerUser);
-    }
-
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown() {
-        
+            $this->friend2, $this->friend3));
     }
 
     /**
@@ -63,5 +59,12 @@ class CustomerTest extends \PHPUnit_Framework_TestCase {
     public function testChangesTracking() {
         $changes = $this->customer->getValueChanges();
         assert(empty($changes));
+    }
+
+    /*
+     * @covers Customer::rules
+     */
+    public function testValidation() {
+        assert($this->customer->validate(), var_export($this->customer, true));
     }
 }

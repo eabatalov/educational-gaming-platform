@@ -8,7 +8,7 @@ class AuthentificatedCustomerTest extends PHPUnit_Framework_TestCase {
     protected function mkCustomer($id, $friends) {
         $user = new AuthentificatedUser($id . "@example.com",
                 "name" . $id, "surname" . $id, FALSE, $id,
-                new UserRole(UserRole::CUSTOMER),
+                UserRole::CUSTOMER,
                 "password" . $id, $id);
         return new AuthentificatedCustomer($user, $friends);
     }
@@ -16,7 +16,7 @@ class AuthentificatedCustomerTest extends PHPUnit_Framework_TestCase {
     /**
      * @covers AuthentificatedCustomer::addFriend
      */
-    public function testAddFriend() {
+    public function testAddFriendNormalInput() {
         $customer = $this->mkCustomer("0", array());
         $customer->addFriend($this->mkCustomer("1", array()));
         $customer->addFriend($this->mkCustomer("2", array()));
@@ -30,9 +30,30 @@ class AuthentificatedCustomerTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
+     * @covers AuthentificatedCustomer::addFriend
+     */
+    public function testAddFriendInvalidInput() {
+        $customer = $this->mkCustomer("0", array());
+        $customer->addFriend($this->mkCustomer("1", array()));
+        try {
+            $customer->addFriend($this->mkCustomer("1", array()));
+            assert(FALSE, "Exception expected");
+        } catch (InvalidArgumentException $ex) {
+            //PASSED
+        }
+
+        try {
+            $customer->addFriend("I am new very good friend, Add me!");
+            assert(FALSE, "Exception expected");
+        } catch (InvalidArgumentException $ex) {
+            //PASSED
+        }
+    }
+
+    /**
      * @covers AuthentificatedCustomer::delFriend
      */
-    public function testDelFriend() {
+    public function testDelFriendNormalInput() {
         $friends = array(
             "1" => $this->mkCustomer("1", array()),
             "2" => $this->mkCustomer("2", array()),
@@ -44,6 +65,28 @@ class AuthentificatedCustomerTest extends PHPUnit_Framework_TestCase {
         $customer->delFriend($this->mkCustomer("2", array()));
         $friends2 = $customer->getFriends();
         assert(empty($friends2));
+    }
+
+    /**
+     * @covers AuthentificatedCustomer::delFriend
+     */
+    public function testDelFriendInvalidInput() {
+        $customer = $this->mkCustomer("0", array());
+        try {
+            //Absent friend
+            $customer->delFriend($this->mkCustomer("1", array()));
+            assert(FALSE, "Exception expected");
+        } catch (InvalidArgumentException $ex) {
+            //PASSED
+        }
+
+        try {
+            //Invalid type
+            $customer->delFriend("I am new very good friend, Add me!");
+            assert(FALSE, "Exception expected");
+        } catch (InvalidArgumentException $ex) {
+            //PASSED
+        }
     }
 
     /**
@@ -77,5 +120,16 @@ class AuthentificatedCustomerTest extends PHPUnit_Framework_TestCase {
                 assert(FALSE, "Only friends should be changed");
             }
         }
+    }
+
+    /*
+     * @covers Customer::rules
+     */
+    public function testValidation() {
+        $customer = $this->mkCustomer("0", array());
+        $customer->addFriend($this->mkCustomer("1", array()));
+        $customer->addFriend($this->mkCustomer("2", array()));
+        $customer->addFriend($this->mkCustomer("3", array()));
+        assert($customer->validate(), "Normal customer");
     }
 }
