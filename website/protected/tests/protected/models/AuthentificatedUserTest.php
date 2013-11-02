@@ -40,6 +40,49 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
+     * @covers AuthentificatedUser::setPassword
+     */
+    public function testSetPasswordInvInput() {
+        $user = $this->mkUser();
+        try {
+            $user->setPassword($this);
+            assert(FALSE, "Exception expected");
+        } catch (InvalidArgumentException $ex) {
+            //PASS
+        }
+    }
+
+    static private function setterTest($object, $_etter, $val, $invVal) {
+        $setter = 'set' . $_etter;
+        $getter = 'get' . $_etter;
+        $object->$setter($val);
+        assert($object->$getter() == $val);
+        try {
+            $object->$setter($invVal);
+            assert(FALSE, "Exception expected");
+        } catch (InvalidArgumentException $ex) {
+            //PASS
+        }
+    }
+
+    /**
+     * @covers AuthentificatedUser::setEmail
+     * @covers AuthentificatedUser::setIsActive
+     * @covers AuthentificatedUser::setName
+     * @covers AuthentificatedUser::setRole
+     * @covers AuthentificatedUser::setSurname
+     * @covers AuthentificatedUser::setDescription
+     */
+    public function testUserSetters() {
+        $user = $this->mkUser();
+        self::setterTest($user, 'Email', "foo@bar.com", 1);
+        self::setterTest($user, 'IsActive', !$user->getIsActive(), "yes!");
+        self::setterTest($user, 'Name', $user->getName() ."Johnny", 1);
+        self::setterTest($user, 'Surname', $user->getSurname() . "bar", 1);
+        self::setterTest($user, 'Description', $user->getDescription() . "wow", 1);
+    }
+
+    /**
      * @covers All the change tracking setters of AuthentificatedUser class
      */
     public function testNoChangesTracking() {

@@ -58,47 +58,43 @@ class User extends ModelObject {
     }
 
     private function setId($id) {
-        /*
-         * id is not set by user, its validation can't be performed in
-         * this model object validation logic. So leave assert hear.
-         */
-        assert(is_numeric($id));
+        TU::throwIfNot(is_numeric($id), TU::INVALID_ARGUMENT_EXCEPTION);
         $this->valueChanged(self::CH_ID, $this->id, $id);
         $this->id = $id;
     }
 
     protected function setEmail($email) {
-        assert(is_string($email));
+        TU::throwIfNot(is_string($email), TU::INVALID_ARGUMENT_EXCEPTION);
         $this->valueChanged(self::CH_EMAIL, $this->email, $email);
         $this->email = $email;
     }
 
     protected function setName($name) {
-        assert(is_string($name));
+        TU::throwIfNot(is_string($name), TU::INVALID_ARGUMENT_EXCEPTION);
         $this->valueChanged(self::CH_NAME, $this->name, $name);
         $this->name = $name;
     }
 
     protected function setSurname($surname) {
-        assert(is_string($surname));
+        TU::throwIfNot(is_string($surname), TU::INVALID_ARGUMENT_EXCEPTION);
         $this->valueChanged(self::CH_SURNAME, $this->surname, $surname);
         $this->surname = $surname;
     }
 
     protected function setIsActive($isActive) {
-        assert(is_bool($isActive));
+        TU::throwIfNot(is_bool($isActive), TU::INVALID_ARGUMENT_EXCEPTION);
         $this->valueChanged(self::CH_ISACTIVE, $this->isActive, $isActive);
         $this->isActive = $isActive;
     }
 
     protected function setDescription($userDesc) {
-        assert(is_string($userDesc));
+        TU::throwIfNot(is_string($userDesc), TU::INVALID_ARGUMENT_EXCEPTION);
         $this->valueChanged(self::CH_DESCR, $this->description, $userDesc);
         $this->description = $userDesc;
     }
 
     protected function setRole($role) {
-        assert(is_numeric($role));
+        TU::throwIfNot(is_numeric($role), TU::INVALID_ARGUMENT_EXCEPTION);
         $this->valueChanged(self::CH_ROLE, $this->role, $role);
         $this->role = $role;
     }

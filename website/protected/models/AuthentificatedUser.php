@@ -24,7 +24,7 @@ class AuthentificatedUser extends User {
     }
 
     public function setPassword($password) {
-        assert(is_string($password));
+        TU::throwIfNot(is_string($password), TU::INVALID_ARGUMENT_EXCEPTION);
         $this->valueChanged(self::CH_PASS, $this->password, $password);
         $this->password = $password;
     }
