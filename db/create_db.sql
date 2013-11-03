@@ -1,26 +1,40 @@
-CREATE TABLE public.user_mst (
-    id		serial NOT NULL
-    name	varchar(25) NOT NULL,
-    surname	varchar(25) NOT NULL,
-    is_active	char(1) NOT NULL DEFAULT 'Y'::bpchar,
-    user_desc	varchar(500) NOT NULL,
-    password 	varchar(500) NOT NULL,
-    role     	varchar(100) NOT NULL 
-    )
-;
+﻿-- WARNING: Due to python db interface limitations add \-\-CMD after each command
 
-CREATE TABLE "public"."friends" ( 
-	"requestor"	numeric(7,0) NULL,
-	"acceptor" 	numeric(7,0) NULL 
-	)
-
-ALTER TABLE "public"."friends"
-	ADD CONSTRAINT "fk_user_mst_req"
+DROP SCHEMA IF EXISTS egp CASCADE;
+--CMD
+CREATE SCHEMA egp;
+--CMD
+DO
+$BODY$
+BEGIN
+IF NOT EXISTS (SELECT 1 FROM pg_type where typname = 'role_t') THEN
+	CREATE TYPE egp.role_t AS ENUM ('CUSTOMER', 'ADMIN', 'ANALYST');
+END IF;
+END;
+$BODY$;
+--CMD
+CREATE TABLE egp.users (
+	id serial8 NOT NULL PRIMARY KEY,
+	name varchar(50) NOT NULL,
+	surname	varchar(50) NOT NULL,
+	email varchar(50) NOT NULL,
+	is_active boolean NOT NULL DEFAULT FALSE,
+	password varchar(100) NOT NULL,
+	role egp.role_t NOT NULL
+);
+--CMD
+CREATE TABLE egp.friendnships (
+	requestor int8 NULL,
+	acceptor int8 NULL
+);
+--CMD
+ALTER TABLE egp.friendnships
+	ADD CONSTRAINT "fk_friendships_users_requestor"
 	FOREIGN KEY("requestor")
-	REFERENCES "public"."user_mst"("user_id")
-
-ALTER TABLE "public"."friends"
-	ADD CONSTRAINT "fk_user_mst_acc"
+	REFERENCES egp.users("id");
+--CMD
+ALTER TABLE egp.friendnships
+	ADD CONSTRAINT "fk_friendships_users_acceptor"
 	FOREIGN KEY("acceptor")
-	REFERENCES "public"."user_mst"("user_id")	
-	
+	REFERENCES egp.users("id");
+--CMD
