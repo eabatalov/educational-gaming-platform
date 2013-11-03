@@ -1,6 +1,8 @@
 MODEL OBJECTS VALIDATION
 
 Override CFormModel::rules() method to specify user input validation rules.
+CFormModel is yii framework class. See yii docs about it here:
+http://www.yiiframework.com/doc/api/1.1/CFormModel 
 
 To check for crazy conditions which appear due to coding mistakes throw
 InvalidArgumentException. Examples of such coding mistakes:
