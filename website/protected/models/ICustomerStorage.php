@@ -10,24 +10,27 @@ class ICustomerStorage {
      * Friends are filled in.
      * @param user: customer's user instance
      * @returns: corresponding Customer object
+     * @throws StorageException if failed
      */
     public function getCustomer($user);
     /*
-     * the same as for getCustomer but with authentificated instances
+     * The same as for getCustomer but with authentificated instances
      */
     public function getAuthCustomer($authUser);
     /*
      * Search Customers by query
-     * @param query: name or surname prefix
-     * @param matchType: ignored
+     * @param query: what to search for
+     * @param matchType: how to search, ignored for now
      * @returns: array of matched Customer objects
+     * @throws StorageException if failed
      */
     public function findCustomers($query, $matchType = NULL);
     /*
      * Save all changes made to AuthentificatedCustomer object
      * to persistent storage
      * @param authCustomer: AuthentificatedCustomer object to save
-     * @returns: TRUE if success FALSE otherwise.
+     * @returns: void
+     * @throws StorageException if failed
      */
     public function saveAuthCustomer($authCustomer);
 }
