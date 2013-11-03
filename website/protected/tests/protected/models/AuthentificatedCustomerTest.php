@@ -6,10 +6,16 @@
 class AuthentificatedCustomerTest extends PHPUnit_Framework_TestCase {
 
     protected function mkCustomer($id, $friends) {
-        $user = new AuthentificatedUser($id . "@example.com",
-                "name" . $id, "surname" . $id, FALSE, $id,
-                UserRole::CUSTOMER,
-                "password" . $id, $id);
+        $email = $id . "@example.com";
+        $name = "name" . $id;
+        $surname = "surname" . $id;
+        $isActive = FALSE;
+        $role = UserRole::CUSTOMER;
+        $password = "password" . $id;
+        $user = new AuthentificatedUser($email,
+                $name, $surname, $isActive,
+                $role,
+                $password, $id);
         return new AuthentificatedCustomer($user, $friends);
     }
 

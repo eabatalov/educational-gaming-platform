@@ -15,10 +15,17 @@ class CustomerTest extends \PHPUnit_Framework_TestCase {
     protected $friend3;
 
     protected function mkUser($id) {
-        return new AuthentificatedUser($id . "@example.com",
-                "name" . $id, "surname" . $id, FALSE, $id,
-                UserRole::CUSTOMER,
-                "password" . $id, $id);
+        $email = $id . "@example.com";
+        $name = "name" . $id;
+        $surname = "surname" . $id;
+        $isActive = FALSE;
+        $role = UserRole::CUSTOMER;
+        $password = "password" . $id;
+        $user = new AuthentificatedUser($email,
+                $name, $surname, $isActive,
+                $role,
+                $password, $id);
+        return $user;
     }
 
     protected function mkCustomer($id, $friends) {

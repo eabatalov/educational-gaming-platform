@@ -13,11 +13,10 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         $name = $id . UserTest::NAME_SUFFIX;
         $surname = $id . UserTest::SURNAME_SUFFIX;
         $isActive = UserTest::IS_ACTIVE;
-        $userDesc = $id . UserTest::DESCR_SUFFIX;
         $role = UserTest::ROLE;
         $pass = $id . AuthentificatedUserTest::PASS_SUFFIX;
         return new AuthentificatedUser($email, $name, $surname, $isActive,
-            $userDesc, $role, $pass, $id);
+            $role, $pass, $id);
     }
 
     /**
@@ -79,7 +78,6 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         self::setterTest($user, 'IsActive', !$user->getIsActive(), "yes!");
         self::setterTest($user, 'Name', $user->getName() ."Johnny", 1);
         self::setterTest($user, 'Surname', $user->getSurname() . "bar", 1);
-        self::setterTest($user, 'Description', $user->getDescription() . "wow", 1);
     }
 
     /**
@@ -93,7 +91,6 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         $oldSurname = $user->getSurname();
         $oldPassword = $user->getPassword();
         $oldIsActive = $user->getIsActive();
-        $oldUserDesc = $user->getDescription();
         $oldRole = $user->getRole();
 
         $newEmail = $oldEmail;
@@ -101,7 +98,6 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         $newSurname = $oldSurname;
         $newPassword = $oldPassword;
         $newIsActive = $oldIsActive;
-        $newUserDesc = $oldUserDesc;
         $newRole = $oldRole;
 
         $user->setEmail($newEmail);
@@ -109,7 +105,6 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         $user->setSurname($newSurname);
         $user->setPassword($newPassword);
         $user->setIsActive($newIsActive);
-        $user->setDescription($newUserDesc);
         $user->setRole($newRole);
 
         $changes = $user->getValueChanges();
@@ -127,7 +122,6 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         $oldSurname = $user->getSurname();
         $oldPassword = $user->getPassword();
         $oldIsActive = $user->getIsActive();
-        $oldUserDesc = $user->getDescription();
         $oldRole = $user->getRole();
 
         $NEW_PREFIX = "new_";
@@ -136,7 +130,6 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         $newSurname = $NEW_PREFIX . $oldSurname;
         $newPassword = $NEW_PREFIX . $oldPassword;
         $newIsActive = !$oldIsActive;
-        $newUserDesc = $NEW_PREFIX . $oldUserDesc;
         $newRole = ($oldRole + 1) % UserRole::LAST_ROLE;
 
         $user->setEmail($newEmail);
@@ -144,7 +137,6 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         $user->setSurname($newSurname);
         $user->setPassword($newPassword);
         $user->setIsActive($newIsActive);
-        $user->setDescription($newUserDesc);
         $user->setRole($newRole);
 
         $changes = $user->getValueChanges();
@@ -170,9 +162,6 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
             } else if ($field == AuthentificatedUser::CH_ISACTIVE) {
                 assert($change->getOldVal() == $oldIsActive &&
                         $change->getNewVal() == $newIsActive);
-            } else if ($field == AuthentificatedUser::CH_DESCR) {
-                assert($change->getOldVal() == $oldUserDesc &&
-                        $change->getNewVal() == $newUserDesc);
             } else if ($field == AuthentificatedUser::CH_ROLE) {
                 assert($change->getOldVal() == $oldRole &&
                         $change->getNewVal() == $newRole);

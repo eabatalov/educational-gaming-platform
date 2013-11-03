@@ -14,7 +14,7 @@ class User extends ModelObject {
     * almost for internal data provider usage and for testing purposes
     */
     public function __construct($email, $name, $surname, $isActive,
-                            $userDesc, $role, $id = NULL) {
+                            $role, $id = NULL) {
         parent::__construct();
         $this->dsChangeTracking();
         if ($id != NULL) {
@@ -24,7 +24,6 @@ class User extends ModelObject {
         $this->setName($name);
         $this->setSurname($surname);
         $this->setIsActive($isActive);
-        $this->setDescription($userDesc);
         $this->setRole($role);
         $this->enChangeTracking();
     }
@@ -47,10 +46,6 @@ class User extends ModelObject {
 
     public function getIsActive() {
         return $this->isActive;
-    }
-
-    public function getDescription() {
-        return $this->description;
     }
 
     public function getRole() {
@@ -87,12 +82,6 @@ class User extends ModelObject {
         $this->isActive = $isActive;
     }
 
-    protected function setDescription($userDesc) {
-        TU::throwIfNot(is_string($userDesc), TU::INVALID_ARGUMENT_EXCEPTION);
-        $this->valueChanged(self::CH_DESCR, $this->description, $userDesc);
-        $this->description = $userDesc;
-    }
-
     protected function setRole($role) {
         TU::throwIfNot(is_numeric($role), TU::INVALID_ARGUMENT_EXCEPTION);
         $this->valueChanged(self::CH_ROLE, $this->role, $role);
@@ -104,7 +93,6 @@ class User extends ModelObject {
             array('email, name, surname, role', 'required'),
             //value checking
             array('email, name, surname', 'length', 'min' => 1, 'max' => 50, 'encoding' => 'utf-8'),
-            array('description', 'length', 'min' => 0, 'max' => 200, 'encoding' => 'utf-8'),
             array('email', 'email'),
         );
     }
@@ -119,8 +107,6 @@ class User extends ModelObject {
     private $surname;
     //Bool
     private $isActive;
-    //Str[200]
-    private $description;
     //int
     private $role;
     //ModelObject constants for changes supply
@@ -129,7 +115,6 @@ class User extends ModelObject {
     const CH_NAME = 3;
     const CH_SURNAME = 4;
     const CH_ISACTIVE = 5;
-    const CH_DESCR = 6;
-    const CH_ROLE = 7;
-    const CH_LAST = 8;
+    const CH_ROLE = 6;
+    const CH_LAST = 7;
 }

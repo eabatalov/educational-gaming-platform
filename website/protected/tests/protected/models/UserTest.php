@@ -9,7 +9,6 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     const NAME_SUFFIX = "name";
     const SURNAME_SUFFIX = "surname";
     const IS_ACTIVE = FALSE;
-    const DESCR_SUFFIX = "descr";
     const ROLE = UserRole::CUSTOMER;
 
     protected function mkUser($id = "0", $email = self::EMAIL_SUFFIX) {
@@ -26,10 +25,9 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         $name = array_key_exists("name", $fields) ? $fields['name'] : $id . self::NAME_SUFFIX;
         $surname = array_key_exists("surname", $fields) ? $fields['surname'] : $id . self::SURNAME_SUFFIX;
         $isActive = array_key_exists("isActive", $fields) ? $fields['isActive'] : self::IS_ACTIVE;
-        $description = array_key_exists("description", $fields) ? $fields['description'] : $id . self::DESCR_SUFFIX;
         $role = array_key_exists("role", $fields) ? $fields['role'] : self::ROLE;
         return new User($email, $name, $surname, $isActive,
-                            $description, $role, $id);
+                            $role, $id);
     }
 
     /**
@@ -71,14 +69,6 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers model\User::getUserDesc
-     */
-    public function testGetUserDesc() {
-        $id = "0";
-        assert($this->mkUser($id)->getDescription() == $id . UserTest::DESCR_SUFFIX);
-    }
-
-    /**
      * @covers model\User::getRole
      */
     public function testGetRole() {
@@ -117,7 +107,5 @@ class UserTest extends \PHPUnit_Framework_TestCase {
             "12345678901234567890" . "12345678901234567890";
         assert(!$this->mkUserFromArray(array("name" => $str240))->validate(),
                 "too long name");
-        assert(!$this->mkUserFromArray(array("description" => $str240))->validate(),
-                "too long description");
     }
 }

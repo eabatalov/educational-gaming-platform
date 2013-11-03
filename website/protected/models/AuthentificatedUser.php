@@ -11,9 +11,9 @@ class AuthentificatedUser extends User {
      * @param id: optional, used for internal data provider and testing purposes
      */
     public function __construct($email, $name, $surname, $isActive,
-                            $userDesc, $role, $password, $id = NULL) {
+                            $role, $password, $id = NULL) {
         parent::__construct($email, $name, $surname, $isActive,
-                            $userDesc, $role, $id);
+                            $role, $id);
         $this->dsChangeTracking();
         $this->setPassword($password);
         $this->enChangeTracking();
