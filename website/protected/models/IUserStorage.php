@@ -14,7 +14,7 @@ Interface IUserStorage {
     const ERROR_EMAIL_EXISTS = 0x7000003;
 
     /*
-     * adds user to persistent storage, sets its id
+     * adds user to persistent storage
      * @param user: instance of User class
      * @param password: password of new user
      * @returns: void
