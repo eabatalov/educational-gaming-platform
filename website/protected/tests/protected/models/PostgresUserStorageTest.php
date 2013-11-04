@@ -9,6 +9,7 @@ class PostgresUserStorageTest extends PHPUnit_Framework_TestCase {
      * @var PostgresUserStorage
      */
     static protected $storage;
+
     const PASSWORD = "777secret";
     const EMAIL = "postgres_user_storage_test@example.com";
     const NO_EMAIl = "postgres_user_storage_test_fail@example.com";
@@ -18,14 +19,14 @@ class PostgresUserStorageTest extends PHPUnit_Framework_TestCase {
         self::$storage = new PostgresUserStorage();
         $output = array();
         $status = 0;
-        assert(chdir("../../../db/"));
-        $setup_db = "./setup_db.py --host=" . PostgresUserStorage::getHostName() .
-                " --db=" . PostgresUserStorage::getDbName() .
-                " --user=" . PostgresUserStorage::getUserName() .
-                " --pass=" . PostgresUserStorage::getPassword();
+        assert(chdir(dirname(__FILE__) . "/../../../../../db/"));
+        $setup_db = "./setup_db.py --host=" . PostgresUtils::getHostName() .
+                " --db=" . PostgresUtils::getDbName() .
+                " --user=" . PostgresUtils::getUserName() .
+                " --pass=" . PostgresUtils::getPassword();
         print $setup_db . '\n';
         exec($setup_db, $output, $status);
-        assert($status == 0, var_dump($output));
+        assert($status == 0, var_export($output, true));
     }
 
     /**
@@ -62,7 +63,7 @@ class PostgresUserStorageTest extends PHPUnit_Framework_TestCase {
         try {
             self::$storage->addUser($user, self::PASSWORD);
             assert(FALSE, "Exception expected");
-        } catch(InvalidArgumentException $ex) {
+        } catch (InvalidArgumentException $ex) {
             assert($ex->getCode() == IUserStorage::ERROR_EMAIL_EXISTS);
         }
     }
@@ -71,8 +72,7 @@ class PostgresUserStorageTest extends PHPUnit_Framework_TestCase {
      * @covers PostgresUserStorage::getAuthentificatedUser
      */
     public function testGetAuthentificatedUser() {
-        $authUser =
-            self::$storage->getAuthentificatedUser(self::EMAIL, self::PASSWORD);
+        $authUser = self::$storage->getAuthentificatedUser(self::EMAIL, self::PASSWORD);
         assert($authUser instanceof AuthentificatedUser);
         assert($authUser->getEmail() == self::EMAIL);
         assert($authUser->getPassword() == self::PASSWORD);
@@ -106,8 +106,7 @@ class PostgresUserStorageTest extends PHPUnit_Framework_TestCase {
      * @covers PostgresUserStorage::getUser
      */
     public function testGetUser() {
-        $authUser =
-            self::$storage->getUser(self::EMAIL, self::PASSWORD);
+        $authUser = self::$storage->getUser(self::EMAIL, self::PASSWORD);
         assert($authUser instanceof User);
         assert($authUser->getEmail() == self::EMAIL);
     }
@@ -130,7 +129,7 @@ class PostgresUserStorageTest extends PHPUnit_Framework_TestCase {
     public function testSaveAuthUserNoSuchEmail() {
         try {
             $authUser = AuthentificatedUserTest::mkUserFromArray(
-                array("email" => self::NO_EMAIl));
+                            array("email" => self::NO_EMAIl));
             self::$storage->saveAuthUser($authUser);
             assert(FALSE, "Exception expected");
         } catch (InvalidArgumentException $ex) {
@@ -144,12 +143,11 @@ class PostgresUserStorageTest extends PHPUnit_Framework_TestCase {
     public function testSaveAuthUserInvalidPassword() {
         try {
             $authUser = AuthentificatedUserTest::mkUserFromArray(
-                array("email" => self::EMAIL, "pass" => self::PASSWORD . "fail"));
+                            array("email" => self::EMAIL, "pass" => self::PASSWORD . "fail"));
             self::$storage->saveAuthUser($authUser);
             assert(FALSE, "Exception expected");
         } catch (InvalidArgumentException $ex) {
-            assert($ex->getCode() == IUserStorage::ERROR_INVALID_PASSWORD,
-                    var_dump($ex));
+            assert($ex->getCode() == IUserStorage::ERROR_INVALID_PASSWORD);
         }
     }
 
@@ -158,8 +156,7 @@ class PostgresUserStorageTest extends PHPUnit_Framework_TestCase {
      */
     public function testSaveAuthUserEmailExists() {
         try {
-            $authUser =
-                self::$storage->getAuthentificatedUser(self::EMAIL, self::PASSWORD);
+            $authUser = self::$storage->getAuthentificatedUser(self::EMAIL, self::PASSWORD);
             $authUser->setEmail(self::DOUBLE_EMAIL);
             self::$storage->saveAuthUser($authUser);
             assert(FALSE, "Exception expected");
@@ -175,7 +172,7 @@ class PostgresUserStorageTest extends PHPUnit_Framework_TestCase {
         $email = "bar@example.com";
         $pass = "777";
         $user = UserTest::mkUserFromArray(
-            array("email" => $email, "id" => 10));
+                        array("email" => $email, "id" => 10));
         self::$storage->addUser($user, $pass);
 
         $authUser = self::$storage->getAuthentificatedUser(
@@ -203,4 +200,5 @@ class PostgresUserStorageTest extends PHPUnit_Framework_TestCase {
         assert($authUser->getRole() == $authUserSaved->getRole());
         assert($authUser->getId() == $authUserSaved->getId());
     }
+
 }

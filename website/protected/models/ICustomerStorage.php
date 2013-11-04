@@ -4,11 +4,11 @@
  * Class which provides access to persistent storage of customer information.
  * @author eugene
  */
-class ICustomerStorage {
+interface ICustomerStorage {
     //InvalidArgumentException error codes
     const ERROR_NO_CUSTOMER_WITH_SUCH_EMAIL = IUserStorage::ERROR_NO_USER_WITH_SUCH_EMAIL;
-    const ERROR_INVALID_PASSWORD = IUserStorage::ERROR_INVALID_PASSWORD;
-    const ERROR_EMAIL_EXISTS = IUserStorage::ERROR_EMAIL_EXISTS;
+    //const ERROR_INVALID_PASSWORD = IUserStorage::ERROR_INVALID_PASSWORD;
+    //const ERROR_EMAIL_EXISTS = IUserStorage::ERROR_EMAIL_EXISTS;
 
     /*
      * adds customer to persistent storage
@@ -20,7 +20,7 @@ class ICustomerStorage {
      *  if failed on customer's storage level validation
      * Relevant InvalidArgumentException codes: (ERROR_EMAIL_EXISTS)
      */
-    public function addCustomer(Customer $customer, $password);
+    function addCustomer(Customer $customer, $password);
     /*
      * @param email: customer's email
      * @returns: corresponding instance of Customer class
@@ -29,7 +29,7 @@ class ICustomerStorage {
      *  if failed on customer's storage level validation
      * Relevant InvalidArgumentException codes: (ERROR_NO_CUSTOMER_WITH_SUCH_EMAIL)
      */
-    public function getCustomer($email);
+    function getCustomer($email);
     /*
      * @param email: customer's email
      * @param password: customer's password
@@ -40,7 +40,7 @@ class ICustomerStorage {
      * Relevant InvalidArgumentException codes: (ERROR_NO_CUSTOMER_WITH_SUCH_EMAIL,
      * ERROR_INVALID_PASSWORD)
      */
-    public function getAuthCustomer($email, $password);
+    function getAuthCustomer($email, $password);
     /*
      * Search Customers by query
      * @param query: what to search for
@@ -48,7 +48,7 @@ class ICustomerStorage {
      * @returns: array of matched Customer objects
      * @throws StorageException if failed on storage problem
      */
-    public function findCustomers($query, $matchType = NULL);
+    function searchCustomers($query, $matchType = NULL);
     /*
      * Save all the changes made for the authentificated customer to persistent
      * storage
@@ -59,5 +59,5 @@ class ICustomerStorage {
      * Relevant InvalidArgumentException codes: (ERROR_NO_CUSTOMER_WITH_SUCH_EMAIL,
      * ERROR_INVALID_PASSWORD, ERROR_EMAIL_EXISTS)
      */
-    public function saveAuthCustomer(AuthentificatedCustomer $authCustomer);
+    function saveAuthCustomer(AuthentificatedCustomer $authCustomer);
 }

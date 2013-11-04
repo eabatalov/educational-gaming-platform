@@ -16,9 +16,9 @@ class TU {
      * @returns : nothing
      */
     static public function throwIf($condition, $ExceptionClass = TU::EXCEPTION,
-                                    $message = NULL) {
+                                    $message = NULL, $errorCode = 0) {
         if ($condition) {
-            throw new $ExceptionClass($message);
+            throw new $ExceptionClass($message, $errorCode);
         }
     }
 
@@ -26,13 +26,14 @@ class TU {
      * throwif with inversed $condition
      */
     static public function throwIfNot($condition, $ExceptionClass = TU::EXCEPTION,
-                                        $message = NULL) {
+                                        $message = NULL, $errorCode = 0) {
         if (!$condition) {
-            throw new $ExceptionClass($message);
+            throw new $ExceptionClass($message, $errorCode);
         }
     }
 
     //Exceptions names constants for convenience
     const EXCEPTION = 'Exception';
     const INVALID_ARGUMENT_EXCEPTION = 'InvalidArgumentException';
+    const STORAGE_EXCEPTION = 'StorageException';
 }

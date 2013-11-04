@@ -22,7 +22,7 @@ Interface IUserStorage {
      * @throws InvalidArgumentException if failed on user's storage level validation
      * Relevant InvalidArgumentException codes: (ERROR_EMAIL_EXISTS)
      */
-    public function addUser(User $user, $password);
+    function addUser(User $user, $password);
     
     /*
      * @param email: user's email
@@ -31,7 +31,7 @@ Interface IUserStorage {
      * @throws InvalidArgumentException if failed on user's storage level validation
      * Relevant InvalidArgumentException codes: (ERROR_NO_USER_WITH_SUCH_EMAIL)
      */
-    public function getUser($email);
+    function getUser($email);
     /*
      * @param email: user's email
      * @param password: user's password
@@ -41,7 +41,7 @@ Interface IUserStorage {
      * Relevant InvalidArgumentException codes: (ERROR_NO_USER_WITH_SUCH_EMAIL,
      * ERROR_INVALID_PASSWORD)
      */
-    public function getAuthentificatedUser($email, $password);
+    function getAuthentificatedUser($email, $password);
 
     /*
      * Save all the changes made for the authentificated user to persistent
@@ -53,5 +53,5 @@ Interface IUserStorage {
      * Relevant InvalidArgumentException codes: (ERROR_NO_USER_WITH_SUCH_EMAIL,
      * ERROR_INVALID_PASSWORD, ERROR_EMAIL_EXISTS)
      */
-    public function saveAuthUser(AuthentificatedUser $authUser);
+    function saveAuthUser(AuthentificatedUser $authUser);
 }

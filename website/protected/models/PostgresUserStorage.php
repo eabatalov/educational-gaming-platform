@@ -8,37 +8,15 @@
  */
 class PostgresUserStorage implements IUserStorage {
 
-    static public function getHostName() {
-        return "localhost";
-    }
-
-    static public function getDbName() {
-        return "postgres";
-    }
-
-    static public function getUserName() {
-        return "postgres";
-    }
-
-    static public function getPassword() {
-        return "111";
-    }
-
     /*
      * Creates object and connects to postgres DB
      * @returns PostgresUserStorage object connected to DB
      * @throws StorageException if connection falied
      */
     function __construct() {
-        $connection_str = "host= " . self::getHostName() . " " .
-            "dbname=" . self::getDbName() ." " .
-            "user=" . self::getUserName() . " " .
-            "password=" . self::getPassword();
-        $this->conn = pg_connect($connection_str, PGSQL_CONNECT_FORCE_NEW);
-        if ($this->conn == FALSE) {
-            throw new StorageException(pg_last_error(),
-                    StorageException::ERROR_CONNECTION_PROBLEMS);
-        }
+        $this->conn = pg_connect(PostgresUtils::getConnString(), PGSQL_CONNECT_FORCE_NEW);
+        TU::throwIf($this->conn == FALSE, TU::STORAGE_EXCEPTION, pg_last_error(),
+            StorageException::ERROR_CONNECTION_PROBLEMS);
     }
 
     /*
@@ -70,9 +48,7 @@ class PostgresUserStorage implements IUserStorage {
                 PostgresUtils::boolToPGBool($user->getIsActive()),
                 $password,
                 $user->getRole()));
-        if ($result ==FALSE) {
-            throw new StorageException(pg_last_error());
-        }
+        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
     }
 
     public function getAuthentificatedUser($email, $password) {
@@ -80,19 +56,13 @@ class PostgresUserStorage implements IUserStorage {
         assert(is_string($password));
         $result = pg_query_params($this->conn, self::$SQL_SELECT_BY_EMAIL,
                                          array($email));
-        if ($result == FALSE) {
-            throw new StorageException(pg_last_error());
-        }
+        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
 
         $data = pg_fetch_object($result);
-        if ($data == FALSE) {
-            throw new InvalidArgumentException(pg_last_error(),
-                    IUserStorage::ERROR_NO_USER_WITH_SUCH_EMAIL);
-        }
-        if ($data->password != $password) {
-            throw new InvalidArgumentException(pg_last_error(),
-                    IUserStorage::ERROR_INVALID_PASSWORD);
-        }
+        TU::throwIf($data == FALSE, TU::INVALID_ARGUMENT_EXCEPTION, pg_last_error(),
+            IUserStorage::ERROR_NO_USER_WITH_SUCH_EMAIL);
+        TU::throwIf($data->password != $password, TU::INVALID_ARGUMENT_EXCEPTION, pg_last_error(),
+            IUserStorage::ERROR_INVALID_PASSWORD);
 
         return new AuthentificatedUser(
                 $data->email,
@@ -107,26 +77,7 @@ class PostgresUserStorage implements IUserStorage {
 
     public function getUser($email) {
         assert(is_string($email));
-        $result = pg_query_params($this->conn, self::$SQL_SELECT_BY_EMAIL,
-                                        array($email));
-        if ($result ==FALSE) {
-            throw new StorageException(pg_last_error());
-        }
-
-        $data= pg_fetch_object($result);
-        if ($data == FALSE) {
-            throw new InvalidArgumentException(pg_last_error(),
-                self::ERROR_NO_USER_WITH_SUCH_EMAIL);
-        }
-
-        return new User(
-                $data->email,
-                $data->name,
-                $data->surname,
-                PostgresUtils::PGBoolToPHP($data->is_active),
-                $data->role,
-                $data->id
-        );
+        return $this->getUserBy(self::$SQL_SELECT_BY_EMAIL, $email);
     }
 
     public function saveAuthUser(AuthentificatedUser $authUser) {
@@ -145,10 +96,8 @@ class PostgresUserStorage implements IUserStorage {
                 $newEmailUser = $this->getUser($authUser->getEmail());
                 assert($newEmailUser->getId() != $authUser->getId());
             } catch(InvalidArgumentException $ex) { $hasUserWithNewEmail = FALSE; }
-            if ($hasUserWithNewEmail) {
-                throw new InvalidArgumentException('User with such email already exists',
-                    IUserStorage::ERROR_EMAIL_EXISTS);
-            }
+            TU::throwIf($hasUserWithNewEmail, TU::INVALID_ARGUMENT_EXCEPTION,
+                'User with such email already exists', IUserStorage::ERROR_EMAIL_EXISTS);
         }
 
         $result = pg_query_params($this->conn, self::$SQL_UPDATE, array(
@@ -159,12 +108,52 @@ class PostgresUserStorage implements IUserStorage {
             $authUser->getIsActive(),
             $authUser->getPassword(),
             $authUser->getRole()));
-        if ($result ==FALSE) {
-            throw new StorageException(pg_last_error());
-        }
+        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
     }
 
-    private $conn;
+    protected function getUserById($id) {
+        assert(is_numeric($id));
+        return $this->getUserBy(self::$SQL_SELECT_BY_ID, $id);
+    }
+
+    protected function getUserBy($sql, $arg) {
+        $result = pg_query_params($this->conn, $sql, array($arg));
+        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
+
+        $data= pg_fetch_object($result);
+        TU::throwIf($data == FALSE, TU::INVALID_ARGUMENT_EXCEPTION, pg_last_error(),
+                self::ERROR_NO_USER_WITH_SUCH_EMAIL);
+
+        return new User(
+                $data->email,
+                $data->name,
+                $data->surname,
+                PostgresUtils::PGBoolToPHP($data->is_active),
+                $data->role,
+                $data->id
+        );
+    }
+
+    protected function searchUsers($query) {
+        assert(is_string($query));
+        $result = pg_query_params($this->conn, self::$SQL_SEARCH, array($query));
+        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
+
+        $found = array();
+        while(($data = pg_fetch_object($result)) != FALSE) {
+            $found[$data->id] = new User(
+                    $data->email,
+                    $data->name,
+                    $data->surname,
+                    PostgresUtils::PGBoolToPHP($data->is_active),
+                    $data->role,
+                    $data->id
+                );
+        }
+        return $found;
+    }
+
+    protected $conn;
     
     //SQL
     static private $SQL_INSERT =
@@ -179,4 +168,12 @@ class PostgresUserStorage implements IUserStorage {
             "SELECT id, name, surname, email, is_active, password, role
              FROM egp.users
              WHERE email=$1";
+    static private $SQL_SELECT_BY_ID =
+            "SELECT id, name, surname, email, is_active, password, role
+             FROM egp.users
+             WHERE id=$1";
+    static private $SQL_SEARCH =
+            "SELECT id, name, surname, email, is_active, password, role
+             FROM egp.users
+             WHERE name LIKE $1 OR surname LIKE $1";
 }

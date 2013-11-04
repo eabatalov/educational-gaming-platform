@@ -24,4 +24,27 @@ class PostgresUtils {
             return FALSE;
         }
     }
+
+    static public function getHostName() {
+        return "localhost";
+    }
+
+    static public function getDbName() {
+        return "postgres";
+    }
+
+    static public function getUserName() {
+        return "postgres";
+    }
+
+    static public function getPassword() {
+        return "111";
+    }
+
+    static public function getConnString() {
+        return "host= " . self::getHostName() . " " .
+            "dbname=" . self::getDbName() ." " .
+            "user=" . self::getUserName() . " " .
+            "password=" . self::getPassword();
+    }
 }

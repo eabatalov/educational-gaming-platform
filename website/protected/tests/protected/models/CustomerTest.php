@@ -74,4 +74,13 @@ class CustomerTest extends \PHPUnit_Framework_TestCase {
     public function testValidation() {
         assert($this->customer->validate(), var_export($this->customer, true));
     }
+
+    static public function CustomersDataEq(Customer $c1, Customer $c2) {
+        $userEq = $c1->getUser()->getName() == $c2->getUser()->getName() and
+                $c1->getUser()->getSurname() == $c2->getUser()->getSurname() and
+                $c1->getUser()->getEmail() == $c2->getUser()->getEmail() and
+                $c1->getUser()->getIsActive() == $c2->getUser()->getIsActive() and
+                $c1->getUser()->getRole() == $c2->getUser()->getRole();
+        return $userEq and array_keys($c1->getFriends()) == array_keys($c2->getFriends());
+    }
 }
