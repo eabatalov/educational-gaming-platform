@@ -45,8 +45,8 @@ class ModelObjectTest extends PHPUnit_Framework_TestCase {
         $model->valueChanged("foo", 1, 2);
         $model->valueChanged("bar", 2, 3);
         assert($model->getValueChanges() == array(
-            new ModelChangeRecord("foo", 1, 2),
-            new ModelChangeRecord("bar", 2, 3)
+            "foo" => new ModelChangeRecord("foo", 1, 2),
+            "bar" => new ModelChangeRecord("bar", 2, 3)
         ));
     }
 }

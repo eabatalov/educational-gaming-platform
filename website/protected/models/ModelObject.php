@@ -62,7 +62,7 @@ class ModelObject extends CFormModel {
      * @returns: array of ModelChangeRecords
      */
     public function getValueChanges() {
-        return array_values($this->getChanges());
+        return $this->getChanges();
     }
 
     private function &getChanges() {

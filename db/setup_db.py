@@ -4,7 +4,7 @@ import sys, time
 from optparse import OptionParser
 import postgresql.driver as pg_driver
 
-files = ["create_db.sql", "fill_db.py"] #add files to run here
+files = ["./create_db.sql", "./fill_db.py"] #add files to run here
 conn = None #DB connection to be used throught setupe process
 
 def check_ver():
@@ -26,7 +26,6 @@ def parse_opts():
 
 	(options, args) = opt_parser.parse_args()
 	print("Running with options: ", options.__dict__)
-	time.sleep(1)
 	return options.__dict__
 
 def setup_con(opts):

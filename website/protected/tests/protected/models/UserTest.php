@@ -19,7 +19,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         return $this->mkUserFromArray($fields);
     }
 
-    protected function mkUserFromArray($fields) {
+    static public function mkUserFromArray($fields = array()) {
         $id = array_key_exists("id", $fields) ? $fields['id'] : "0";
         $email = array_key_exists("email", $fields) ? $fields['email'] : $id . self::EMAIL_SUFFIX;
         $name = array_key_exists("name", $fields) ? $fields['name'] : $id . self::NAME_SUFFIX;

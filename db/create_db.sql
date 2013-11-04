@@ -17,7 +17,7 @@ CREATE TABLE egp.users (
 	id serial8 NOT NULL PRIMARY KEY,
 	name varchar(50) NOT NULL,
 	surname	varchar(50) NOT NULL,
-	email varchar(50) NOT NULL,
+	email varchar(50) NOT NULL UNIQUE,
 	is_active boolean NOT NULL DEFAULT FALSE,
 	password varchar(100) NOT NULL,
 	role egp.role_t NOT NULL

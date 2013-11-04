@@ -6,7 +6,7 @@
 
 //all the paths are relative to website/protected/tests
 set_include_path(get_include_path() . PATH_SEPARATOR .
-        "../models/");
+        \dirname(__FILE__)."/../models/");
 
 require_once \dirname(__FILE__).'/../external/yii/framework/yii.php';
 

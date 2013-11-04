@@ -6,8 +6,8 @@
  * @author eugene
  */
 class UserRole {
-    const CUSTOMER = 0;
-    const ADMIN = 1;
-    const ANALYST = 2;
-    const LAST_ROLE = 3;
+    const CUSTOMER = 'CUSTOMER';
+    const ADMIN = 'ADMIN';
+    const ANALYST = 'ANALYST';
+    public static $ROLES = array(self::CUSTOMER, self::ADMIN, self::ANALYST);
 }

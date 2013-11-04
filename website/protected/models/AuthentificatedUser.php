@@ -53,6 +53,20 @@ class AuthentificatedUser extends User {
         parent::setDescription($userDesc);
     }
 
+    /*
+     * @returns: User object which represents the same user
+     */
+    public function getUser() {
+        return new User(
+                $this->getEmail(),
+                $this->getName(),
+                $this->getSurname(),
+                $this->getIsActive(),
+                $this->getRole(),
+                $this->getId()
+        );
+    }
+
     public function rules() {
         $rules = parent::rules();
         array_push($rules,

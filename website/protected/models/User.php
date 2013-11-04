@@ -83,7 +83,8 @@ class User extends ModelObject {
     }
 
     protected function setRole($role) {
-        TU::throwIfNot(is_numeric($role), TU::INVALID_ARGUMENT_EXCEPTION);
+        TU::throwIfNot(is_string($role), TU::INVALID_ARGUMENT_EXCEPTION);
+        TU::throwIfNot(in_array($role, UserRole::$ROLES), TU::INVALID_ARGUMENT_EXCEPTION);
         $this->valueChanged(self::CH_ROLE, $this->role, $role);
         $this->role = $role;
     }

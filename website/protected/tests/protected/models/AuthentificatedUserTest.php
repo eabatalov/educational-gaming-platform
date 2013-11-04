@@ -7,16 +7,24 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
 
     const PASS_SUFFIX = "password";
 
-    protected function mkUser($id_ = NULL, $email_ = NULL) {
-        $id = $id_ == NULL ? "0" : $id_;
-        $email = $email_ == NULL ? $id . UserTest::EMAIL_SUFFIX : $email_;
-        $name = $id . UserTest::NAME_SUFFIX;
-        $surname = $id . UserTest::SURNAME_SUFFIX;
-        $isActive = UserTest::IS_ACTIVE;
-        $role = UserTest::ROLE;
-        $pass = $id . AuthentificatedUserTest::PASS_SUFFIX;
+    public function mkUser($id = NULL, $email = NULL) {
+        $fields = array(
+            "id" => $id == NULL ? "0" : $id,
+            "email" => $email == NULL ? $id . UserTest::EMAIL_SUFFIX : $email
+        );
+        return $this->mkUserFromArray($fields);
+    }
+
+    static public function mkUserFromArray($fields = array()) {
+        $id = array_key_exists("id", $fields) ? $fields['id'] : "0";
+        $email = array_key_exists("email", $fields) ? $fields['email'] : $id . UserTest::EMAIL_SUFFIX;
+        $name = array_key_exists("name", $fields) ? $fields['name'] : $id . UserTest::NAME_SUFFIX;
+        $surname = array_key_exists("surname", $fields) ? $fields['surname'] : $id . UserTest::SURNAME_SUFFIX;
+        $isActive = array_key_exists("isActive", $fields) ? $fields['isActive'] : UserTest::IS_ACTIVE;
+        $pass = array_key_exists("pass", $fields) ? $fields['pass'] : $id . self::PASS_SUFFIX;
+        $role = array_key_exists("role", $fields) ? $fields['role'] : UserTest::ROLE;
         return new AuthentificatedUser($email, $name, $surname, $isActive,
-            $role, $pass, $id);
+                                        $role, $pass, $id);
     }
 
     /**
@@ -80,6 +88,16 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         self::setterTest($user, 'Surname', $user->getSurname() . "bar", 1);
     }
 
+    public function testGetUser() {
+        $authUser = $this->mkUser();
+        assert($authUser->getEmail() == $authUser->getUser()->getEmail());
+        assert($authUser->getName() == $authUser->getUser()->getName());
+        assert($authUser->getSurname() == $authUser->getUser()->getSurname());
+        assert($authUser->getIsActive() == $authUser->getUser()->getIsActive());
+        assert($authUser->getRole() == $authUser->getUser()->getRole());
+        assert($authUser->getId() == $authUser->getUser()->getId());
+    }
+
     /**
      * @covers All the change tracking setters of AuthentificatedUser class
      */
@@ -130,7 +148,7 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         $newSurname = $NEW_PREFIX . $oldSurname;
         $newPassword = $NEW_PREFIX . $oldPassword;
         $newIsActive = !$oldIsActive;
-        $newRole = ($oldRole + 1) % UserRole::LAST_ROLE;
+        $newRole = UserRole::ADMIN;
 
         $user->setEmail($newEmail);
         $user->setName($newName);
