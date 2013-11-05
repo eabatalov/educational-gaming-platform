@@ -200,5 +200,29 @@ class PostgresUserStorageTest extends PHPUnit_Framework_TestCase {
         assert($authUser->getRole() == $authUserSaved->getRole());
         assert($authUser->getId() == $authUserSaved->getId());
     }
-
+    /**
+     * @covers PostgresUserStorage::addUser
+     */
+    public function testInvalidUserAdd() {
+        try {
+            $user = UserTest::mkUserFromArray(array("email" => ""));
+            self::$storage->addUser($user, self::PASSWORD);
+            assert(FALSE, "Exception expected");
+        } catch (InvalidArgumentException $ex) {
+            assert($ex->getCode() == ModelObject::ERROR_INVALID_OBJECT);
+        }
+    }
+    /**
+     * @covers PostgresUserStorage::saveAuthUser
+     */
+    public function testInvalidUserSave() {
+        try {
+            $authUser = self::$storage->getAuthentificatedUser(self::EMAIL, self::PASSWORD);
+            $authUser->setEmail("");
+            self::$storage->saveAuthUser($authUser);
+            assert(FALSE, "Exception expected");
+        } catch (InvalidArgumentException $ex) {
+            assert($ex->getCode() == ModelObject::ERROR_INVALID_OBJECT);
+        }
+    }
 }

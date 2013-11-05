@@ -7,6 +7,12 @@
  * @author eugene
  */
 class ModelObject extends CFormModel {
+    
+    /*
+     * Exception with this error code will be thrown on attempt to save
+     * ModelObject which hasn't passed validation to persistent storage
+     */
+    const ERROR_INVALID_OBJECT = 0x1000001;
 
     public function __construct() {
         $this->changes = NULL;        

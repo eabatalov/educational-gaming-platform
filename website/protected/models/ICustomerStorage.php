@@ -11,16 +11,17 @@ interface ICustomerStorage {
     //const ERROR_EMAIL_EXISTS = IUserStorage::ERROR_EMAIL_EXISTS;
 
     /*
-     * adds customer to persistent storage
+     * Adds customer and its user to persistent storage.
+     * Customer's user should be set.
      * @param customer: instance of Customer class
      * @param password: password of new customer's user
      * @returns: void
      * @throws StorageException if failed on storage problem
      * @throws InvalidArgumentException
      *  if failed on customer's storage level validation
-     * Relevant InvalidArgumentException codes: (ERROR_EMAIL_EXISTS)
+     * Relevant InvalidArgumentException codes: (ERROR_EMAIL_EXISTS, ERROR_INVALID_OBJECT)
      */
-    function addCustomer(Customer $customer, $password);
+    function addCustomerAndUser(Customer $customer, $password);
     /*
      * @param email: customer's email
      * @returns: corresponding instance of Customer class
@@ -51,13 +52,13 @@ interface ICustomerStorage {
     function searchCustomers($query, $matchType = NULL);
     /*
      * Save all the changes made for the authentificated customer to persistent
-     * storage
+     * storage. Don't save customer's user changes.
      * @param authCustomer: instance of AuthentificatedCustomer to save
      * @returns: void
      * @throws StorageException if failed on storage problem
      * @throws InvalidArgumentException if failed on customer's storage level validation
      * Relevant InvalidArgumentException codes: (ERROR_NO_CUSTOMER_WITH_SUCH_EMAIL,
-     * ERROR_INVALID_PASSWORD, ERROR_EMAIL_EXISTS)
+     * ERROR_INVALID_PASSWORD, ERROR_EMAIL_EXISTS, ERROR_INVALID_OBJECT)
      */
     function saveAuthCustomer(AuthentificatedCustomer $authCustomer);
 }

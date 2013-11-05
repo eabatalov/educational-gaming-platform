@@ -31,6 +31,8 @@ class PostgresUserStorage implements IUserStorage {
 
     public function addUser(User $user, $password) {
         assert(is_string($password));
+        TU::throwIfNot($user->validate(), TU::INVALID_ARGUMENT_EXCEPTION,
+            NULL, ModelObject::ERROR_INVALID_OBJECT);
 
         $dupEmail = TRUE;
         try {
@@ -81,6 +83,9 @@ class PostgresUserStorage implements IUserStorage {
     }
 
     public function saveAuthUser(AuthentificatedUser $authUser) {
+        TU::throwIfNot($authUser->validate(), TU::INVALID_ARGUMENT_EXCEPTION,
+            NULL, ModelObject::ERROR_INVALID_OBJECT);
+
         $changes = $authUser->getValueChanges();
         //TODO make it all in DB, fix races
         $authEmail = array_key_exists(AuthentificatedUser::CH_EMAIL, $changes) ?

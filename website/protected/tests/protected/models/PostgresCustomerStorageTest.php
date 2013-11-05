@@ -21,7 +21,7 @@ class PostgresCustomerStorageTest extends PHPUnit_Framework_TestCase {
         for($i = 1; $i <= 3; ++$i) {
             $fr_email = strval($i) . "friend" . self::EMAIL;
             self::$fr[$i] = new Customer(UserTest::mkUserFromArray(array('email' => $fr_email)));
-            self::$storage->addCustomer(self::$fr[$i], self::PASSWORD);
+            self::$storage->addCustomerAndUser(self::$fr[$i], self::PASSWORD);
             self::$fr[$i] = self::$storage->getCustomer($fr_email);
         }
     }
@@ -36,20 +36,16 @@ class PostgresCustomerStorageTest extends PHPUnit_Framework_TestCase {
     }
 
     protected static function mkCustomer() {
-        $user = UserTest::mkUserFromArray(array(
+        return CustomerTest::mkCustomerFromArray(array(
             "email" => self::EMAIL,
             "password" => self::PASSWORD
-        ));
-        return new Customer($user, self::$fr);
+        ), self::$fr);
     }
 
-    /**
-     * @covers PostgresCustomerStorage::addCustomer
-     * @covers PostgresCustomerStorage::getCustomer
-     */
+    
     public function testAddCustomer() {
         $customer = self::mkCustomer();
-        self::$storage->addCustomer($customer, self::PASSWORD);
+        self::$storage->addCustomerAndUser($customer, self::PASSWORD);
         $savedCustomer = self::$storage->getCustomer($customer->getUser()->getEmail());
         assert(CustomerTest::CustomersDataEq($customer, $savedCustomer),
             var_export($savedCustomer, true) . var_export($customer, true));
@@ -98,7 +94,7 @@ class PostgresCustomerStorageTest extends PHPUnit_Framework_TestCase {
             "email" => 'fr4' . self::EMAIL,
             "password" => self::PASSWORD
         )));
-        self::$storage->addCustomer($fr4, self::PASSWORD);
+        self::$storage->addCustomerAndUser($fr4, self::PASSWORD);
         $fr4 = self::$storage->getCustomer($fr4->getUser()->getEmail());
         $authCustomer->addFriend($fr4);
         //check that all is ok
@@ -107,5 +103,24 @@ class PostgresCustomerStorageTest extends PHPUnit_Framework_TestCase {
             self::$storage->getAuthCustomer($customer->getUser()->getEmail(), self::PASSWORD);
         assert(CustomerTest::CustomersDataEq($authCustomer2, $authCustomer),
                     var_export($authCustomer2, true) . var_export($authCustomer, true));
+    }
+    /**
+     * @covers PostgresCustomerStorage::addCustomer
+     */
+    public function testInvalidCustomerAndUserAdd() {
+        try {
+            $customer = CustomerTest::mkCustomerFromArray(array(
+                "email" => ""
+            ));
+            self::$storage->addCustomerAndUser($customer, self::PASSWORD);
+        } catch (InvalidArgumentException $ex) {
+            assert($ex->getCode() == ModelObject::ERROR_INVALID_OBJECT);
+        }
+    }
+    /**
+     * @covers PostgresCustomerStorage::saveAuthCustomer
+     */
+    public function testInvalidAuthCustomerSave() {
+            //PASS - no invalid customer for now
     }
 }

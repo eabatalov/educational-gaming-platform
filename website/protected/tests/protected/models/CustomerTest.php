@@ -33,6 +33,11 @@ class CustomerTest extends \PHPUnit_Framework_TestCase {
         return new Customer($this->customerUser, $friends);
     }
 
+    static public function mkCustomerFromArray($array, $friends = array()) {
+        $user = UserTest::mkUserFromArray($array);
+        return new Customer($user, $friends);
+    }
+
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.

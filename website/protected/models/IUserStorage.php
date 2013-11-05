@@ -20,7 +20,7 @@ Interface IUserStorage {
      * @returns: void
      * @throws StorageException if failed on storage problem
      * @throws InvalidArgumentException if failed on user's storage level validation
-     * Relevant InvalidArgumentException codes: (ERROR_EMAIL_EXISTS)
+     * Relevant InvalidArgumentException codes: (ERROR_EMAIL_EXISTS, ERROR_INVALID_OBJECT)
      */
     function addUser(User $user, $password);
     
@@ -51,7 +51,7 @@ Interface IUserStorage {
      * @throws StorageException if failed on storage problem
      * @throws InvalidArgumentException if failed on user's storage level validation
      * Relevant InvalidArgumentException codes: (ERROR_NO_USER_WITH_SUCH_EMAIL,
-     * ERROR_INVALID_PASSWORD, ERROR_EMAIL_EXISTS)
+     * ERROR_INVALID_PASSWORD, ERROR_EMAIL_EXISTS, ERROR_INVALID_OBJECT)
      */
     function saveAuthUser(AuthentificatedUser $authUser);
 }

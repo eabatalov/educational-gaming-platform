@@ -12,9 +12,12 @@ class PostgresCustomerStorage extends PostgresUserStorage implements ICustomerSt
         parent::__construct();
     }
 
-    public function addCustomer(Customer $customer, $password) {
+    public function addCustomerAndUser(Customer $customer, $password) {
         assert($customer->getUser() instanceof User);
         assert($customer->getUser()->getRole() == UserRole::CUSTOMER);
+        TU::throwIfNot($customer->validate() && $customer->getUser()->validate(),
+            TU::INVALID_ARGUMENT_EXCEPTION, NULL, ModelObject::ERROR_INVALID_OBJECT);
+
         $this->addUser($customer->getUser(), $password);
         $authCustomer =
             $this->getAuthCustomer($customer->getUser()->getEmail(), $password);
@@ -68,6 +71,8 @@ class PostgresCustomerStorage extends PostgresUserStorage implements ICustomerSt
     }
 
     public function saveAuthCustomer(AuthentificatedCustomer $authCustomer) {
+        TU::throwIfNot($authCustomer->validate(), TU::INVALID_ARGUMENT_EXCEPTION,
+            NULL, ModelObject::ERROR_INVALID_OBJECT);
         if (!array_key_exists(AuthentificatedCustomer::CH_FRIENDS,
             $authCustomer->getValueChanges())) {
             return;
