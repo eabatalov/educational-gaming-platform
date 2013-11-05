@@ -1,6 +1,6 @@
 <img src="media/images/pl_team_lbl.png" alt="Img" height="342" width="368">
 <div>
-        <h1>We are Studify</h1>
+        <h1>Synapse Builder</h1>
         <br/>
         <h2>
                 Multiplayer?

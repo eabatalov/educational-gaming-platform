@@ -11,7 +11,7 @@
 	<div id="header">
 		<div>
 			<div class="logo">
-                                <?php echo CHtml::link("Studify",$this->createUrl("site/index")); ?>
+                                <?php echo CHtml::link("SynapseBuilder",$this->createUrl("site/index")); ?>
                                 <p>
                                     Educational gaming platform
                                 </p>
@@ -35,17 +35,21 @@
             </div>
         </div>
 	<div id="footer">
-		<div class="clearfix">
-			<div id="connect">
-				<a href="" target="_blank" class="facebook"></a>
-                                <a href="" target="_blank" class="googleplus"></a>
-                                <a href="" target="_blank" class="twitter"></a>
-                                <a href="" target="_blank" class="tumbler"></a>
-			</div>
-			<p>
-                            All rights reserved but for what? :)
-			</p>
-		</div>
+            <div class="clearfix">
+                <div id="connect">
+                    <a href="" target="_blank" class="facebook"></a>
+                    <a href="" target="_blank" class="googleplus"></a>
+                    <a href="" target="_blank" class="twitter"></a>
+                    <a href="" target="_blank" class="tumbler"></a>
+                </div>
+                <!--Don't remove this website template site's copyright.
+                    We'll check whether we can remove it later.
+                    If design of our website cnahges much then we can remove
+                    this copyright without checking. -->
+                <p>
+                        © 2023 Zerotype. All Rights Reserved.
+                </p>
+            </div>
 	</div>
 </body>
 </html>
