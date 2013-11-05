@@ -3,10 +3,11 @@
 /**
  * @author eugene
  */
-
+$protectedDir = \dirname(__FILE__)."/../";
 //all the paths are relative to website/protected/tests
 set_include_path(get_include_path() . PATH_SEPARATOR .
-        \dirname(__FILE__)."/../models/");
+        $protectedDir ."/models/" . PATH_SEPARATOR .
+        $protectedDir . "/models/postgres/");
 
 require_once \dirname(__FILE__).'/../external/yii/framework/yii.php';
 
