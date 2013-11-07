@@ -4,7 +4,9 @@ import sys, time
 from optparse import OptionParser
 import postgresql.driver as pg_driver
 
-files = ["./create_db.sql", "./fill_db.py"] #add files to run here
+#add files to run here
+files_db = ["./create_db.sql", "./fill_db.py"] 
+files_all = files_db + ["./packages.sh"]
 conn = None #DB connection to be used throught setupe process
 
 def check_ver():
@@ -14,15 +16,17 @@ def check_ver():
 def parse_opts():
 	opt_parser = OptionParser()
 	opt_parser.add_option("--host", dest="db_host", default="127.0.0.1",
-		help="host name or ip of target postgres instance")
+		metavar="HOST", help="host name or ip of target postgres instance")
 	opt_parser.add_option("-p", "--port", dest="db_port", default="5432",
-		help="port of target postgres instance")
+		metavar="PORT", help="port of target postgres instance")
 	opt_parser.add_option("--db", dest="db_name", default="postgres",
-		help="target db on target postgres instance")
+		metavar="DATABASE", help="target db on target postgres instance")
 	opt_parser.add_option("-u", "--user", dest="db_user", default="postgres",
-		help="password for target postgres instance")
+		metavar="USER", help="user of target postgres instance")
 	opt_parser.add_option("--pass", dest="db_pass", default="111",
-		help="password for target postgres instance")
+		metavar="PASS", help="password for target postgres instance")
+	opt_parser.add_option("-a", "--all", dest="is_all", action="store_true",
+		help="run all scripts - running only db scripts by default")
 
 	(options, args) = opt_parser.parse_args()
 	print("Running with options: ", options.__dict__)
@@ -52,12 +56,19 @@ def run_py(file_name):
 	exec(compile(open(file_name).read(), file_name, 'exec'))
 	print("FINISHED EXECUTION OF PYTHON FILE:", file_name)
 
+def run_bash(file_name):
+	import subprocess
+	print("EXECUTING BASH FILE:", file_name)
+	subprocess.call(file_name, shell=True)
+	print("FINISHED EXECUTION OF BASH FILE:", file_name)
+
 def main():
 	global conn
 	global files
 	check_ver()
 	opts = parse_opts()
 	conn = setup_con(opts)
+	files = files_all if opts["is_all"] else files_db
 
 	try:
 		for file_name in files:
@@ -65,6 +76,8 @@ def main():
 				run_sql(file_name)
 			elif file_name.endswith(".py"):
 				run_py(file_name)
+			elif file_name.endswith(".sh"):
+				run_bash(file_name)
 			else:
 				print("USUPPORTED FILE: ", file_name)
 				exit(1)

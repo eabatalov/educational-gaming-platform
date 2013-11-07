@@ -19,8 +19,8 @@ class PostgresUserStorageTest extends PHPUnit_Framework_TestCase {
         self::$storage = new PostgresUserStorage();
         $output = array();
         $status = 0;
-        assert(chdir(dirname(__FILE__) . "/../../../../../db/"));
-        $setup_db = "./setup_db.py --host=" . PostgresUtils::getHostName() .
+        assert(chdir(dirname(__FILE__) . "/../../../../../setup/"));
+        $setup_db = "./setup.py --host=" . PostgresUtils::getHostName() .
                 " --db=" . PostgresUtils::getDbName() .
                 " --user=" . PostgresUtils::getUserName() .
                 " --pass=" . PostgresUtils::getPassword();
