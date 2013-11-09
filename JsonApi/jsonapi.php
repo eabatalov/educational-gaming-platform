@@ -2,10 +2,12 @@
 /*
  * This section is needed to load model classes
  */
-$protectedDir = \dirname(__FILE__).'../website/protected/';
+
+$protectedDir = \dirname(__FILE__).'/../website/protected/';
 set_include_path(get_include_path() . PATH_SEPARATOR .
         $protectedDir ."/models/" . PATH_SEPARATOR .
-        $protectedDir . "/models/postgres/");
+        $protectedDir . "/models/postgres/" . PATH_SEPARATOR .
+        $protectedDir . '/tests/protected/models/' . PATH_SEPARATOR);
 
 require_once $protectedDir . '/external/yii/framework/yii.php';
 function autoloader($className) {
@@ -96,14 +98,9 @@ static  $vbmstorage;
         * $user = $vbmstorage->getUser("95_Email@example.com");
         */
        //Simply construct new User model class and return. This won't need working DB
-       $user = UserTest::mkUserFromArray(array(
-           "id" => 1,
-           "name" => "Chuck",
-           "surname" => "Norris",
-           "email" => "hack@chucknorris.com",
-           "role" => UserRole::CUSTOMER
-       )); 
-       return $user;
+       $user = new User("hack@chucknorris.com", "Chuck", "Norris", FALSE,
+                        UserRole::CUSTOMER, 1); 
+       return $user->getName() . ": " . $user->getEmail();
     }
 
 // Define whether an HTTPS connection is required
