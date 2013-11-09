@@ -16,7 +16,7 @@ insert_user_ps = conn.prepare(INSERT_USER_SQL)
 insert_friendship_ps = conn.prepare(INSERT_FRIENDSHIP_SQL)
 
 default_user = { 'name' : 'Name_', 'surname' : 'Surame_',
-	'email' : 'Email_', 'is_active' : False,
+	'email' : '_Email@example.com', 'is_active' : False,
 	'password' : 'Password_', 'role' : 'CUSTOMER'}
 
 CUSTOMER_NUM = 100
@@ -24,13 +24,13 @@ FRIEND_MAX_NUM = 10
 
 print('CREATING USER')
 for i in range(0, CUSTOMER_NUM):
-	suffix = str(i)
+	unique = str(i)
 	new_user = [
-		default_user['name'] + suffix,
-		default_user['surname'] + suffix,
-		default_user['email'] + suffix,
+		default_user['name'] + unique,
+		default_user['surname'] + unique,
+		unique + default_user['email'],
 		default_user['is_active'],
-		default_user['password'] + suffix,
+		default_user['password'] + unique,
 		default_user['role'],
 		]
 	insert_user_ps(new_user[0],
