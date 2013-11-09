@@ -1,5 +1,17 @@
 <?php
+/*
+ * This section is needed to load model classes
+ */
+$protectedDir = \dirname(__FILE__).'../website/protected/';
+set_include_path(get_include_path() . PATH_SEPARATOR .
+        $protectedDir ."/models/" . PATH_SEPARATOR .
+        $protectedDir . "/models/postgres/");
 
+require_once $protectedDir . '/external/yii/framework/yii.php';
+function autoloader($className) {
+    include_once($className . ".php");
+}
+spl_autoload_register('autoloader'); 
 
 /*
     Learzing API Demo
@@ -78,8 +90,20 @@ function deliver_response($format, $api_response){
 static  $vbmstorage;
 
      function vbmtesting() {
-       $vbmstorage = new UserTest(); //  User();
-       return $vbmstorage->testGetEmail(); 
+       //This will throw exception if you havent setup DBS
+       //See PostgresUserStorageTest::setUpBeforeClass() for DB initialization example
+       /* $vbmstorage = new PostgresUserStorage();
+        * $user = $vbmstorage->getUser("95_Email@example.com");
+        */
+       //Simply construct new User model class and return. This won't need working DB
+       $user = UserTest::mkUserFromArray(array(
+           "id" => 1,
+           "name" => "Chuck",
+           "surname" => "Norris",
+           "email" => "hack@chucknorris.com",
+           "role" => UserRole::CUSTOMER
+       )); 
+       return $user;
     }
 
 // Define whether an HTTPS connection is required
