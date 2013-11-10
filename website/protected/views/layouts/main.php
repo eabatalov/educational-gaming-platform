@@ -11,7 +11,7 @@
 	<div id="header">
 		<div>
 			<div class="logo">
-                                <?php echo CHtml::link(Yii::app()->name,$this->createUrl("site/index")); ?>
+                                <?php echo CHtml::image('/media/images/logo.gif'); ?>
                                 <p>
                                     Educational gaming platform
                                 </p>
