@@ -116,9 +116,9 @@ class HandlerController extends EGPControllerBase {
             if ($user->validate()) {
                 $userStorage = new PostgresUserStorage();
                 //TODO make random password generation in this case
-                $hauthPassword = "HybAuth:make_it_random!";
-                $userStorage->addUser($user, $hauthPassword);
-                $authUser = $userStorage->getAuthentificatedUser($user->getEmail(), $hauthPassword);
+                $userPassword = AuthUtils::genPassword();
+                $userStorage->addUser($user, $userPassword);
+                $authUser = $userStorage->getAuthentificatedUser($user->getEmail(), $userPassword);
 
                 if ($this->module->withYiiUser == true) {
                     throw new Exception("Not implemented");
