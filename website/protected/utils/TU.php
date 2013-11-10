@@ -32,6 +32,25 @@ class TU {
         }
     }
 
+    /*
+     * Format exception data depending on current debug mode
+     * and make it ready for rendering to HTML page
+     */
+    static public function htmlFormatExceptionForUser(Exception $ex) {
+        $message =
+            'Error occured.' . PHP_EOL .
+            'Code: ' . (string)$ex->getCode() . PHP_EOL .
+            'Message: ' . $ex->getMessage() . PHP_EOL .
+            'Please try again.' . PHP_EOL;
+        if (YII_DEBUG)
+            $message = $message .
+                'Exception backtrace (displayed in dev mode only):' . PHP_EOL .
+                CVarDumper::dumpAsString($ex->getTrace());
+
+        $formatter = new CFormatter();
+        return $formatter->formatNtext($message);
+    }
+
     //Exceptions names constants for convenience
     const EXCEPTION = 'Exception';
     const INVALID_ARGUMENT_EXCEPTION = 'InvalidArgumentException';

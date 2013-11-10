@@ -32,7 +32,7 @@ class HandlerController extends EGPControllerBase {
     }
 
     private function doActionSafe() {
-        //try {
+        try {
             if (!isset(Yii::app()->session['hybridauth-referrer'])) {
                 Yii::app()->session['hybridauth-referrer'] = Yii::app()->request->urlReferrer;
             }
@@ -45,15 +45,17 @@ class HandlerController extends EGPControllerBase {
             $this->isSafeContext = TRUE;
             //Main work is here
             $this->action->run();
-        //} catch (Exception $e) {
+        } catch (Exception $ex) {
             /*
              * TODO we need some rollback of DB here.
              * We could get Exception in the middle of the process
              * At least we should log fatal exceptions
              */
-            //Yii::app()->user->setFlash('hybridauth-error', "Sorry. Something went wrong.");
-            //$this->redirect(Yii::app()->session['hybridauth-referrer'], true);
-        //}
+            Yii::app()->user->setFlash('hybridauth-error',
+                "Sorry. Something went wrong." . PHP_EOL .
+                TU::htmlFormatExceptionForUser($ex));
+            $this->redirect(Yii::app()->session['hybridauth-referrer'], true);
+        }
     }
 
     private function doHybLogin() {
