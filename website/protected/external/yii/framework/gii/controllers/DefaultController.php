@@ -1,6 +1,6 @@
 <?php
 
-class DefaultController extends CController
+class HandlerController extends CController
 {
 	public $layout='/layouts/column1';
 

@@ -2,13 +2,18 @@
 
 class renderProviders extends CWidget {
 
+        const ACTION_SIGNUP = 'signup';
+        const ACTION_LOGIN = 'login';
 	public $config;
+        public $action; //'signup' or 'login'
 	private $_assetsUrl;
 	
 	public function init() {
 		// this method is called by CController::beginWidget()
 		$this->config = Yii::app()->getModule('hybridauth')->getConfig();
 		$this->_assetsUrl = Yii::app()->getModule('hybridauth')->getAssetsUrl();
+                if ($this->action != self::ACTION_LOGIN && $this->action != self::ACTION_SIGNUP)
+                    throw new InvalidArgumentException('Action name is invalid!');
 	}
 
 	public function run() {
@@ -23,8 +28,10 @@ class renderProviders extends CWidget {
 		$cs->registerCssFile($this->_assetsUrl . '/styles.css');
 		$providers = $this->config['providers'];
 		
-		foreach ($providers as &$provider) {
+		foreach ($providers as $key => &$provider) {
 			$provider['active']=false;
+                        if ($this->action == self::ACTION_SIGNUP && !$provider['showOnSignup'])
+                            unset($providers[$key]);
 		}
 		if (!Yii::app()->user->isGuest) {
                         $hauthStorage = new PostgresHybridAuthStorage();
@@ -36,7 +43,7 @@ class renderProviders extends CWidget {
 			'baseUrl'=>$this->config['baseUrl'],
 			'providers' => $providers,
 			'assetsUrl' =>  $this->_assetsUrl,
+                        'action'    => $this->action
 		));
-
 	}
 }

@@ -50,7 +50,8 @@ class HybridAuthIdentity extends EGPIdentityBase {
         //if ($adapter->isUserConnected()) {
                 $this->adapter = $adapter;
                 $this->loginProviderIdentifier = $this->adapter->getUserProfile()->identifier;
-                $this->email = $this->adapter->getUserProfile()->email;
+                //This is convenient but it s security hole. Live email NULL;
+                //$this->email = $this->adapter->getUserProfile()->email;
 
                 $this->fillAuthUserFromStorage();
                 return $this->errorCode == self::ERROR_NONE;

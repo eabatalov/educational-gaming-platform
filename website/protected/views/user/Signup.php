@@ -37,5 +37,5 @@
 </div><!-- form -->
 
 <?php
-$this->widget('application.modules.hybridauth.widgets.renderProviders');
+$this->widget('application.modules.hybridauth.widgets.renderProviders', array('action' => 'signup'));
 ?>

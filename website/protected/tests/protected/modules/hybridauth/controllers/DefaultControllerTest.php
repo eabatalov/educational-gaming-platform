@@ -6,7 +6,7 @@
 class DefaultControllerTest extends PHPUnit_Framework_TestCase {
 
     /**
-     * @var DefaultController
+     * @var HandlerController
      */
     protected $controller;
 
@@ -15,7 +15,7 @@ class DefaultControllerTest extends PHPUnit_Framework_TestCase {
      * This method is called before a test is executed.
      */
     protected function setUp() {
-        $this->controller = new DefaultController(0);
+        $this->controller = new HandlerController(0);
     }
 
     /**

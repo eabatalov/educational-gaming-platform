@@ -55,8 +55,8 @@ class UserController extends EGPControllerBase {
      * Handler for manual user login through entering email and password
      */
     public function actionLogin() {
-        if (!Yii::app()->user->isGuest)
-            $this->redirect (self::$URL_REDIRECT_ON_SUCCESS);
+        /*if (!Yii::app()->user->isGuest)
+            $this->redirect (self::$URL_REDIRECT_ON_SUCCESS);*/
 
         $this->pageTitle = self::$PAGE_NAME_LOGIN;
         $model = AuthentificatedUser::createEmpty();

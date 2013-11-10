@@ -32,7 +32,7 @@ class PostgresHybridAuthStorage implements IHybridAuthStorage {
     public function getAuthentificatedUser($loginProvider, $loginProviderIdentifier,
                                             $email = NULL) {
         assert(is_string($loginProvider));
-        assert(is_string($loginProviderIdentifier));
+        assert($loginProviderIdentifier != NULL);
 
         $result = pg_query_params($this->conn, self::$SQL_GET_USER_EMAIL_PASS_BY_HAUTH,
             array($loginProvider, $loginProviderIdentifier));

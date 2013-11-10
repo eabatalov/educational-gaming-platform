@@ -52,7 +52,7 @@ class HybridauthModule extends CWebModule {
 	public function getConfig() {
 		return array(
 			'baseUrl' => $this->baseUrl,
-			'base_url' => $this->baseUrl . '/default/callback', // URL for Hybrid_Auth callback
+			'base_url' => $this->baseUrl . '/handler/callback', // URL for Hybrid_Auth callback
 			'providers' => $this->providers,
 		);
 	}
