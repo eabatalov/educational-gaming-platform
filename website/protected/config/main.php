@@ -55,13 +55,13 @@ return array(
                 ),
                 //Don't show on signup - doesn't provide email. Need request it from user - not implemented
                 "Twitter" => array ( 
-                    "enabled" => true,
+                    "enabled" => false,
                     "keys"    => array ( "key" => "LwiRbzXDGhzvhuvPFLRkg", "secret" => "LMcDHie2pNJ9N8xNa4EfNaIqHKqDB27R5sOylu8Ci8w" ),
                     "showOnSignup" => false,
                 ),
                 //Don't show on signup - doesn't provide email. Need request it from user - not implemented
                 "Vkontakte" => array ( 
-                    "enabled" => true,
+                    "enabled" => false,
                     "keys"    => array ( "id" => "3986656", "secret" => "MywzE8lVxd861Uu6rm2I" ),
                     "scope"        => "offline, wall, friends, email",
                     "showOnSignup" => false,
