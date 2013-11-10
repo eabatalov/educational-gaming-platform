@@ -8,15 +8,21 @@
 class AuthentificatedUser extends User {
     
     /*
+     * Fabric method. Use as constructor.
      * @param id: optional, used for internal data provider and testing purposes
      */
-    public function __construct($email, $name, $surname, $isActive,
+    static public function createInstance($email, $name, $surname, $isActive,
                             $role, $password, $id = NULL) {
-        parent::__construct($email, $name, $surname, $isActive,
-                            $role, $id);
-        $this->dsChangeTracking();
-        $this->setPassword($password);
-        $this->enChangeTracking();
+        return new AuthentificatedUser(FALSE, $email, $name, $surname, $isActive,
+                            $role, $password, $id);
+    }
+
+    /*
+     * Overrides corresponding ModelObject method
+     */
+    static public function createEmpty() {
+        //All fields are NULL
+        return new AuthentificatedUser(TRUE);
     }
 
     public function getPassword() {
@@ -57,7 +63,7 @@ class AuthentificatedUser extends User {
      * @returns: User object which represents the same user
      */
     public function getUser() {
-        return new User(
+        return User::createInstance(
                 $this->getEmail(),
                 $this->getName(),
                 $this->getSurname(),
@@ -77,6 +83,19 @@ class AuthentificatedUser extends User {
             //array('password', 'compare', 'compareAttribute'=>'password_repeat', 'on'=>'register'),
         );
         return $rules;
+    }
+
+    //public just because we can't hide constructor if it was public in one of parent classes
+    public function __construct($mkEmpty, $email = NULL, $name = NULL, $surname = NULL,
+                            $isActive = NULL, $role = NULL, $password = NULL, $id = NULL) {
+        assert(is_bool($mkEmpty));
+        if (!$mkEmpty) {
+            parent::__construct(FALSE, $email, $name, $surname, $isActive,
+                            $role, $id);
+            $this->dsChangeTracking();
+            $this->setPassword($password);
+            $this->enChangeTracking();
+        }
     }
 
     //Str[100]

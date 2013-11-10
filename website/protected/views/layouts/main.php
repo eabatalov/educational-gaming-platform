@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Studify
+        <title><?php echo Yii::app()->name;?>
             <?php echo $this->pageTitle == EGPControllerBase::$DEFAULT_PAGE_TITLE ? "" : (" : " . $this->pageTitle)?>
         </title>
 	<link rel="stylesheet" href="/media/css/style.css" type="text/css">
@@ -11,7 +11,7 @@
 	<div id="header">
 		<div>
 			<div class="logo">
-                                <?php echo CHtml::link("SynapseBuilder",$this->createUrl("site/index")); ?>
+                                <?php echo CHtml::link(Yii::app()->name,$this->createUrl("site/index")); ?>
                                 <p>
                                     Educational gaming platform
                                 </p>
@@ -42,12 +42,12 @@
                     <a href="" target="_blank" class="twitter"></a>
                     <a href="" target="_blank" class="tumbler"></a>
                 </div>
-                <!--Don't remove this website template site's copyright.
-                    We'll check whether we can remove it later.
-                    If design of our website cnahges much then we can remove
-                    this copyright without checking. -->
+                <!--Don't remove this website template site's information.
+                    Term of template usage requires it.
+                    This web site template was designed by http://www.freewebsitetemplates.com
+                -->
                 <p>
-                        © 2023 Zerotype. All Rights Reserved.
+                    <?php echo Yii::app()->name;?> Inc :)
                 </p>
             </div>
 	</div>

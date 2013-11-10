@@ -10,22 +10,20 @@
 class User extends ModelObject {
 
     /*
-    * @arg id: optional,
-    * almost for internal data provider usage and for testing purposes
+    * Fabric method. Use as constructor.
+    * @arg id: is optional and
+    *   almost for internal data provider usage and for testing purposes
     */
-    public function __construct($email, $name, $surname, $isActive,
+    static public function createInstance($email, $name, $surname, $isActive,
                             $role, $id = NULL) {
-        parent::__construct();
-        $this->dsChangeTracking();
-        if ($id != NULL) {
-            $this->setId($id);
-        }
-        $this->setEmail($email);
-        $this->setName($name);
-        $this->setSurname($surname);
-        $this->setIsActive($isActive);
-        $this->setRole($role);
-        $this->enChangeTracking();
+        return new User(FALSE, $email, $name, $surname, $isActive, $role, $id);
+    }
+ 
+    /*
+     * Overrides corresponding ModelObject method
+     */
+    static public function createEmpty() {
+        return new User(TRUE);
     }
 
     public function getId() {
@@ -42,6 +40,10 @@ class User extends ModelObject {
 
     public function getSurname() {
         return $this->surname;
+    }
+
+    public function getDisplayName() {
+        return $this->getName() . " " . $this->getSurname();
     }
 
     public function getIsActive() {
@@ -98,7 +100,26 @@ class User extends ModelObject {
         );
     }
 
-        //Int
+    //public just because we can't hide constructor if it was public in one of parent classes
+    public function __construct($mkEmpty, $email = NULL, $name = NULL, $surname = NULL,
+                                $isActive = NULL, $role = NULL, $id = NULL) {
+        assert(is_bool($mkEmpty));
+        if (!$mkEmpty) {
+            parent::__construct();
+            $this->dsChangeTracking();
+            if ($id != NULL) {
+                $this->setId($id);
+            }
+            $this->setEmail($email);
+            $this->setName($name);
+            $this->setSurname($surname);
+            $this->setIsActive($isActive);
+            $this->setRole($role);
+            $this->enChangeTracking();
+        }
+    }
+
+    //Int
     private $id;
     //Str[50]
     private $email;

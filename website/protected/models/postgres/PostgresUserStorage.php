@@ -66,7 +66,7 @@ class PostgresUserStorage implements IUserStorage {
         TU::throwIf($data->password != $password, TU::INVALID_ARGUMENT_EXCEPTION, pg_last_error(),
             IUserStorage::ERROR_INVALID_PASSWORD);
 
-        return new AuthentificatedUser(
+        return AuthentificatedUser::createInstance(
                 $data->email,
                 $data->name,
                 $data->surname,
@@ -129,7 +129,7 @@ class PostgresUserStorage implements IUserStorage {
         TU::throwIf($data == FALSE, TU::INVALID_ARGUMENT_EXCEPTION, pg_last_error(),
                 self::ERROR_NO_USER_WITH_SUCH_EMAIL);
 
-        return new User(
+        return User::createInstance(
                 $data->email,
                 $data->name,
                 $data->surname,
@@ -146,7 +146,7 @@ class PostgresUserStorage implements IUserStorage {
 
         $found = array();
         while(($data = pg_fetch_object($result)) != FALSE) {
-            $found[$data->id] = new User(
+            $found[$data->id] = User::createInstance(
                     $data->email,
                     $data->name,
                     $data->surname,

@@ -1,7 +1,7 @@
 <?php
  
 /**
- * Add validation and changes tracking functionality
+ * Adds validation and changes tracking functionality
  * to derived class
  *
  * @author eugene
@@ -19,6 +19,36 @@ class ModelObject extends CFormModel {
         $this->disableTrackCnt = 0;
     }
 
+    /*
+     * Should be overiden by child classes.
+     * Create new object with empty or default fields values
+     * Use this object for binding with ActiveForm class in views
+     */
+    static public function createEmpty() {
+        throw new BadMethodCallException("Should be overriden in child classes");
+    }
+
+    //==================== Errors in this model object ======================
+    public function addFatalError(Exception $ex) {
+        $message =
+            'Fatal error occured.' . PHP_EOL .
+            'Code ' . (string)$ex->getCode() . PHP_EOL .
+            'Please try again.' . PHP_EOL;
+        if (YII_DEBUG)
+            $message = $message .
+                'Exception (displayed in dev mode only):' . PHP_EOL .
+                $ex->getMessage() . PHP_EOL .
+                CVarDumper::dumpAsString($ex->getTrace());
+
+        $this->addHtmlFormattedError('Fatal error', $message);
+    }
+
+    public function addHtmlFormattedError($attribute, $message) {
+        $formatter = new CFormatter();
+        $this->addError($attribute, $formatter->formatNtext($message));
+    }
+
+    //========================== CHANGES TRACKING ===========================
     /*
      * Call in the beginning of your constructor
      * to temporarely disable changes tracking

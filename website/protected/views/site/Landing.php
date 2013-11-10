@@ -1,13 +1,30 @@
-<img src="media/images/pl_team_lbl.png" alt="Img" height="342" width="368">
+<img src="/media/images/pl_team_lbl.png" alt="Img" height="342" width="368">
 <div>
-        <h1>Synapse Builder</h1>
+        <h1><?php echo Yii::app()->name;?></h1>
         <br/>
         <h2>
                 Multiplayer?
                 Social?<br/>
                 Attention catching?<br/>
-                It is all about <b>education!</b>
+                It's all about <b>education!</b>
         </h2>
         <br/>
-        <?php echo CHtml::link("Try It Now!",$this->createUrl("user/index"), array("class" => "btn")); ?>
+        <?php echo CHtml::link("Signup", $this->createUrl("user/signup"), array("class" => "btn")); ?>
+        <br/>
+        <h3>Already a member?</h3>
+        <?php echo CHtml::link("Login", $this->createUrl("user/login"), array("class" => "btn")); ?>
+        <br/>
+        <h3>Staying for too long? Try brand new functionality!</h3>
+        <?php echo CHtml::link("Logout", $this->createUrl("user/logout"), array("class" => "btn")); ?>
+
+        <p>
+        <?php echo "User id: " . Yii::app()->user->id;?>
+        </p>
+        <p>
+        <?php echo "User name: " . Yii::app()->user->name;
+              if (isset(Yii::app()->user->authUser))
+                      echo var_dump(Yii::app()->user->authUser, true);
+              //phpinfo();
+        ?>
+        </p>
 </div>

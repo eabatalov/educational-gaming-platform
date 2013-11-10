@@ -21,7 +21,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase {
         $isActive = FALSE;
         $role = UserRole::CUSTOMER;
         $password = "password" . $id;
-        $user = new AuthentificatedUser($email,
+        $user = AuthentificatedUser::createInstance($email,
                 $name, $surname, $isActive,
                 $role,
                 $password, $id);
@@ -30,12 +30,12 @@ class CustomerTest extends \PHPUnit_Framework_TestCase {
 
     protected function mkCustomer($id, $friends) {
         $this->customerUser = $this->mkUser($id);
-        return new Customer($this->customerUser, $friends);
+        return Customer::createInstance($this->customerUser, $friends);
     }
 
     static public function mkCustomerFromArray($array, $friends = array()) {
         $user = UserTest::mkUserFromArray($array);
-        return new Customer($user, $friends);
+        return Customer::createInstance($user, $friends);
     }
 
     /**
@@ -87,5 +87,14 @@ class CustomerTest extends \PHPUnit_Framework_TestCase {
                 $c1->getUser()->getIsActive() == $c2->getUser()->getIsActive() and
                 $c1->getUser()->getRole() == $c2->getUser()->getRole();
         return $userEq and array_keys($c1->getFriends()) == array_keys($c2->getFriends());
+    }
+
+    /*
+     * @covers Customer::createEmpty()
+     */
+    public function testCreateEmpty() {
+        $customer = Customer::createEmpty();
+        assert($customer->getUser() == NULL);
+        assert($customer->getFriends() == NULL);
     }
 }

@@ -26,7 +26,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         $surname = array_key_exists("surname", $fields) ? $fields['surname'] : $id . self::SURNAME_SUFFIX;
         $isActive = array_key_exists("isActive", $fields) ? $fields['isActive'] : self::IS_ACTIVE;
         $role = array_key_exists("role", $fields) ? $fields['role'] : self::ROLE;
-        return new User($email, $name, $surname, $isActive,
+        return User::createInstance($email, $name, $surname, $isActive,
                             $role, $id);
     }
 
@@ -107,5 +107,17 @@ class UserTest extends \PHPUnit_Framework_TestCase {
             "12345678901234567890" . "12345678901234567890";
         assert(!$this->mkUserFromArray(array("name" => $str240))->validate(),
                 "too long name");
+    }
+
+    /*
+     * @covers User::createEmpty()
+     */
+    public function testCreateEmpty() {
+        $user = User::createEmpty();
+        assert($user->getName() == NULL);
+        assert($user->getSurname() == NULL);
+        assert($user->getEmail() == NULL);
+        assert($user->getRole() == NULL);
+        assert($user->getIsActive() == NULL);
     }
 }

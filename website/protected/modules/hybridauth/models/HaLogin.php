@@ -28,7 +28,7 @@ class HaLogin extends CActiveRecord
      */
     public function tableName()
     {
-        return 'ha_logins';
+        return Yii::app()->db->tablePrefix .'ha_logins';
     }
 
     /**

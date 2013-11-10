@@ -23,7 +23,7 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         $isActive = array_key_exists("isActive", $fields) ? $fields['isActive'] : UserTest::IS_ACTIVE;
         $pass = array_key_exists("pass", $fields) ? $fields['pass'] : $id . self::PASS_SUFFIX;
         $role = array_key_exists("role", $fields) ? $fields['role'] : UserTest::ROLE;
-        return new AuthentificatedUser($email, $name, $surname, $isActive,
+        return AuthentificatedUser::createInstance($email, $name, $surname, $isActive,
                                         $role, $pass, $id);
     }
 
@@ -208,5 +208,18 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
 
         $user->setPassword($str240);
         assert(!$user->validate(), "Too long password");
+    }
+
+    /*
+     * @covers AuthentificatedUser::createEmpty()
+     */
+    public function testCreateEmpty() {
+        $authUser = AuthentificatedUser::createEmpty();
+        assert($authUser->getName() == NULL);
+        assert($authUser->getSurname() == NULL);
+        assert($authUser->getEmail() == NULL);
+        assert($authUser->getRole() == NULL);
+        assert($authUser->getPassword() == NULL);
+        assert($authUser->getIsActive() == NULL);
     }
 }

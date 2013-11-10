@@ -4,20 +4,18 @@
  * @author eugene
  */
 $protectedDir = \dirname(__FILE__)."/../";
-//all the paths are relative to website/protected/tests
+
 set_include_path(get_include_path() . PATH_SEPARATOR .
         $protectedDir ."/models/" . PATH_SEPARATOR .
-        $protectedDir . "/models/postgres/");
+        $protectedDir . "/models/postgres/" . PATH_SEPARATOR .
+        $protectedDir . "/models/hybrid_auth/" . PATH_SEPARATOR .
+        $protectedDir . "/modules/hybridauth/controllers/" . PATH_SEPARATOR
+        );
 
-require_once \dirname(__FILE__).'/../external/yii/framework/yii.php';
+define('YII_DEBUG',true);
+require_once $protectedDir . '/external/yii/framework/yii.php';
+require_once $protectedDir . '/modules/hybridauth/HybridauthModule.php';
 
-function autoloader($className) {
-    //$classPath =
-        //"/data/github/educational-gaming-platform/website/protected/models/"
-        //. $className;
-    print($className . "\n");
-    include_once($className . ".php");
-}
-
-spl_autoload_register('autoloader'); 
+require_once('PHPUnit/Runner/Version.php');
+require_once('PHPUnit/Autoload.php');
 ?>

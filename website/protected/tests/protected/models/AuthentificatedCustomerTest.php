@@ -12,11 +12,11 @@ class AuthentificatedCustomerTest extends PHPUnit_Framework_TestCase {
         $isActive = FALSE;
         $role = UserRole::CUSTOMER;
         $password = "password" . $id;
-        $user = new AuthentificatedUser($email,
+        $user = AuthentificatedUser::createInstance($email,
                 $name, $surname, $isActive,
                 $role,
                 $password, $id);
-        return new AuthentificatedCustomer($user, $friends);
+        return AuthentificatedCustomer::createInstance($user, $friends);
     }
 
     /**
@@ -137,5 +137,14 @@ class AuthentificatedCustomerTest extends PHPUnit_Framework_TestCase {
         $customer->addFriend($this->mkCustomer("2", array()));
         $customer->addFriend($this->mkCustomer("3", array()));
         assert($customer->validate(), "Normal customer");
+    }
+
+    /*
+     * @covers AuthentificatedCustomer::createEmpty()
+     */
+    public function testCreateEmpty() {
+        $authCustomer = AuthentificatedCustomer::createEmpty();
+        assert($authCustomer->getFriends() == NULL);
+        assert($authCustomer->getUser() == NULL);
     }
 }

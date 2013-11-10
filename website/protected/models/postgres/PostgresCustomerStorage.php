@@ -40,7 +40,7 @@ class PostgresCustomerStorage extends PostgresUserStorage implements ICustomerSt
             $friends[$data->acceptor] = $this->getCustomerWithNoFriendsById($data->acceptor);
         }
 
-        return new Customer($user, $friends);
+        return Customer::createInstance($user, $friends);
     }
 
     public function getAuthCustomer($email, $password) {
@@ -57,7 +57,7 @@ class PostgresCustomerStorage extends PostgresUserStorage implements ICustomerSt
             $friends[$data->acceptor] = $this->getCustomerWithNoFriendsById($data->acceptor);
         }
 
-        return new AuthentificatedCustomer($authUser, $friends);
+        return AuthentificatedCustomer::createInstance($authUser, $friends);
     }
 
     public function searchCustomers($query, $matchType = NULL) {
@@ -106,7 +106,7 @@ class PostgresCustomerStorage extends PostgresUserStorage implements ICustomerSt
 
     protected function getCustomerWithNoFriendsById($id) {
         assert(is_numeric($id));
-        return new Customer($this->getUserById($id));
+        return Customer::createInstance($this->getUserById($id));
     }
 
     private static $SQL_SELECT_FRIENDS =

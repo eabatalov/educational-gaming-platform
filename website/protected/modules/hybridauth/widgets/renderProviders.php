@@ -27,8 +27,9 @@ class renderProviders extends CWidget {
 			$provider['active']=false;
 		}
 		if (!Yii::app()->user->isGuest) {
-			foreach (HaLogin::getLogins(Yii::app()->user->id) as $login) {
-				$providers[$login->loginProvider]['active']=true;
+                        $hauthStorage = new PostgresHybridAuthStorage();
+			foreach ($hauthStorage->getUserHAuthRecords(Yii::app()->user->id) as $hauthRecord) {
+				$providers[$hauthRecord->getLoginProviderName()]['active']=true;
 			}
 		}
 		$this->render('providers', array(

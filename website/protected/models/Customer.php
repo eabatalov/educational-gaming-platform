@@ -9,43 +9,21 @@
  */
 class Customer extends ModelObject {
 
-    /*
+    /* Fabric method.
      * Create customer instance for $user which have
      * friends $friends
      * @param user: User object
      * @param friends: array of Customer objects
      */
-    function __construct($user, &$friends = array()) {
-        parent::__construct();
-        $this->dsChangeTracking();
-        $this->setUser($user);        
-        $this->setFriends($this->mkFriendsArrayCanonical($friends));
-        $this->enChangeTracking();
+    public static function createInstance($user, &$friends = array()) {
+        return new Customer(FALSE, $user, $friends);
     }
 
     /*
-     * @param: array(Customer) of any form
-     * @returns: array(Customer->getUser()->getId() => Customer)
+     * Overrides corresponding ModelObject method
      */
-    private function &mkFriendsArrayCanonical(&$friends) {
-        TU::throwIfNot(is_array($friends), TU::INVALID_ARGUMENT_EXCEPTION,
-                "friends should be array()");
-
-        $canonicalArray = NULL;
-        foreach ($friends as $userIx => $friend) {
-            $this->checkFriend($friend);
-            if ($userIx != $friend->getUser()->getId()) {
-                if ($canonicalArray == NULL) {
-                    $canonicalArray = array();
-                }
-                $canonicalArray[$friend->getUser()->getId()] = $friend;
-            }
-        }
-        if ($canonicalArray == NULL) {
-            return $friends;
-        } else {
-            return $canonicalArray;
-        }
+    public static function createEmpty() {
+        return new Customer(TRUE);
     }
 
     /*
@@ -136,6 +114,43 @@ class Customer extends ModelObject {
                 TU::INVALID_ARGUMENT_EXCEPTION, "friend's role should be CUSTOMER");
         TU::throwIfNot($friend->getUser()->getId() != $this->getUser()->getId(),
                 TU::INVALID_ARGUMENT_EXCEPTION, "Can't add myself to friends");
+    }
+
+    //public just because we can't hide constructor if it was public in one of parent classes
+    public function __construct($mkEmpty, $user = NULL, &$friends = NULL) {
+        assert(is_bool($mkEmpty));
+        if (!$mkEmpty) {
+            parent::__construct();
+            $this->dsChangeTracking();
+            $this->setUser($user);        
+            $this->setFriends($this->mkFriendsArrayCanonical($friends));
+            $this->enChangeTracking();
+        }
+    }
+
+    /*
+     * @param: array(Customer) of any form
+     * @returns: array(Customer->getUser()->getId() => Customer)
+     */
+    private function &mkFriendsArrayCanonical(&$friends) {
+        TU::throwIfNot(is_array($friends), TU::INVALID_ARGUMENT_EXCEPTION,
+                "friends should be array()");
+
+        $canonicalArray = NULL;
+        foreach ($friends as $userIx => $friend) {
+            $this->checkFriend($friend);
+            if ($userIx != $friend->getUser()->getId()) {
+                if ($canonicalArray == NULL) {
+                    $canonicalArray = array();
+                }
+                $canonicalArray[$friend->getUser()->getId()] = $friend;
+            }
+        }
+        if ($canonicalArray == NULL) {
+            return $friends;
+        } else {
+            return $canonicalArray;
+        }
     }
 
     //User object

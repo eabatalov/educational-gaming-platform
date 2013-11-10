@@ -20,7 +20,8 @@ class PostgresCustomerStorageTest extends PHPUnit_Framework_TestCase {
 
         for($i = 1; $i <= 3; ++$i) {
             $fr_email = strval($i) . "friend" . self::EMAIL;
-            self::$fr[$i] = new Customer(UserTest::mkUserFromArray(array('email' => $fr_email)));
+			self::$fr[$i] = Customer::createInstance(
+				UserTest::mkUserFromArray(array('email' => $fr_email)));
             self::$storage->addCustomerAndUser(self::$fr[$i], self::PASSWORD);
             self::$fr[$i] = self::$storage->getCustomer($fr_email);
         }
@@ -90,7 +91,7 @@ class PostgresCustomerStorageTest extends PHPUnit_Framework_TestCase {
         //delete 1 friend
         $authCustomer->delFriend(self::$storage->getCustomer(self::$fr[2]->getUser()->getEmail()));
         //add new friend
-        $fr4 = new Customer(UserTest::mkUserFromArray(array(
+        $fr4 = Customer::createInstance(UserTest::mkUserFromArray(array(
             "email" => 'fr4' . self::EMAIL,
             "password" => self::PASSWORD
         )));

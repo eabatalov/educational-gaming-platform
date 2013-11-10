@@ -38,15 +38,17 @@ ALTER TABLE egp.friendnships
 	FOREIGN KEY("acceptor")
 	REFERENCES egp.users("id");
 --CMD
+-- Hybrid authentification table
+-- Maps (loginprovider, loginproviderIdentity) -> userId from egp.users
 CREATE TABLE  egp.ha_logins (
 	id serial NOT NULL PRIMARY KEY,
-	"loginProvider" character varying(50) NOT NULL,
-	"loginProviderIdentifier" character varying(102) NOT NULL,
-	"userId" int8 NOT NULL
+	loginprovider character varying(50) NOT NULL,
+	loginprovideridentifier character varying(102) NOT NULL,
+	userid int8 NOT NULL
 );
 --CMD
 ALTER TABLE egp.ha_logins
 	ADD CONSTRAINT "fk_ha_logins_userId"
-	FOREIGN KEY("userId")
+	FOREIGN KEY("userid")
 	REFERENCES egp.users("id");
 --CMD

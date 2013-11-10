@@ -1,6 +1,9 @@
+<?php $hybauthUrl = Yii::app()->createUrl("hybridauth");
+      $unlinkUrl = Yii::app()->createUrl("hybridauth/default/unlink");
+?>
 <div id="hybridauth-openid-div">
 	<p>Enter your OpenID identity or provider:</p>
-	<form action="<?php echo $this->config['baseUrl'];?>/default/login/" method="get" id="hybridauth-openid-form" >
+	<form action="<?php echo $hybauthUrl;?>" method="get" id="hybridauth-openid-form" >
 		<input type="hidden" name="provider" value="openid"/>
 		<input type="text" name="openid-identity" size="30"/>
 	</form>
@@ -8,7 +11,7 @@
 
 <div id="hybridauth-confirmunlink">
 	<p>Unlink provider?</p>
-	<form action="<?php echo $this->config['baseUrl'];?>/default/unlink" method="post" id="hybridauth-unlink-form" >
+	<form action="<?php echo $unlinkUrl;?>" method="post" id="hybridauth-unlink-form" >
 		<input type="hidden" name="hybridauth-unlinkprovider" id="hybridauth-unlinkprovider" value=""/>
 	</form>
 </div>
@@ -26,7 +29,7 @@
 					class='inactive'
 				<?php endif; ?>
 			>
-				<a id="hybridauth-<?php echo $provider ?>" href="<?php echo $baseUrl?>/default/login/?provider=<?php echo $provider ?>" >
+				<a id="hybridauth-<?php echo $provider ?>" href="<?php echo $hybauthUrl;?>?provider=<?php echo $provider ?>" >
 					<img src="<?php echo $assetsUrl ?>/images/<?php echo strtolower($provider)?>.png"/>
 				</a>
 			</li>
