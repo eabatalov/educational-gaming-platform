@@ -6,6 +6,8 @@
 $protectedDir = \dirname(__FILE__)."/../";
 
 set_include_path(get_include_path() . PATH_SEPARATOR .
+        $protectedDir ."/utils/" . PATH_SEPARATOR .
+        $protectedDir ."/controllers/" . PATH_SEPARATOR .
         $protectedDir ."/models/" . PATH_SEPARATOR .
         $protectedDir . "/models/postgres/" . PATH_SEPARATOR .
         $protectedDir . "/models/hybrid_auth/" . PATH_SEPARATOR .
