@@ -73,7 +73,7 @@ class HandlerController extends EGPControllerBase {
                 $this->haIdentity->setId(Yii::app()->user->id);
                 $this->linkProvider($this->haIdentity);
                 $this->redirect(Yii::app()->user->returnUrl);
-            } 
+            }
         }
         throw new InvalidArgumentException("Couldn't login.");
     }
@@ -146,7 +146,7 @@ class HandlerController extends EGPControllerBase {
     }
 
     private function loginUser($identity) {
-        Yii::app()->user->login($identity, 0);
+        AuthUtils::login($identity, 0);
         $this->redirect(Yii::app()->user->returnUrl);
     }
 

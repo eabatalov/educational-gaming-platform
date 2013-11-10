@@ -22,8 +22,7 @@
         </p>
         <p>
         <?php echo "User name: " . Yii::app()->user->name;
-              if (isset(Yii::app()->user->authUser))
-                      echo var_dump(Yii::app()->user->authUser, true);
+              echo var_dump(AuthUtils::authCustomer(), true);
               //phpinfo();
         ?>
         </p>

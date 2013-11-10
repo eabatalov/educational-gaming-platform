@@ -10,6 +10,7 @@ return array(
         'application.models.*',
         'application.models.postgres.*',
         'application.models.hybrid_auth.*',
+        'application.utils.*',
         'application.components.*',
         'application.controllers.*',
         'application.modules.hybridauth.*',

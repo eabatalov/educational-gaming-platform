@@ -32,7 +32,7 @@ class UserController extends EGPControllerBase {
 
                     $identity = new AuthIdentity($model->getEmail(), $model->getPassword());
                     if (!$identity->authenticate() ||
-                        !Yii::app()->user->login($identity))
+                        !AuthUtils::login($identity))
                         throw new Exception($identity->errorMessage, $identity->errorCode);
 
                     $this->redirect(self::$URL_REDIRECT_ON_SUCCESS);
@@ -69,7 +69,7 @@ class UserController extends EGPControllerBase {
                 if ($model->validate(array('email', 'password'))) {
                     $identity = new AuthIdentity($model->getEmail(), $model->getPassword());
                     if ($identity->authenticate() &&
-                        Yii::app()->user->login($identity)) {
+                        AuthUtils::login($identity)) {
                         $this->redirect(self::$URL_REDIRECT_ON_SUCCESS);
                     } else
                         $model->addHtmlFormattedError ('Email or password', $identity->errorMessage);
