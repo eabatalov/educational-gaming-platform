@@ -3,7 +3,7 @@
 import sys, time
 #==== VERSION CHECK. LIVE IT HERE. CHECK IS NEEDED BEFORE MODULES LOADING ====
 if sys.version_info < (3, 3):
-	raise "To run setup use python 3.3 or higher"
+	raise Exception("To run setup use python 3.3 or higher")
 
 from optparse import OptionParser
 import postgresql.driver as pg_driver
