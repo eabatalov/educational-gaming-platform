@@ -23,7 +23,7 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         $isActive = array_key_exists("isActive", $fields) ? $fields['isActive'] : UserTest::IS_ACTIVE;
         $pass = array_key_exists("pass", $fields) ? $fields['pass'] : $id . self::PASS_SUFFIX;
         $role = array_key_exists("role", $fields) ? $fields['role'] : UserTest::ROLE;
-        return AuthentificatedUser::createInstance($email, $name, $surname, $isActive,
+        return AuthentificatedUser::createAUInstance($email, $name, $surname, $isActive,
                                         $role, $pass, $id);
     }
 

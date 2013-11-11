@@ -14,7 +14,7 @@ class User extends ModelObject {
     * @arg id: is optional and
     *   almost for internal data provider usage and for testing purposes
     */
-    static public function createInstance($email, $name, $surname, $isActive,
+    static public function createUInstance($email, $name, $surname, $isActive,
                             $role, $id = NULL) {
         return new User(FALSE, $email, $name, $surname, $isActive, $role, $id);
     }

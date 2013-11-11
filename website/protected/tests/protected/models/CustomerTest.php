@@ -21,7 +21,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase {
         $isActive = FALSE;
         $role = UserRole::CUSTOMER;
         $password = "password" . $id;
-        $user = AuthentificatedUser::createInstance($email,
+        $user = AuthentificatedUser::createAUInstance($email,
                 $name, $surname, $isActive,
                 $role,
                 $password, $id);
@@ -30,12 +30,12 @@ class CustomerTest extends \PHPUnit_Framework_TestCase {
 
     protected function mkCustomer($id, $friends) {
         $this->customerUser = $this->mkUser($id);
-        return Customer::createInstance($this->customerUser, $friends);
+        return Customer::createCInstance($this->customerUser, $friends);
     }
 
     static public function mkCustomerFromArray($array, $friends = array()) {
         $user = UserTest::mkUserFromArray($array);
-        return Customer::createInstance($user, $friends);
+        return Customer::createCInstance($user, $friends);
     }
 
     /**

@@ -110,7 +110,7 @@ class HandlerController extends EGPControllerBase {
             }
 
             $haProfile = $this->haIdentity->getAdapter()->getUserProfile();                      
-            $user = User::createInstance($haProfile->email,
+            $user = User::createUInstance($haProfile->email,
                 $haProfile->firstName, $haProfile->lastName, TRUE, UserRole::CUSTOMER);
 
             if ($user->validate()) {

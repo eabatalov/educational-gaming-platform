@@ -11,7 +11,7 @@ class AuthentificatedCustomer extends Customer {
     /*
      * Fabric method. Use as constructor.
      */
-    public static function createInstance($user, &$friends = array()) {
+    public static function createACInstance($user, &$friends = array()) {
         return new AuthentificatedCustomer(FALSE, $user, $friends);
     }
 

@@ -12,11 +12,11 @@ class AuthentificatedCustomerTest extends PHPUnit_Framework_TestCase {
         $isActive = FALSE;
         $role = UserRole::CUSTOMER;
         $password = "password" . $id;
-        $user = AuthentificatedUser::createInstance($email,
+        $user = AuthentificatedUser::createAUInstance($email,
                 $name, $surname, $isActive,
                 $role,
                 $password, $id);
-        return AuthentificatedCustomer::createInstance($user, $friends);
+        return AuthentificatedCustomer::createACInstance($user, $friends);
     }
 
     /**

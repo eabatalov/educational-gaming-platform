@@ -11,7 +11,7 @@ class AuthentificatedUser extends User {
      * Fabric method. Use as constructor.
      * @param id: optional, used for internal data provider and testing purposes
      */
-    static public function createInstance($email, $name, $surname, $isActive,
+    static public function createAUInstance($email, $name, $surname, $isActive,
                             $role, $password, $id = NULL) {
         return new AuthentificatedUser(FALSE, $email, $name, $surname, $isActive,
                             $role, $password, $id);
@@ -63,7 +63,7 @@ class AuthentificatedUser extends User {
      * @returns: User object which represents the same user
      */
     public function getUser() {
-        return User::createInstance(
+        return User::createUInstance(
                 $this->getEmail(),
                 $this->getName(),
                 $this->getSurname(),

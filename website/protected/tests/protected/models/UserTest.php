@@ -26,7 +26,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         $surname = array_key_exists("surname", $fields) ? $fields['surname'] : $id . self::SURNAME_SUFFIX;
         $isActive = array_key_exists("isActive", $fields) ? $fields['isActive'] : self::IS_ACTIVE;
         $role = array_key_exists("role", $fields) ? $fields['role'] : self::ROLE;
-        return User::createInstance($email, $name, $surname, $isActive,
+        return User::createUInstance($email, $name, $surname, $isActive,
                             $role, $id);
     }
 

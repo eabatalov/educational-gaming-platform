@@ -15,7 +15,7 @@ class Customer extends ModelObject {
      * @param user: User object
      * @param friends: array of Customer objects
      */
-    public static function createInstance($user, &$friends = array()) {
+    public static function createCInstance($user, &$friends = array()) {
         return new Customer(FALSE, $user, $friends);
     }
 
