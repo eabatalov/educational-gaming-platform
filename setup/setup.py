@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 
 import sys, time
+#==== VERSION CHECK. LIVE IT HERE. CHECK IS NEEDED BEFORE MODULES LOADING ====
+if sys.version_info < (3, 3):
+	raise "To run setup use python 3.3 or higher"
+
 from optparse import OptionParser
 import postgresql.driver as pg_driver
 
@@ -8,10 +12,6 @@ import postgresql.driver as pg_driver
 files_db = ["./create_db.sql", "./fill_db.py"] 
 files_all = files_db + ["./packages.sh"]
 conn = None #DB connection to be used throught setupe process
-
-def check_ver():
-	if sys.version_info < (3, 3):
-	    raise "To run setup use python 3.3 or higher"
 
 def parse_opts():
 	opt_parser = OptionParser()
@@ -65,7 +65,6 @@ def run_bash(file_name):
 def main():
 	global conn
 	global files
-	check_ver()
 	opts = parse_opts()
 	conn = setup_con(opts)
 	files = files_all if opts["is_all"] else files_db
