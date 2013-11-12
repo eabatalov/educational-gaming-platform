@@ -1,13 +1,13 @@
 <div class="form">
 <?php $form=$this->beginWidget('CActiveForm', array(
     'id' => 'signup-form',
-    'enableAjaxValidation' => false,
+    'enableAjaxValidation' => true,
     'enableClientValidation' => false,
     'focus' => array($model,'name'),
     'action' => $this->createUrl('Signup'),
 )); ?>
  
-    <?php echo $form->errorSummary($model); ?>
+    <?php echo $form->error($model, ModelObject::FATAL_ERROR_FIELD_NAME); ?>
     <div class="row">
             <?php echo $form->labelEx($model, "name")?>
             <?php echo $form->textField($model, "name")?>

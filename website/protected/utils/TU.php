@@ -38,10 +38,10 @@ class TU {
      */
     static public function htmlFormatExceptionForUser(Exception $ex) {
         $message =
-            'Error occured.' . PHP_EOL .
-            'Code: ' . (string)$ex->getCode() . PHP_EOL .
+            'Sorry. Error occured.' . PHP_EOL .
+            'Error code: ' . (string)$ex->getCode() . PHP_EOL .
             'Message: ' . $ex->getMessage() . PHP_EOL .
-            'Please try again.' . PHP_EOL;
+            'Please try again or contact support for help.' . PHP_EOL;
         if (YII_DEBUG)
             $message = $message .
                 'Exception backtrace (displayed in dev mode only):' . PHP_EOL .

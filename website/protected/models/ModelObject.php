@@ -13,6 +13,7 @@ class ModelObject extends CFormModel {
      * ModelObject which hasn't passed validation to persistent storage
      */
     const ERROR_INVALID_OBJECT = 0x1000001;
+    const FATAL_ERROR_FIELD_NAME = 'Error';
 
     public function __construct() {
         $this->changes = NULL;        
@@ -30,7 +31,7 @@ class ModelObject extends CFormModel {
 
     //==================== Errors in this model object ======================
     public function addFatalError(Exception $ex) {
-        $this->addError('Error', TU::htmlFormatExceptionForUser($ex));
+        $this->addError(self::FATAL_ERROR_FIELD_NAME, TU::htmlFormatExceptionForUser($ex));
     }
 
     public function addHtmlFormattedError($attribute, $message) {

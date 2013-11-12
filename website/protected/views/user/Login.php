@@ -1,12 +1,12 @@
 <div class="form">
     <?php $form=$this->beginWidget('CActiveForm', array(
         'id' => 'login-form',
-        'enableAjaxValidation' => false,
+        'enableAjaxValidation' => true,
         'enableClientValidation' => false,
         'focus' => array($model,'email'),
         'action' => $this->createUrl('Login'),
     )); ?>
-    <?php echo $form->errorSummary($model); ?>
+    <?php echo $form->error($model, ModelObject::FATAL_ERROR_FIELD_NAME); ?>
     <div class="row">
             <?php echo $form->labelEx($model, "email")?>
             <?php echo $form->textField($model, "email")?>

@@ -19,14 +19,17 @@ class UserController extends EGPControllerBase {
 
         $this->pageTitle = self::$PAGE_NAME_SIGNUP;
         $model = AuthentificatedUser::createEmpty();
+        $model->setRole(UserRole::CUSTOMER);
+        $model->setIsActive(TRUE);
 
         if (Yii::app()->request->isPostRequest) {
             try {
                 $model->attributes = $this->getPOSTVal('AuthentificatedUser');
-                $model->setRole(UserRole::CUSTOMER);
-                $model->setIsActive(TRUE);
-
-                if ($model->validate()) {
+                if (Yii::app()->request->isAjaxRequest) {
+                    //Ajax validation request processing
+                    echo CActiveForm::validate(array($model));
+                    Yii::app()->end();
+                } else if ($model->validate()) {
                     $userStorage = new PostgresUserStorage();
                     $userStorage->addUser($model, $model->getPassword());
 
@@ -40,12 +43,14 @@ class UserController extends EGPControllerBase {
             } catch(Exception $ex) {
                 if ($ex instanceof InvalidArgumentException &&
                     $ex->getCode() == IUserStorage::ERROR_EMAIL_EXISTS) {
-                        $model->addError('email', 'User with such email already exists');
-                } else $model->addFatalError($ex);
+                    $model->addError('email', 'User with such email already exists');
+                } else 
+                    $model->addFatalError($ex);
+                if (Yii::app()->request->isAjaxRequest) {
+                    echo CActiveForm::validate($model, array('email', ModelObject::FATAL_ERROR_FIELD_NAME));
+                    Yii::app()->end();
+                }
             }
-        } else if (Yii::app()->request->isAjaxRequest) {
-            //Process ajax validation request here
-            //TODO
         }
 
         $this->render('Signup', array('model' => $model));
@@ -60,20 +65,37 @@ class UserController extends EGPControllerBase {
 
         $this->pageTitle = self::$PAGE_NAME_LOGIN;
         $model = AuthentificatedUser::createEmpty();
+        $model->setRole(UserRole::CUSTOMER);
+        $model->setIsActive(TRUE);
 
         if (Yii::app()->request->isPostRequest) {
-            $model->attributes = $this->getPOSTVal('AuthentificatedUser');
-                $model->setRole(UserRole::CUSTOMER);
-                $model->setIsActive(TRUE);
-
-                if ($model->validate(array('email', 'password'))) {
+            try {
+                $model->attributes = $this->getPOSTVal('AuthentificatedUser');
+                $attrsToValidate = array('email', 'password');
+                if (Yii::app()->request->isAjaxRequest) {
+                        //Ajax validation request processing
+                        echo CActiveForm::validate(array($model), $attrsToValidate);
+                        Yii::app()->end();
+                } else if ($model->validate($attrsToValidate)) {
                     $identity = new AuthIdentity($model->getEmail(), $model->getPassword());
                     if ($identity->authenticate() &&
                         AuthUtils::login($identity)) {
                         $this->redirect(self::$URL_REDIRECT_ON_SUCCESS);
                     } else
-                        $model->addHtmlFormattedError ('Email or password', $identity->errorMessage);
+                        $model->addError(ModelObject::FATAL_ERROR_FIELD_NAME, $identity->errorMessage);
                 }
+            } catch(Exception $ex) {
+                if ($ex instanceof InvalidArgumentException &&
+                        ($ex->getCode() == IUserStorage::ERROR_NO_USER_WITH_SUCH_EMAIL ||
+                        $ex->getCode() == IUserStorage::ERROR_INVALID_PASSWORD)) {
+                    $model->addError(ModelObject::FATAL_ERROR_FIELD_NAME,
+                            'Invalid email or password');
+                } else $model->addFatalError($ex);
+                if (Yii::app()->request->isAjaxRequest) {
+                    echo CActiveForm::validate($model, array('email', 'password', ModelObject::FATAL_ERROR_FIELD_NAME));
+                    Yii::app()->end();
+                }
+            }
         }
         $this->render('Login',  array('model' => $model));
     }
