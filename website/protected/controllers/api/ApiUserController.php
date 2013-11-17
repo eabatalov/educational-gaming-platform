@@ -1,7 +1,7 @@
 <?php
 
 /**
- * User API service requests handler
+ * User and login API services request handler
  *
  * @author eugene
  */

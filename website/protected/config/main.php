@@ -32,10 +32,19 @@ return array(
             'urlFormat'=>'path',
             'rules'=>array(
                 // REST patterns
-                array('api/ApiUser/GetUser', 'pattern' => 'api/user', 'verb' => 'GET'),
+                //user and login services
                 array('api/ApiUser/LoginUser', 'pattern' => 'api/login', 'verb' => 'GET'),
+                array('api/ApiUser/GetUser', 'pattern' => 'api/user', 'verb' => 'GET'),
                 array('api/ApiUser/ModifyUser', 'pattern' => 'api/user', 'verb' => 'PUT'),
                 array('api/ApiUser/RegisterUser', 'pattern' => 'api/user', 'verb' => 'POST'),
+                //friends service
+                array('api/ApiFriends/GetFriends', 'pattern' => 'api/friends', 'verb' => 'GET'),
+                array('api/ApiFriends/AddFriend', 'pattern' => 'api/friends', 'verb' => 'POST'),
+                //messaging service
+                array('api/ApiMessaging/GetMessages', 'pattern' => 'api/messaging', 'verb' => 'GET'),
+                array('api/ApiMessaging/SendMessage', 'pattern' => 'api/messaging', 'verb' => 'POST'),
+                //search service
+                array('api/ApiSearch/Search', 'pattern' => 'api/search', 'verb' => 'GET'),
                 // Other controllers
                 '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
             ),
