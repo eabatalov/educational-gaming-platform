@@ -72,10 +72,16 @@ function testApiFriendsController(){
 }
 
 function testApiSearchController(){
+	echo
+	createUser
+	echo
 	echo "Test actionSearch"
-
+	$GET_JSON 'data={ email : "'$EMAIL'", password : "'$PASSWORD'", request : { query : "'$EMAIL'", object_type : "all" } }' $HOST/api/search $FILTER_RESULT
+	echo
+	echo "Test actionSearch with BIG result"
+	$GET_JSON 'data={ email : "'$EMAIL'", password : "'$PASSWORD'", request : { query : "Surname_", object_type : "all" } }' $HOST/api/search $FILTER_RESULT
 }
 
-#testApiUserController
-#testApiFriendsController
+testApiUserController
+testApiFriendsController
 testApiSearchController

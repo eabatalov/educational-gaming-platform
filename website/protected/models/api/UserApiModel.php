@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Adaptor from/to json User object to User model object
+ * Adaptor from/to JSON API User object to User model object
  *
  * @author eugene
  */

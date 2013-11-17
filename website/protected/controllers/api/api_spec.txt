@@ -85,10 +85,12 @@ Message: { from: userid, to: userid, date: string/date JS type, time: string/tim
 ===============================
 service_name: search
 HTTP methods:
-GET ( request : { query : String } ): get search results for query @query
-	RETURNS: search_results: [SearchResult]
+GET ( request : { query : String, object_type = ObjectType | "all" } ):
+        Get search results for query @query looking for objects of type @object_type.
+	RETURNS: search_results: [ SearchResult ]
 
 Javascript types:
-SearchResult: { object_type: "User" | "GameDescription" | ..., object: object of type object_type }
-
+SearchResult: { object_type : ObjectType, object : Object }
+ObjectType: "user" | ...
+Object : User | ...
 =============================
