@@ -15,7 +15,7 @@ INSERT_FRIENDSHIP_SQL = """
 insert_user_ps = conn.prepare(INSERT_USER_SQL)
 insert_friendship_ps = conn.prepare(INSERT_FRIENDSHIP_SQL)
 
-default_user = { 'name' : 'Name_', 'surname' : 'Surame_',
+default_user = { 'name' : 'Name_', 'surname' : 'Surname_',
 	'email' : '_Email@example.com', 'is_active' : False,
 	'password' : 'Password_', 'role' : 'CUSTOMER'}
 
