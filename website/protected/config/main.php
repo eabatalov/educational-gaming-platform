@@ -8,9 +8,13 @@ return array(
     // autoloading model and component classes
     'import'=>array(
         'application.models.*',
-        'application.models.postgres.*',
-        'application.models.hybrid_auth.*',
         'application.models.api.*',
+        'application.models.auth.*',
+        'application.models.auth.hybrid_auth.*',
+        'application.models.auth.hybrid_auth.postgres.*',
+        'application.models.entities.*',
+        'application.models.services.*',
+        'application.models.services.postgres.*',
         'application.utils.*',
         'application.components.*',
         'application.controllers.*',
@@ -18,7 +22,6 @@ return array(
         'application.modules.hybridauth.*',
         'application.modules.hybridauth.controllers.*'
     ),
-
     // application components
     'components'=>array(
         /*'db'=>array(
