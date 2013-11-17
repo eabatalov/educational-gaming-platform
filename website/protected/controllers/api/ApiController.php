@@ -130,7 +130,7 @@ class ApiController extends CController {
                 $json = Yii::app()->request->getRawBody();
             }
             $this->request = CJSON::decode($json, TRUE);
-            echo var_export($this->request, true);
+            //echo var_export($this->request, true);
 
             if (AuthUtils::authUser() != NULL)
             {

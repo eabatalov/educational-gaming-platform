@@ -8,7 +8,6 @@
 class ApiFriendsController extends ApiController {
 
     public function actionGetFriends() {
-        echo "actionGetFriend" . PHP_EOL;
         try {
             $this->requireAuthentification();
             $userId = TU::getValueOrThrow("userid", $this->getRequest());
@@ -35,7 +34,6 @@ class ApiFriendsController extends ApiController {
     }
 
     public function actionAddFriend() {
-        echo "actionAddFriend" . PHP_EOL;
         try {
             $this->requireAuthentification();
             $customerStorage = new PostgresCustomerStorage();
@@ -65,7 +63,6 @@ class ApiFriendsController extends ApiController {
     }
 
     public function actionDeleteFriend() {
-        echo "actionDeleteFriend" . PHP_EOL;
         try {
             $this->requireAuthentification();
             $customerStorage = new PostgresCustomerStorage();
