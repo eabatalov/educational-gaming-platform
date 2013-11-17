@@ -21,10 +21,10 @@ class ApiController extends CController {
     protected function sendResponse($result, $texts = NULL, $body_field = NULL, $body = NULL)
     {
         assert(is_string($result));
-        if ($texts == NULL)
+        if ($texts === NULL)
              $texts = self::resultToHumanReadableText ($result);
-        if ($body_field != NULL && $body == NULL)
-            throw new InvalidArgumentException("body_field != NULL but body == NULL");
+        if ($body_field !== NULL && $body === NULL)
+            throw new InvalidArgumentException("body_field != NULL but body === NULL");
 
         //Output header
         header('HTTP/1.1 ' . self::resultToHttpStatusCode($result) . ' ' .
@@ -88,7 +88,15 @@ class ApiController extends CController {
     }
 
     /*
-     * returns: current user's email or NULL of not supplied
+     * returns: current user's id or NULL of not authentificated
+     */
+    protected function getUserId()
+    {
+        return $this->userId;
+    }
+    
+    /*
+     * returns: current user's email or NULL of not authentificated
      */
     protected function getUserEmail()
     {
@@ -96,7 +104,7 @@ class ApiController extends CController {
     }
 
     /*
-     * returns: current user's password or NULL of not supplied
+     * returns: current user's password or NULL of not authentificated
      */
     protected function getUserPassword()
     {
@@ -114,9 +122,9 @@ class ApiController extends CController {
         parent::beforeAction($action);
         try {
             $json = NULL;
-            if (Yii::app()->request->getRequestType() == "GET") {
+            if (Yii::app()->request->getRequestType() === "GET") {
                 $json = Yii::app()->request->getParam("data", NULL);
-                if ($json == NULL)
+                if ($json === NULL)
                     throw new InvalidArgumentException("GET request should contain data parameter with json");
             } else {
                 $json = Yii::app()->request->getRawBody();
@@ -127,6 +135,7 @@ class ApiController extends CController {
             if (AuthUtils::authUser() != NULL)
             {
                 /*Temporary workaround for website authentification done using php session */
+                $this->userId = AuthUtils::authUser()->getId();
                 $this->userEmail = AuthUtils::authUser()->getEmail();
                 $this->userPassword = AuthUtils::authUser()->getPassword();
                 $this->isCurrentUserAuthentificated = TRUE;
@@ -167,8 +176,9 @@ class ApiController extends CController {
         }
     }*/
 
-    private $userEmail = "";
-    private $userPassword = "";
+    private $userId = NULL;
+    private $userEmail = NULL;
+    private $userPassword = NULL;
     private $isCurrentUserAuthentificated = FALSE;
     private $request = NULL;
 

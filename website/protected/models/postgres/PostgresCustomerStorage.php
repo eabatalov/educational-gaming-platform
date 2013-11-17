@@ -28,19 +28,29 @@ class PostgresCustomerStorage extends PostgresUserStorage implements ICustomerSt
     }
 
     public function getCustomer($email) {
-        assert(is_string($email));
         $user = $this->getUser($email);
+        return Customer::createCInstance($user,
+            $this->getCustomerFriends($user->getId()));
+    }
+
+    public function getCustomerById($id) {
+        $user = $this->getUserById($id);
+        return Customer::createCInstance($user,
+            $this->getCustomerFriends($user->getId()));
+    }
+
+    public function getCustomerFriends($id) {
+        $user = $this->getUserById($id); //as inefficient $id validation
         $friends = array();
 
-        $result = pg_query_params($this->conn, self::$SQL_SELECT_FRIENDS,
-                array($user->getId()));
+        $result = pg_query_params($this->conn, self::$SQL_SELECT_FRIENDS, array($id));
         TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
 
         while(($data = pg_fetch_object($result)) != FALSE) {
-            $friends[$data->acceptor] = $this->getCustomerWithNoFriendsById($data->acceptor);
+            $friends[$data->acceptor] =
+                $this->getCustomerWithNoFriendsById($data->acceptor);
         }
-
-        return Customer::createCInstance($user, $friends);
+        return $friends;
     }
 
     public function getAuthCustomer($email, $password) {

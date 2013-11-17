@@ -40,6 +40,7 @@ return array(
                 //friends service
                 array('api/ApiFriends/GetFriends', 'pattern' => 'api/friends', 'verb' => 'GET'),
                 array('api/ApiFriends/AddFriend', 'pattern' => 'api/friends', 'verb' => 'POST'),
+                array('api/ApiFriends/DeleteFriend', 'pattern' => 'api/friends', 'verb' => 'DELETE'),
                 //messaging service
                 array('api/ApiMessaging/GetMessages', 'pattern' => 'api/messaging', 'verb' => 'GET'),
                 array('api/ApiMessaging/SendMessage', 'pattern' => 'api/messaging', 'verb' => 'POST'),
