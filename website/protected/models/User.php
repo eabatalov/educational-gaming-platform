@@ -99,6 +99,7 @@ class User extends ModelObject {
             array('email', 'email'),
         );
     }
+    
 
     //public just because we can't hide constructor if it was public in one of parent classes
     public function __construct($mkEmpty, $email = NULL, $name = NULL, $surname = NULL,
@@ -117,6 +118,14 @@ class User extends ModelObject {
             $this->setRole($role);
             $this->enChangeTracking();
         }
+    }
+
+    public function setAttributes($values, $safeOnly = true) {
+        if (isset($values["id"])) {
+            TU::throwIf($values["id"] != $this->id, TU::INVALID_ARGUMENT_EXCEPTION,
+                    "User id cannot be changed");
+        }
+        parent::setAttributes($values, $safeOnly);
     }
 
     //Int

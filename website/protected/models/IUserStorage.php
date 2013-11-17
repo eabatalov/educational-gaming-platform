@@ -12,6 +12,7 @@ Interface IUserStorage {
     const ERROR_NO_USER_WITH_SUCH_EMAIL = 0x7000001;
     const ERROR_INVALID_PASSWORD = 0x7000002;
     const ERROR_EMAIL_EXISTS = 0x7000003;
+    const ERROR_NO_USER_WITH_SUCH_ID = 0x7000004;
 
     /*
      * adds user to persistent storage
@@ -32,6 +33,16 @@ Interface IUserStorage {
      * Relevant InvalidArgumentException codes: (ERROR_NO_USER_WITH_SUCH_EMAIL)
      */
     function getUser($email);
+
+    /*
+     * @param id: user's id
+     * @returns: corresponding instance of User class
+     * @throws StorageException if failed on storage problem
+     * @throws InvalidArgumentException if failed on user's storage level validation
+     * Relevant InvalidArgumentException codes: (ERROR_NO_USER_WITH_SUCH_ID)
+     */
+    function getUserById($id);
+
     /*
      * @param email: user's email
      * @param password: user's password

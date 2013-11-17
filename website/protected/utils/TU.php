@@ -51,6 +51,19 @@ class TU {
         return $formatter->formatNtext($message);
     }
 
+    /*
+     * Throw InvalidArgumentException if array key doesn't exist.
+     * @throws InvalidArgumentException
+     */
+    public static function getValueOrThrow($key, $array) {
+        if (isset($array[$key])) {
+            return $array[$key];
+        } else {
+            throw new InvalidArgumentException("No key " . var_export($key, TRUE)
+                    . " in array");
+        }
+    }
+
     //Exceptions names constants for convenience
     const EXCEPTION = 'Exception';
     const INVALID_ARGUMENT_EXCEPTION = 'InvalidArgumentException';

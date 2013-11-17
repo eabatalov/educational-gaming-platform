@@ -1,0 +1,94 @@
+EGP RESTful API specification.
+
+For the purpose of authentification pass email and password with each request.
+Authentification mechanism will significantly change later.
+
+JSON API request format:
+{
+  email: current user's email used for authentification,
+  password: current user's password used for authentification,
+  request: service specific request part - JSON object
+}
+This JSON object should be the body of request for all the HTTP request methods except GET.
+In case of GET request, set request parameter "data" of your URL to the JSON request object value
+and URL encode it.
+
+JSON API response format:
+{
+  result: RESULT - defines status of requested operation. See RESULT values description below.
+  texts: [String] List of human readable result explanation strings in current user's locale or in English.
+  >= 0 service dependent fields defined in documentation as RETURNS.
+}
+RESULT values:
+- "SUCCESS": operation is completed successfully.
+- "AUTHORIZATION_FAILED": returned when current user doesn't have sufficient permissions
+  to perform requested operation.
+- "INVALID_ARGUMENT": argument passed to operation has invalid value.
+- "INTERNAL_ERROR": internal server error occured.
+
++++++++++++++++++++++++++++++++
+API SERVICES DESCRIPTION
+URLs of all API services have the following form: /api/<service_name>
+
+service_name: user
+HTTP methods:
+GET (request : { userid : String }): get User object with id @userid and all the information avaliable for current user
+	RETURNS: user: User
+	
+POST (request : { User user, String password }): register new @user object with password @password
+
+PUT (request : { User user }): replace current user object with @user object supplied (update scenario)
+
+DELETE (): not implemented
+
+Javascript types:
+User : { id: string, email: string, name: string, surname: string, is_online: "true"|"false", role: UserRole }
+UserRole: "customer" or ...
+===============================
+service_name: login
+HTTP methods:
+GET (request : { Credential cred } ): get User object of user with credential = @cred
+        RETURNS: user: User
+
+Javascript types:
+Credential: { email: string, password: string }
+===============================
+service_name: friends
+HTTP methods:
+GET ( request : { userid : String } ): get list of friends visible to current user of user with id @userid
+	RETURNS: friends: [User]
+
+POST ( request : { userid : String } ): add new friend with id @userid to current user's friend list
+
+PUT (): not implemented
+
+DELETE ( request : { userid : String } ): delete current user's friend with id @userid
+
+===============================
+service_name: messaging
+HTTP methods:
+GET ( request : { userid : String, start : String, end: String } ):
+        get list of messages with sequential number from @start to @end in conversation of current user and user with id @userid.
+	@start: message sequential number starting from 1
+	@end: message sequential number
+		You can use 'LAST-x' value for @start and @end, where x is some number to perform selection of messages relative to the last message.
+	RETURNS: messages: [Message]
+
+POST ( request : { userid : String, text : String } ): send message with body @text from current user to user with id @userid
+
+PUT (): not implemented
+
+DELETE (): not implemented
+
+Javascript types:
+Message: { from: userid, to: userid, date: string/date JS type, time: string/time JS type: body: string }
+===============================
+service_name: search
+HTTP methods:
+GET ( request : { query : String } ): get search results for query @query
+	RETURNS: search_results: [SearchResult]
+
+Javascript types:
+SearchResult: { object_type: "User" | "GameDescription" | ..., object: object of type object_type }
+
+=============================

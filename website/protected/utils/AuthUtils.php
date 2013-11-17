@@ -24,7 +24,7 @@ class AuthUtils {
     }
 
     /*
-     * @returns AuthentificatedUser instance if current user if not guest
+     * @returns AuthentificatedUser instance if current user is not guest
      *  else returns NULL
      */
     static  public function authUser() {
@@ -34,7 +34,7 @@ class AuthUtils {
     }
 
     /*
-     * @returns AuthentificatedCustomer instance if current user if not guest
+     * @returns AuthentificatedCustomer instance if current user is not guest
      *  else returns NULL
      */
     static public function authCustomer() {

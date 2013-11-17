@@ -79,7 +79,22 @@ class PostgresUserStorage implements IUserStorage {
 
     public function getUser($email) {
         assert(is_string($email));
-        return $this->getUserBy(self::$SQL_SELECT_BY_EMAIL, $email);
+        try {
+            return $this->getUserBy(self::$SQL_SELECT_BY_EMAIL, $email);
+        } catch (InvalidArgumentException $ex) {
+            throw new InvalidArgumentException($ex->getMessage(),
+                self::ERROR_NO_USER_WITH_SUCH_EMAIL, $ex);
+        }
+    }
+
+    public function getUserById($id) {
+        assert(is_numeric($id));
+        try {
+            return $this->getUserBy(self::$SQL_SELECT_BY_ID, $id);
+        } catch (InvalidArgumentException $ex) {
+            throw new InvalidArgumentException($ex->getMessage(),
+                self::ERROR_NO_USER_WITH_SUCH_ID, $ex);
+        }
     }
 
     public function saveAuthUser(AuthentificatedUser $authUser) {
@@ -116,18 +131,12 @@ class PostgresUserStorage implements IUserStorage {
         TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
     }
 
-    protected function getUserById($id) {
-        assert(is_numeric($id));
-        return $this->getUserBy(self::$SQL_SELECT_BY_ID, $id);
-    }
-
     protected function getUserBy($sql, $arg) {
         $result = pg_query_params($this->conn, $sql, array($arg));
         TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
 
         $data= pg_fetch_object($result);
-        TU::throwIf($data == FALSE, TU::INVALID_ARGUMENT_EXCEPTION, pg_last_error(),
-                self::ERROR_NO_USER_WITH_SUCH_EMAIL);
+        TU::throwIf($data == FALSE, TU::INVALID_ARGUMENT_EXCEPTION, pg_last_error());
 
         return User::createUInstance(
                 $data->email,

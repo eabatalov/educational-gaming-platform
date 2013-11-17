@@ -10,9 +10,11 @@ return array(
         'application.models.*',
         'application.models.postgres.*',
         'application.models.hybrid_auth.*',
+        'application.models.api.*',
         'application.utils.*',
         'application.components.*',
         'application.controllers.*',
+        'application.controllers.api.*',
         'application.modules.hybridauth.*',
         'application.modules.hybridauth.controllers.*'
     ),
@@ -26,8 +28,17 @@ return array(
             'tablePrefix'=>'egp.',
         ),*/
         'urlManager'=>array(
-                'showScriptName' => false,
-                'urlFormat'=>'path',
+            'showScriptName' => false,
+            'urlFormat'=>'path',
+            'rules'=>array(
+                // REST patterns
+                array('api/ApiUser/GetUser', 'pattern' => 'api/user', 'verb' => 'GET'),
+                array('api/ApiUser/LoginUser', 'pattern' => 'api/login', 'verb' => 'GET'),
+                array('api/ApiUser/ModifyUser', 'pattern' => 'api/user', 'verb' => 'PUT'),
+                array('api/ApiUser/RegisterUser', 'pattern' => 'api/user', 'verb' => 'POST'),
+                // Other controllers
+                '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+            ),
         ),
         'user' => array(
             'returnUrl' => '/'
