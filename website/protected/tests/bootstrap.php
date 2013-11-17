@@ -8,6 +8,7 @@ $protectedDir = \dirname(__FILE__)."/../";
 set_include_path(get_include_path() . PATH_SEPARATOR .
         $protectedDir ."/utils/" . PATH_SEPARATOR .
         $protectedDir ."/controllers/" . PATH_SEPARATOR .
+        $protectedDir ."/controllers/api/" . PATH_SEPARATOR .
         $protectedDir ."/modules/hybridauth/controllers/" . PATH_SEPARATOR .
         $protectedDir ."/models/" . PATH_SEPARATOR .
         $protectedDir ."/models/api/" . PATH_SEPARATOR .
