@@ -70,16 +70,6 @@ class PostgresCustomerStorage extends PostgresUserStorage implements ICustomerSt
         return AuthentificatedCustomer::createACInstance($authUser, $friends);
     }
 
-    public function searchCustomers($query, $matchType = NULL) {
-        assert(is_string($query));
-        $users = $this->searchUsers($query);
-        $result = array();
-        foreach ($users as $user) {
-            $result[$user->getId()] = $this->getCustomer($user->getEmail());
-        }
-        return $result;
-    }
-
     public function saveAuthCustomer(AuthentificatedCustomer $authCustomer) {
         TU::throwIfNot($authCustomer->validate(), TU::INVALID_ARGUMENT_EXCEPTION,
             NULL, ModelObject::ERROR_INVALID_OBJECT);

@@ -148,25 +148,6 @@ class PostgresUserStorage implements IUserStorage {
         );
     }
 
-    protected function searchUsers($query) {
-        assert(is_string($query));
-        $result = pg_query_params($this->conn, self::$SQL_SEARCH, array($query));
-        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
-
-        $found = array();
-        while(($data = pg_fetch_object($result)) != FALSE) {
-            $found[$data->id] = User::createUInstance(
-                    $data->email,
-                    $data->name,
-                    $data->surname,
-                    PostgresUtils::PGBoolToPHP($data->is_active),
-                    $data->role,
-                    $data->id
-                );
-        }
-        return $found;
-    }
-
     protected $conn;
     
     //SQL
@@ -186,8 +167,4 @@ class PostgresUserStorage implements IUserStorage {
             "SELECT id, name, surname, email, is_active, password, role
              FROM egp.users
              WHERE id=$1";
-    static private $SQL_SEARCH =
-            "SELECT id, name, surname, email, is_active, password, role
-             FROM egp.users
-             WHERE name LIKE $1 OR surname LIKE $1";
 }

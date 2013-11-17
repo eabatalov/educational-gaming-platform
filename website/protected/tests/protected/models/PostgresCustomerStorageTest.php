@@ -66,22 +66,6 @@ class PostgresCustomerStorageTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers PostgresCustomerStorage::searchCustomers
-     */
-    public function testSearchCustomers() {
-        $customer = self::mkCustomer();
-        $searchResults = self::$storage->searchCustomers($customer->getUser()->getSurname());
-        foreach ($searchResults as $foundCustomer) {
-            if ($foundCustomer->getUser()->getEmail() == $customer->getUser()->getEmail()) {
-                assert(CustomerTest::CustomersDataEq($customer, $foundCustomer),
-                    var_export($foundCustomer, true) . var_export($customer, true));
-                return;
-            }
-        }
-        assert(FALSE, "Customer is not found");
-    }
-
-    /**
      * @covers PostgresCustomerStorage::saveAuthCustomer
      */
     public function testSaveAuthCustomer() {

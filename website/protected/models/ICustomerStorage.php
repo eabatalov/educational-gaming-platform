@@ -60,14 +60,6 @@ interface ICustomerStorage {
      */
     function getAuthCustomer($email, $password);
     /*
-     * Search Customers by query
-     * @param query: what to search for
-     * @param matchType: how to search, ignored for now
-     * @returns: array of matched Customer objects
-     * @throws StorageException if failed on storage problem
-     */
-    function searchCustomers($query, $matchType = NULL);
-    /*
      * Save all the changes made for the authentificated customer to persistent
      * storage. Don't save customer's user changes.
      * @param authCustomer: instance of AuthentificatedCustomer to save
