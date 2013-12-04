@@ -12,27 +12,19 @@
 		<div>
 			<div class="logo">
                                 <?php echo CHtml::image('/media/images/logo.gif'); ?>
-                                <p>
-                                    Educational gaming platform
-                                </p>
 			</div>
 			<ul id="navigation">
 				<li>
                                     <?php echo CHtml::link("Home",$this->createUrl("site/index")); ?>
 				</li>
                                 <li>
-                                    <?php echo CHtml::link("User",$this->createUrl("user/index")); ?>
+                                    <?php /*echo CHtml::link("User",$this->createUrl("user/index"));*/ ?>
                                 </li>
 			</ul>
 		</div>
 	</div>
-        <!-- FIXME: some html div mess-->
         <div id="contents">
-            <div id="adbox">
-                <div class="clearfix">
-                    <?php echo $content; ?>
-                </div>
-            </div>
+            <?php echo $content; ?>
         </div>
 	<div id="footer">
             <div class="clearfix">

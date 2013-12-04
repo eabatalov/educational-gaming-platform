@@ -21,6 +21,12 @@ body {
 img {
 	border: 0;
 }
+
+div {
+    display:block;
+    /*overflow:auto;*/
+}
+
 .clearfix:after, #contents:after {
 	clear:both;
 	content:"";
@@ -46,11 +52,15 @@ img {
 }
 /*------------------------------ HEADER ------------------------------*/
 #header {
-	background-color: #eee;
+	background-color: white;
 	border-bottom: 1px solid #e6e6e6;
-	padding: 27px 0;
+	/*padding: 27px 0;*/
+        position: fixed;
+        margin: auto;
+        left: 0;
+        right: 0;
 }
-#header > div, #footer > div {
+body > div {
 	width: 920px;
 	margin: 0 auto;
 	padding: 0 20px;
@@ -73,26 +83,28 @@ img {
 }
 /** Navigation **/
 #navigation {
-	display: inline-block;
+	display: block;
 	list-style: none;
-	line-height: 100px;
+	/*line-height: 100px;*/
 	margin: 0;
 	padding: 0;
+        height: 100%;
 }
 #navigation ul {
-	display: inline-block;
 	list-style: none;
 	margin: 0;
 	padding: 0;
 }
 #navigation li {
-	float: left;
-	width: 160px;
+	float: right;
+	display: inline;
 	text-align: center;
+        padding: 20px;
 }
 #navigation li a {
-	color: #818181;
-	font-size: 15px;
+	color: black;
+	font-size: 14pt;
+        font-weight: bold;
 	line-height: 30px;
 	text-decoration: none;
 }
@@ -102,56 +114,54 @@ img {
 #navigation li.active a {
 	color: #f99600;
 }
-#adbox {
-	background: url(../images/bg-adbox.jpg) repeat-x left top;
-	height: 380px;
-	padding: 60px 0;
+/*------------------------------ CONTENTS ------------------------------*/
+#contents {
+	min-height: 510px;
+	width: 880px;
+	margin: 0 auto;
+	padding: 10px;
+        padding-top: 80px;
 }
-#adbox > div {
+
+#contents > div {
 	width: 800px;
 	margin: 0 auto;
-	padding: 0 80px;
+	padding: 10px;
 }
-#adbox > div img {
+#contents > div img {
 	float: right;
 	margin-left: 60px;
 }
-#adbox h1, #adbox h2 {
+#contents h1, #contents h2 {
 	color: #2c2c2c;
 	font-size: 60px;
 	line-height: 60px;
 	margin: 0;
 	text-transform: uppercase;
 }
-#adbox h2 {
+#contents h2 {
 	font-size: 30px;
 	line-height: 36px;
 	text-transform: none;
 }
-#adbox p {
+#contents p {
 	font-size: 16px;
 	line-height: 24px;
 	margin: 0;
 }
-#adbox p span {
+#contents p span {
 	display: block;
 	font-size: 12px;
 	width: 360px;
 	padding: 24px 0;
 	text-align: center;
 }
-#adbox p span b {
+#contents p span b {
 	font-weight: normal;
 	display: block;
 	width: 256px;
 }
-/*------------------------------ CONTENTS ------------------------------*/
-#contents {
-	min-height: 510px;
-	width: 880px;
-	margin: 0 auto;
-	padding: 54px 40px;
-}
+
 h1 {
 	color: #3e3e3e;
 	font-size: 30px;
