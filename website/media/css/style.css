@@ -13,10 +13,12 @@
 	font-weight: normal;
 	font-style: normal;
 }
-body {
+html, body {
 	background-color: #fff;
 	font-family: 'OpenSans';
 	margin: 0;
+        padding: 0;
+        height: 100%;
 }
 img {
 	border: 0;
@@ -24,7 +26,6 @@ img {
 
 div {
     display:block;
-    /*overflow:auto;*/
 }
 
 .clearfix:after, #contents:after {
@@ -50,37 +51,35 @@ div {
 .btn:hover {
 	background-position: 0 0;
 }
+
+/*---------------------------- CONTAINER ------------------------------*/
+#container {
+    min-height: 100%;
+    position: relative;
+    margin: 0 auto;
+    height: auto !important;
+}
+
+#container > div {
+    width: 920px;
+}
+
 /*------------------------------ HEADER ------------------------------*/
 #header {
 	background-color: white;
 	border-bottom: 1px solid #e6e6e6;
-	/*padding: 27px 0;*/
         position: fixed;
         margin: auto;
         left: 0;
         right: 0;
 }
-body > div {
-	width: 920px;
-	margin: 0 auto;
-	padding: 0 20px;
-}
+
 /** Logo **/
 #header .logo {
 	float: left;
 	margin-right: 20px;
 }
-#header .logo a {
-	/*background: url(../images/logo.gif) no-repeat center top;*/
-	color: #000;
-	display: block;
-	font: 15px/30px 'Play';
-	height: 30px;
-	width: 250px;
-	padding-top: 68px;
-	text-decoration: none;
-	text-transform: uppercase;
-}
+
 /** Navigation **/
 #navigation {
 	display: block;
@@ -114,13 +113,14 @@ body > div {
 #navigation li.active a {
 	color: #f99600;
 }
+
 /*------------------------------ CONTENTS ------------------------------*/
 #contents {
-	min-height: 510px;
 	width: 880px;
 	margin: 0 auto;
 	padding: 10px;
         padding-top: 80px;
+        padding-bottom: 120px;
 }
 
 #contents > div {
@@ -185,193 +185,16 @@ p {
 p a {
 	color: #585858;
 }
-#tagline h1 {
-	margin-left: 20px;
-}
-#tagline > div {
-	float: left;
-	width: 400px;
-	margin: 0 20px;
-}
-#contents .features {
-	width: 810px;
-	margin: 0 auto;
-}
-.features > div {
-	display: inline-block;
-	margin: 0 0 30px;
-}
-.features > div img {
-	float: left;
-	margin-right: 20px;
-	margin-top: 36px;
-}
-.date {
-	float: left;
-	height: 78px;
-	width: 70px;
-	margin-right: 20px;
-	border: 1px solid #d5d5d5;
-	text-align: center;
-}
-.date p {
-	margin: 12px 0 0;
-}
-.date p span {
-	display: block;
-	font-size: 30px;
-	margin-bottom: 6px;
-}
-.author {
-	color: #585858;
-	display: block;
-	font-size: 12px;
-}
-.more {
-	background-color: #727272;
-	color: #fff;
-	display: inline-block;
-	font-size: 14px;
-	line-height: 30px;
-	width: 100px;
-	text-align: center;
-	text-decoration: none;
-}
-.more:hover, .message input[type='submit']:hover {
-	background-color: #f99600;
-	color: #000;
-}
-/** main **/
-.main {
-	float: left;
-	background: url(../images/divider.png) repeat-y right top;
-	min-height: 100px;
-	width: 620px;
-	padding-right: 24px;
-}
-.main h1, .sidebar h1 {
-	margin: 0 0 12px;
-	position: relative;
-	top: -18px;
-}
-.main h2 span {
-	display: block;
-	font-size: 12px;
-}
-/** sidebar **/
-.sidebar {
-	float: left;
-	min-height: 848px;
-	width: 216px;
-	margin-left: 20px;
-}
-.sidebar ul, .news {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-.news li {
-	border-top: 1px solid #d5d5d5;
-	padding: 24px 30px 0 100px;
-	position: relative;
-}
-.news li .date {
-	float: none;
-	position: absolute;
-	left: 0;
-	top: 30px;
-}
-.news li > p span, .post > span {
-	display: block;
-	text-align: right;
-}
-.posts {
-	border-top: 1px solid #d5d5d5;
-}
-.posts li {
-	border-bottom: 1px solid #d5d5d5;
-	padding: 24px 10px 0;
-}
-.posts li p {
-	font-size: 14px;
-}
-.posts li .title {
-	font-size: 16px;
-	font-weight: normal;
-	margin: 0 0 12px;
-}
-.posts li .title a {
-	color: #2c2c2c;
-	font-size: 16px;
-	text-decoration: none;
-}
-.post {
-	width: 785px;
-	margin: 0 auto;
-}
-.post h1 {
-	padding-top: 12px;
-}
-#about {
-	width: 740px;
-	margin: 0 auto;
-}
-#about h1, .section h1 {
-	border-bottom: 1px solid #e0e0e0;
-	padding-bottom: 12px;
-}
-.section {
-	float: left;
-	width: 390px;
-	margin-right: 50px;
-}
-.section h1 {
-	margin-bottom: 18px;
-}
-.message input[type='text'], .message textarea {
-	color: #aeaeae;
-	font-size: 13px;
-	height: 33px;
-	line-height: 33px;
-	width: 380px;
-	border: 1px solid #d5d5d5;
-	margin: 0 0 6px;
-	padding: 0 4px;
-}
-.message textarea {
-	height: 175px;
-	overflow: auto;
-	resize: none;
-}
-.message input[type='submit'] {
-	float: right;
-	background-color: #818181;
-	color: #d5d5d5;
-	cursor: pointer;
-	font: 13px/30px Arial, Helvetica, sans-serif;
-	height: 30px;
-	border: 0;
-	margin: 0;
-	padding: 0 10px;
-}
-.contact {
-	background-color: #f8f8f8;
-	width: 270px;
-	padding: 124px 60px;
-	text-align: center;
-}
-.contact p span {
-	color: #2c2c2c;
-	display: block;
-	font-size: 30px;
-	line-height: 36px;
-	padding: 18px 0;
-}
 /*------------------------------ FOOTER ------------------------------*/
 #footer {
 	background-color: #eee;
 	border-top: 1px solid #d8d8d8;
-	padding: 30px 0;
+	padding: 30px;
+        position: absolute;
+        bottom: 0px;
+        margin: auto;
+        left: 0;
+        right: 0;
 }
 #footer p {
 	font-size: 12px;
@@ -381,7 +204,6 @@ p a {
 #connect {
 	float: right;
 	display: inline-block;
-	margin-right: 30px;
 }
 #connect a {
 	background: url(../images/icons.png) no-repeat;

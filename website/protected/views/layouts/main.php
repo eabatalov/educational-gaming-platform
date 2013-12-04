@@ -8,14 +8,16 @@
 	<link rel="stylesheet" href="/media/css/style.css" type="text/css">
 </head>
 <body>
+    <div id="container">
 	<div id="header">
 		<div>
 			<div class="logo">
-                                <?php echo CHtml::image('/media/images/logo.gif'); ?>
+                                <?php $imgHtml = CHtml::image('/media/images/logo.gif');
+                                    echo CHtml::link($imgHtml, $this->createUrl("site/index"));?>
 			</div>
 			<ul id="navigation">
 				<li>
-                                    <?php echo CHtml::link("Home",$this->createUrl("site/index")); ?>
+                                    <?php echo CHtml::link("Home", $this->createUrl("site/index")); ?>
 				</li>
                                 <li>
                                     <?php /*echo CHtml::link("User",$this->createUrl("user/index"));*/ ?>
@@ -23,9 +25,11 @@
 			</ul>
 		</div>
 	</div>
+
         <div id="contents">
             <?php echo $content; ?>
         </div>
+
 	<div id="footer">
             <div class="clearfix">
                 <div id="connect">
@@ -43,5 +47,6 @@
                 </p>
             </div>
 	</div>
+    </div>
 </body>
 </html>
