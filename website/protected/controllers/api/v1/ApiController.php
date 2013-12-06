@@ -118,6 +118,14 @@ class ApiController extends CController {
         return $this->request;
     }
 
+    /*
+     * Returns fields which client has requested
+     * NULL if no fields are filtered
+     */
+    protected function getFields() {
+        return NULL;
+    }
+
     protected function beforeAction($action) {
         parent::beforeAction($action);
         try {

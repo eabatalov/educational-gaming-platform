@@ -27,7 +27,8 @@ class ApiUserController extends ApiController {
                 throw new InvalidArgumentException("Invalid email or password");
             $userApi = new UserApiModel($user);
             $userApi->initFromUser($user);
-            $this->sendResponse(self::RESULT_SUCCESS, NULL, "user", $userApi);
+            $this->sendResponse(self::RESULT_SUCCESS, NULL, "user",
+                $userApi->toArray($this->getFields()));
         } catch (InvalidArgumentException $ex) {
             $message = $ex->getMessage();
             $this->sendResponse(self::RESULT_INVALID_ARGUMENT, $message);
@@ -45,7 +46,8 @@ class ApiUserController extends ApiController {
             $user = $userStorage->getUserById($userId);
             $userApi = new UserApiModel();
             $userApi->initFromUser($user);
-            $this->sendResponse(self::RESULT_SUCCESS, NULL, "user", $userApi);
+            $this->sendResponse(self::RESULT_SUCCESS, NULL, "user",
+                $userApi->toArray($this->getFields()));
         } catch (InvalidArgumentException $ex) {
             $message = $ex->getMessage();
             if ($ex->getCode() == IUserStorage::ERROR_NO_USER_WITH_SUCH_ID)
@@ -96,7 +98,7 @@ class ApiUserController extends ApiController {
             $userStorage = new PostgresUserStorage();
             $user = $userStorage->getAuthentificatedUser(
                 $this->getUserEmail(), $this->getUserPassword());
-            $user->setAttributes($userApi->toArray());
+            $user->setAttributes($userApi->toUserFieldsArray());
 
             if ($this->getUserEmail() != $user->getEmail() &&
                 $this->getUserPassword() != $user->getPassword())

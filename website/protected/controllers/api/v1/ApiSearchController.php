@@ -28,7 +28,7 @@ class ApiSearchController extends ApiController {
             foreach ($searchResults as $searchResult) {
                 $searchResultApi = new SearchResultApiModel();
                 $searchResultApi->initFromSearchResult($searchResult);
-                $searchResultsApi[] = $searchResultApi;
+                $searchResultsApi[] = $searchResultApi->toArray($this->getFields());
             }
 
             $this->sendResponse(self::RESULT_SUCCESS, NULL, "search_results", $searchResultsApi);

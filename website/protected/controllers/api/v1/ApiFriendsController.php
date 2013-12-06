@@ -19,7 +19,7 @@ class ApiFriendsController extends ApiController {
                 $friendUser = $friendCustomer->getUser();
                 $friendUserApi = new UserApiModel();
                 $friendUserApi->initFromUser($friendUser);
-                $friendsUserApi[] = $friendUserApi;
+                $friendsUserApi[] = $friendUserApi->toArray($this->getFields());
             }
             $this->sendResponse(self::RESULT_SUCCESS, NULL, "friends", $friendsUserApi);
 
