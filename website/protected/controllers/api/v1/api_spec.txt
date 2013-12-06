@@ -1,4 +1,7 @@
-EGP RESTful API specification.
+EGP RESTful API v1 specification.
+
+//TODO Add pagination to all the collections, add authentification with each request, remove PHP session dependency
+//TODO Rewrite GET urls if possible to url with parameters. GET with JSON as parameters have common style at the same time...
 
 For the purpose of authentification pass email and password with each request.
 Authentification mechanism will significantly change later.

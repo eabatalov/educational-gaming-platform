@@ -7,7 +7,7 @@ FILTER_RESULT=''
 #' 2>&1 | grep result'
 HOST="http://localhost:8080/"
 
-cd ../../../../../../setup/
+cd ../../../../../../../setup/
 python3 setup.py > /dev/null
 cd $PWD
 
@@ -16,7 +16,7 @@ PASSWORD="111111"
 USERID="101"
 
 function createUser(){
-	$POST_JSON '{ email: "", password: "", request : {user : { id: "NULL", email: "'$EMAIL'",
+	$POST_JSON '{ email: "", password: "", request : { user : { id: "NULL", email: "'$EMAIL'",
 		name: "Eugene", surname: "Batalov", is_online: true, role: "customer" }, password: "'$PASSWORD'" } }' $HOST\api/user \
 		$FILTER_RESULT
 }
@@ -24,7 +24,7 @@ function createUser(){
 function testApiUserController(){
 	echo
 	echo "Test actionRegisterUser with invalid input"
-	$POST_JSON '{ email: "", password: "", request : {user : { id: "NULL", email: "foo",
+	$POST_JSON '{ email: "", password: "", request : { user : { id: "NULL", email: "foo",
 		name: "Eugene", surname: "", is_online: true, role: "customer" }, password: "123" } }' $HOST\api/user
 
 	echo
@@ -37,7 +37,7 @@ function testApiUserController(){
 
 	echo
 	echo "Test actionModifyUser"
-	$PUT_JSON '{ email : "'$EMAIL'", password : "'$PASSWORD'", request : {user : { id: "'$USERID'", email: "'$EMAIL'",
+	$PUT_JSON '{ email : "'$EMAIL'", password : "'$PASSWORD'", request : { user : { id: "'$USERID'", email: "'$EMAIL'",
 		name: "Chuck", surname: "Norris", is_online: true, role: "customer" }, password: "'$PASSWORD'" } }' $HOST\api/user
 
 	echo

@@ -9,6 +9,7 @@ return array(
     'import'=>array(
         'application.models.*',
         'application.models.api.*',
+        'application.models.api.v1.*',
         'application.models.auth.*',
         'application.models.auth.hybrid_auth.*',
         'application.models.auth.hybrid_auth.postgres.*',
@@ -19,6 +20,7 @@ return array(
         'application.components.*',
         'application.controllers.*',
         'application.controllers.api.*',
+        'application.controllers.api.v1.*',
         'application.modules.hybridauth.*',
         'application.modules.hybridauth.controllers.*'
     ),
@@ -36,19 +38,19 @@ return array(
             'rules'=>array(
                 // REST patterns
                 //user and login services
-                array('api/ApiUser/LoginUser', 'pattern' => 'api/login', 'verb' => 'GET'),
-                array('api/ApiUser/GetUser', 'pattern' => 'api/user', 'verb' => 'GET'),
-                array('api/ApiUser/ModifyUser', 'pattern' => 'api/user', 'verb' => 'PUT'),
-                array('api/ApiUser/RegisterUser', 'pattern' => 'api/user', 'verb' => 'POST'),
+                array('api/v1/ApiUser/LoginUser', 'pattern' => 'api/login', 'verb' => 'GET'),
+                array('api/v1/ApiUser/GetUser', 'pattern' => 'api/user', 'verb' => 'GET'),
+                array('api/v1/ApiUser/ModifyUser', 'pattern' => 'api/user', 'verb' => 'PUT'),
+                array('api/v1/ApiUser/RegisterUser', 'pattern' => 'api/user', 'verb' => 'POST'),
                 //friends service
-                array('api/ApiFriends/GetFriends', 'pattern' => 'api/friends', 'verb' => 'GET'),
-                array('api/ApiFriends/AddFriend', 'pattern' => 'api/friends', 'verb' => 'POST'),
-                array('api/ApiFriends/DeleteFriend', 'pattern' => 'api/friends', 'verb' => 'DELETE'),
+                array('api/v1/ApiFriends/GetFriends', 'pattern' => 'api/friends', 'verb' => 'GET'),
+                array('api/v1/ApiFriends/AddFriend', 'pattern' => 'api/friends', 'verb' => 'POST'),
+                array('api/v1/ApiFriends/DeleteFriend', 'pattern' => 'api/friends', 'verb' => 'DELETE'),
                 //messaging service
-                array('api/ApiMessaging/GetMessages', 'pattern' => 'api/messaging', 'verb' => 'GET'),
-                array('api/ApiMessaging/SendMessage', 'pattern' => 'api/messaging', 'verb' => 'POST'),
+                array('api/v1/ApiMessaging/GetMessages', 'pattern' => 'api/messaging', 'verb' => 'GET'),
+                array('api/v1/ApiMessaging/SendMessage', 'pattern' => 'api/messaging', 'verb' => 'POST'),
                 //search service
-                array('api/ApiSearch/Search', 'pattern' => 'api/search', 'verb' => 'GET'),
+                array('api/v1/ApiSearch/Search', 'pattern' => 'api/search', 'verb' => 'GET'),
                 // Other controllers
                 '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
             ),

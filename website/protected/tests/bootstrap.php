@@ -12,6 +12,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR .
         $protectedDir ."/modules/hybridauth/controllers/" . PATH_SEPARATOR .
         $protectedDir ."/models/" . PATH_SEPARATOR .
         $protectedDir ."/models/api/" . PATH_SEPARATOR .
+        $protectedDir ."/models/api/v1/" . PATH_SEPARATOR .
         $protectedDir ."/models/auth/" . PATH_SEPARATOR .
         $protectedDir ."/models/auth/hybrid_auth/" . PATH_SEPARATOR .
         $protectedDir ."/models/auth/hybrid_auth/postgres/" . PATH_SEPARATOR .
