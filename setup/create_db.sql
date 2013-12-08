@@ -4,6 +4,8 @@ DROP SCHEMA IF EXISTS egp CASCADE;
 --CMD
 CREATE SCHEMA egp;
 --CMD
+--CREATE EXTENSION "uuid-ossp" WITH SCHEMA egp;
+--CMD
 DO
 $BODY$
 BEGIN
@@ -51,4 +53,24 @@ ALTER TABLE egp.ha_logins
 	ADD CONSTRAINT "fk_ha_logins_userId"
 	FOREIGN KEY("userid")
 	REFERENCES egp.users("id");
+--CMD
+CREATE TABLE egp.api_clients
+(
+	id serial NOT NULL PRIMARY KEY,
+	global_id char(30) NOT NULL UNIQUE,
+	name varchar(50) NOT NULL
+);
+--CMD
+CREATE TABLE egp.api_access_tokens
+(
+	access_token char(30) NOT NULL PRIMARY KEY, -- The actual value of access token
+	user_id int8 NOT NULL, -- User which this token authentificates
+	client_id integer NOT NULL,
+	CONSTRAINT fk_api_access_tokens_clientid FOREIGN KEY (client_id)
+	REFERENCES egp.api_clients (id),
+	CONSTRAINT fk_api_access_tokens_userid FOREIGN KEY (user_id)
+	REFERENCES egp.users (id),
+	CONSTRAINT unique_api_tokens_client_user UNIQUE (user_id, client_id)
+);
+--CMD
 --CMD
