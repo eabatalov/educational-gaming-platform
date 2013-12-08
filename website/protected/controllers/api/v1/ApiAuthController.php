@@ -8,7 +8,7 @@
  * @author eugene
  */
 
-class AuthController extends ApiController {
+class ApiAuthController extends ApiController {
  
     function __construct() {
         $this->auth = new LearzingAuth();

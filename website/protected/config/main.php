@@ -38,8 +38,8 @@ return array(
             'rules'=>array(
                 // REST patterns
                 //auth services
-                array('api/v1/Auth/GetAccessToken', 'pattern' => 'auth/token', 'verb' => 'GET'),
-                array('api/v1/Auth/DestroyAccessToken', 'pattern' => 'auth/token', 'verb' => 'DELETE'),
+                array('api/v1/ApiAuth/GetAccessToken', 'pattern' => 'auth/token', 'verb' => 'GET'),
+                array('api/v1/ApiAuth/DestroyAccessToken', 'pattern' => 'auth/token', 'verb' => 'DELETE'),
                 //user services
                 array('api/v1/ApiUser/GetUser', 'pattern' => 'api/user', 'verb' => 'GET'),
                 array('api/v1/ApiUser/ModifyUser', 'pattern' => 'api/user', 'verb' => 'PUT'),
