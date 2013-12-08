@@ -5,7 +5,7 @@
  *
  * @author eugene
  */
-class SearchRequestApiModel {
+class SearchRequestApiModel extends SerializableApiModel {
     /*
      * @throws: InvalidArgumentException if very basic validation has failed
      */

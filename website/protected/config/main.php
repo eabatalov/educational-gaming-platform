@@ -37,8 +37,10 @@ return array(
             'urlFormat'=>'path',
             'rules'=>array(
                 // REST patterns
-                //user and login services
-                array('api/v1/ApiUser/LoginUser', 'pattern' => 'api/login', 'verb' => 'GET'),
+                //auth services
+                array('api/v1/Auth/GetAccessToken', 'pattern' => 'auth/token', 'verb' => 'GET'),
+                array('api/v1/Auth/DestroyAccessToken', 'pattern' => 'auth/token', 'verb' => 'DELETE'),
+                //user services
                 array('api/v1/ApiUser/GetUser', 'pattern' => 'api/user', 'verb' => 'GET'),
                 array('api/v1/ApiUser/ModifyUser', 'pattern' => 'api/user', 'verb' => 'PUT'),
                 array('api/v1/ApiUser/RegisterUser', 'pattern' => 'api/user', 'verb' => 'POST'),

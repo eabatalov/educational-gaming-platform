@@ -30,6 +30,8 @@ class ApiController extends CController {
         header('HTTP/1.1 ' . self::resultToHttpStatusCode($result) . ' ' .
             self::resultToHttpStatusMessage($result));
         header('Content-type: application/json');
+        foreach ($this->headers as $header)
+            header($header);
         //Output body
         if (is_array($texts)) {
             //Tweak only for validation errors
@@ -62,9 +64,12 @@ class ApiController extends CController {
      */
     protected function sendInternalError(Exception $exception = NULL)
     {
-        $this->sendResponse(self::RESULT_INTERNAL_ERROR,
-            $exception != NULL ? $exception->getMessage() . PHP_EOL .
-                "Error code: " . $exception->getCode() : NULL);
+        $message = NULL;
+        if (YII_DEBUG && ($exception != NULL)) {
+            $message = $exception->getMessage() . PHP_EOL .
+                "Error code: " . $exception->getCode();
+        }
+        $this->sendResponse(self::RESULT_INTERNAL_ERROR, $message);
     }
 
     /*
@@ -72,7 +77,7 @@ class ApiController extends CController {
      */
     protected function requireAuthentification()
     {
-        if (!$this->isCurrentUserAuthentificated)
+        if (LearzingAuth::getCurrentAccessToken() == NULL)
             $this->sendResponse (self::RESULT_AUTHORIZATION_FAILED,
                 'Current user should be authentificated');
     }
@@ -82,37 +87,13 @@ class ApiController extends CController {
      */
     protected function requireNoAuthentification()
     {
-        if ($this->isCurrentUserAuthentificated)
+        if (LearzingAuth::getCurrentAccessToken() != NULL)
             $this->sendResponse (self::RESULT_AUTHORIZATION_FAILED,
                 "Current user shouldn't be authentificated");
     }
 
     /*
-     * returns: current user's id or NULL of not authentificated
-     */
-    protected function getUserId()
-    {
-        return $this->userId;
-    }
-    
-    /*
-     * returns: current user's email or NULL of not authentificated
-     */
-    protected function getUserEmail()
-    {
-        return $this->userEmail;
-    }
-
-    /*
-     * returns: current user's password or NULL of not authentificated
-     */
-    protected function getUserPassword()
-    {
-        return $this->userPassword;
-    }
-
-    /*
-     * Returns not parsed request
+     * Returns parsed to PHP array current API REQUEST object
      */
     protected function getRequest() {
         return $this->request;
@@ -126,69 +107,34 @@ class ApiController extends CController {
         return NULL;
     }
 
+    protected function addHttpHeaderToResponse($header) {
+        $this->headers[] = $header;
+    }
+
     protected function beforeAction($action) {
         parent::beforeAction($action);
         try {
-            $json = NULL;
+            $request = NULL;
             if (Yii::app()->request->getRequestType() === "GET") {
-                $json = Yii::app()->request->getParam("data", NULL);
-                if ($json === NULL)
-                    throw new InvalidArgumentException("GET request should contain data parameter with json");
+                $request = Yii::app()->request->getParam("request", NULL);
+                if ($request === NULL)
+                    throw new InvalidArgumentException(
+                        "GET request should contain 'request' parameter with REQUEST JSON object");
             } else {
-                $json = Yii::app()->request->getRawBody();
+                $request = Yii::app()->request->getRawBody();
             }
-            $this->request = CJSON::decode($json, TRUE);
-            //echo var_export($this->request, true);
-
-            if (AuthUtils::authUser() != NULL)
-            {
-                /*Temporary workaround for website authentification done using php session */
-                $this->userId = AuthUtils::authUser()->getId();
-                $this->userEmail = AuthUtils::authUser()->getEmail();
-                $this->userPassword = AuthUtils::authUser()->getPassword();
-                $this->isCurrentUserAuthentificated = TRUE;
-            }
-
-            $this->userEmail = TU::getValueOrThrow("email", $this->request);
-            $this->userPassword = TU::getValueOrThrow("password", $this->request);
-            $userStorage = new PostgresUserStorage();
-            try {
-                $authUser = $userStorage->getAuthentificatedUser(
-                    $this->getUserEmail(), $this->getUserPassword());
-                $this->isCurrentUserAuthentificated = TRUE;
-            } catch (Exception $ex) {
-                $this->isCurrentUserAuthentificated = FALSE;
-            }
-            //Set application level request data
-            $this->request = TU::getValueOrThrow("request", $this->request);
+            //echo var_export($request, true);
+            $this->request = CJSON::decode($request, TRUE);
+            $auth = new LearzingAuth();
+            $auth->authenticateRequest();
         } catch(Exception $ex) {
             $this->sendInternalError($ex);
         }
         return TRUE;
     }
-    /* ============  NON INTERFACE PART OF CLASS DEFINITION  ============ */
-    /* Setting up exceptions handling for all the actions here.
-       But it doesn't work for some reason. */
-    /*public function init() {        
-        parent::init();
-        Yii::app()->errorHandler->errorAction = $this->actionError();
-    }
 
-    public function actionError(){
-        $exception = NULL;
-        $error = Yii::app()->errorHandler->getError();
-        echo var_export($error);
-        if ($error != NULL) {
-            $exception = new Exception($error['message'], $error['code']);
-            $this->sendInternalError($exception);
-        }
-    }*/
-
-    private $userId = NULL;
-    private $userEmail = NULL;
-    private $userPassword = NULL;
-    private $isCurrentUserAuthentificated = FALSE;
     private $request = NULL;
+    private $headers = array();
 
     const HTTP_STATUS_OK = 200;
     const HTTP_STATUS_BAD_REQUEST = 400;

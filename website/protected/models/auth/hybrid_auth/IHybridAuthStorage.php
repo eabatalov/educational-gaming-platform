@@ -8,7 +8,7 @@
 Interface IHybridAuthStorage {
 
     /*
-     * @throws StorageException
+     * @throws InternalErrorException
      */
     public function saveHAuthRecord(HybridAuthRecord $record);
     /*
@@ -17,7 +17,7 @@ Interface IHybridAuthStorage {
      * @returns: AuthentificatedUser instance which has hybrid auth record for
      *   $loginProvider, $loginProviderIdentifier pair
      * @throws: InvalidArgumentException if no such AuthentificatedUser,
-     *   StorageException
+     *   InternalErrorException
      */
     public function getAuthentificatedUser($loginProvider, $loginProviderIdentifier,
                                             $email = NULL);

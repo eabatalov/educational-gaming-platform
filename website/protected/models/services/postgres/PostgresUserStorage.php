@@ -11,12 +11,12 @@ class PostgresUserStorage implements IUserStorage {
     /*
      * Creates object and connects to postgres DB
      * @returns PostgresUserStorage object connected to DB
-     * @throws StorageException if connection falied
+     * @throws InternalErrorException if connection falied
      */
     function __construct() {
         $this->conn = pg_connect(PostgresUtils::getConnString(), PGSQL_CONNECT_FORCE_NEW);
-        TU::throwIf($this->conn == FALSE, TU::STORAGE_EXCEPTION, pg_last_error(),
-            StorageException::ERROR_CONNECTION_PROBLEMS);
+        TU::throwIf($this->conn == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error(),
+            InternalErrorException::ERROR_CONNECTION_PROBLEMS);
     }
 
     /*
@@ -50,7 +50,7 @@ class PostgresUserStorage implements IUserStorage {
                 PostgresUtils::boolToPGBool($user->getIsActive()),
                 $password,
                 $user->getRole()));
-        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
+        TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
     }
 
     public function getAuthentificatedUser($email, $password) {
@@ -58,7 +58,7 @@ class PostgresUserStorage implements IUserStorage {
         assert(is_string($password));
         $result = pg_query_params($this->conn, self::$SQL_SELECT_BY_EMAIL,
                                          array($email));
-        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
+        TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
 
         $data = pg_fetch_object($result);
         TU::throwIf($data == FALSE, TU::INVALID_ARGUMENT_EXCEPTION, pg_last_error(),
@@ -66,6 +66,23 @@ class PostgresUserStorage implements IUserStorage {
         TU::throwIf($data->password != $password, TU::INVALID_ARGUMENT_EXCEPTION, pg_last_error(),
             IUserStorage::ERROR_INVALID_PASSWORD);
 
+        return $this->pgAuthUserToAuthUser($data);
+    }
+
+    function getAuthentificatedUserByAccessToken($accessToken) {
+        assert(is_string($accessToken));
+        $result = pg_query_params($this->conn, self::$SQL_SELECT_BY_ACCESS_TOKEN,
+                                         array($accessToken));
+        TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
+
+        $data = pg_fetch_object($result);
+        TU::throwIf($data == FALSE, TU::INVALID_ARGUMENT_EXCEPTION, pg_last_error(),
+            IUserStorage::ERROR_NO_USER_WITH_SUCH_TOKEN);
+
+        return $this->pgAuthUserToAuthUser($data);
+    }
+
+    private function pgAuthUserToAuthUser($data) {
         return AuthentificatedUser::createAUInstance(
                 $data->email,
                 $data->name,
@@ -128,12 +145,12 @@ class PostgresUserStorage implements IUserStorage {
             $authUser->getIsActive(),
             $authUser->getPassword(),
             $authUser->getRole()));
-        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
+        TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
     }
 
     protected function getUserBy($sql, $arg) {
         $result = pg_query_params($this->conn, $sql, array($arg));
-        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
+        TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
 
         $data= pg_fetch_object($result);
         TU::throwIf($data == FALSE, TU::INVALID_ARGUMENT_EXCEPTION, pg_last_error());
@@ -167,4 +184,10 @@ class PostgresUserStorage implements IUserStorage {
             "SELECT id, name, surname, email, is_active, password, role
              FROM egp.users
              WHERE id=$1";
+    static private $SQL_SELECT_BY_ACCESS_TOKEN =
+            "SELECT id, name, surname, email, is_active, password, role
+             FROM egp.users
+             WHERE id=(SELECT user_id
+                FROM egp.api_access_tokens
+                WHERE access_token=$1);";
 }

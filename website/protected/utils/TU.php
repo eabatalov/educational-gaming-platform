@@ -55,17 +55,18 @@ class TU {
      * Throw InvalidArgumentException if array key doesn't exist.
      * @throws InvalidArgumentException
      */
-    public static function getValueOrThrow($key, $array) {
+    public static function getValueOrThrow($key, $array, $errorMessage = NULL) {
         if (isset($array[$key])) {
             return $array[$key];
         } else {
-            throw new InvalidArgumentException("No key " . var_export($key, TRUE)
-                    . " in array");
+            $errorMessage = $errorMessage != NULL ? $errorMessage :
+                "No key " . var_export($key, TRUE) . " in array";
+            throw new InvalidArgumentException($errorMessage);
         }
     }
 
     //Exceptions names constants for convenience
     const EXCEPTION = 'Exception';
     const INVALID_ARGUMENT_EXCEPTION = 'InvalidArgumentException';
-    const STORAGE_EXCEPTION = 'StorageException';
+    const INTERNAL_ERROR_EXCEPTION = 'InternalErrorException';
 }

@@ -44,7 +44,7 @@ class PostgresCustomerStorage extends PostgresUserStorage implements ICustomerSt
         $friends = array();
 
         $result = pg_query_params($this->conn, self::$SQL_SELECT_FRIENDS, array($id));
-        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
+        TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
 
         while(($data = pg_fetch_object($result)) != FALSE) {
             $friends[$data->acceptor] =
@@ -57,17 +57,17 @@ class PostgresCustomerStorage extends PostgresUserStorage implements ICustomerSt
         assert(is_string($email));
         assert(is_string($password));
         $authUser = $this->getAuthentificatedUser($email, $password);
-        $friends = array();
 
-        $result = pg_query_params($this->conn, self::$SQL_SELECT_FRIENDS,
-                array($authUser->getId()));
-        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
+        return AuthentificatedCustomer::createACInstance($authUser,
+            $this->getCustomerFriends($authUser->getId()));
+    }
 
-        while(($data = pg_fetch_object($result)) != FALSE) {
-            $friends[$data->acceptor] = $this->getCustomerWithNoFriendsById($data->acceptor);
-        }
+    function getAuthCustomerByAccessToken($accessToken) {
+        assert(is_string($accessToken));
+        $authUser = $this->getAuthentificatedUserByAccessToken($accessToken);
 
-        return AuthentificatedCustomer::createACInstance($authUser, $friends);
+        return AuthentificatedCustomer::createACInstance($authUser,
+            $this->getCustomerFriends($authUser->getId()));
     }
 
     public function saveAuthCustomer(AuthentificatedCustomer $authCustomer) {
@@ -95,13 +95,13 @@ class PostgresCustomerStorage extends PostgresUserStorage implements ICustomerSt
     protected function delFriend($reqId, $accId) {
         $result = pg_query_params($this->conn, self::$SQL_DELETE_FRIEND,
                                          array($reqId, $accId));
-        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
+        TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
     }
 
     protected function addFriend($reqId, $accId) {
         $result = pg_query_params($this->conn, self::$SQL_INSERT_FRIEND,
                                          array($reqId, $accId));
-        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
+        TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
     }
 
     protected function getCustomerWithNoFriendsById($id) {

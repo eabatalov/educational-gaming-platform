@@ -8,8 +8,8 @@ class PostgresHybridAuthStorage implements IHybridAuthStorage {
 
     function __construct() {
         $this->conn = pg_connect(PostgresUtils::getConnString(), PGSQL_CONNECT_FORCE_NEW);
-        TU::throwIf($this->conn == FALSE, TU::STORAGE_EXCEPTION, pg_last_error(),
-                StorageException::ERROR_CONNECTION_PROBLEMS);
+        TU::throwIf($this->conn == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error(),
+                InternalErrorException::ERROR_CONNECTION_PROBLEMS);
     }
 
     /*
@@ -26,7 +26,7 @@ class PostgresHybridAuthStorage implements IHybridAuthStorage {
         $result = pg_query_params($this->conn, self::$SQL_INSERT_HAUTH,
             array($record->getLoginProviderName(), $record->getLoginProviderIdentifier(),
                 $record->getUserId()));
-        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
+        TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
     }
 
     public function getAuthentificatedUser($loginProvider, $loginProviderIdentifier,
@@ -36,7 +36,7 @@ class PostgresHybridAuthStorage implements IHybridAuthStorage {
 
         $result = pg_query_params($this->conn, self::$SQL_GET_USER_EMAIL_PASS_BY_HAUTH,
             array($loginProvider, $loginProviderIdentifier));
-        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
+        TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
 
         $data = pg_fetch_object($result);
         if ($data == FALSE) {
@@ -58,7 +58,7 @@ class PostgresHybridAuthStorage implements IHybridAuthStorage {
 
         $hauths = array();
         $result = pg_query_params($this->conn, self::$SQL_GET_USER_HAUTHS, array($userId));
-        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
+        TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
 
         while(($data = pg_fetch_object($result)) != FALSE) {
             array_push($hauths,
@@ -75,7 +75,7 @@ class PostgresHybridAuthStorage implements IHybridAuthStorage {
                 
         $result = pg_query_params($this->conn, self::$SQL_GET_USER_EMAIL_PASS_BY_EMAIL,
             array($email));
-        TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
+        TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
 
         return pg_fetch_object($result);
     }

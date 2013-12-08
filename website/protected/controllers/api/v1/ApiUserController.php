@@ -7,36 +7,6 @@
  */
 class ApiUserController extends ApiController {
 
-    public function actionLoginUser()
-    {
-        try {
-            $this->requireNoAuthentification();
-            $cred = TU::getValueOrThrow("cred", $this->getRequest());
-            $userEmail = TU::getValueOrThrow("email", $cred);
-            $userPassword = TU::getValueOrThrow("password", $cred);
-            /*
-             * As website can use our API we should create login session
-             * This will be removed once website and API auth mechanisms merged
-             */
-            $identity = new AuthIdentity($userEmail, $userPassword);
-            $identity->authenticate();
-            AuthUtils::login($identity);
-            $user = AuthUtils::authUser();
-            /* End website auth */
-            if ($user == NULL)
-                throw new InvalidArgumentException("Invalid email or password");
-            $userApi = new UserApiModel($user);
-            $userApi->initFromUser($user);
-            $this->sendResponse(self::RESULT_SUCCESS, NULL, "user",
-                $userApi->toArray($this->getFields()));
-        } catch (InvalidArgumentException $ex) {
-            $message = $ex->getMessage();
-            $this->sendResponse(self::RESULT_INVALID_ARGUMENT, $message);
-        } catch (Exception $ex) {
-            $this->sendInternalError($ex);
-        }
-    }
-
     public function actionGetUser()
     {
         try {
@@ -96,14 +66,10 @@ class ApiUserController extends ApiController {
             $userApi->initFromArray(TU::getValueOrThrow("user", $this->getRequest()));
 
             $userStorage = new PostgresUserStorage();
-            $user = $userStorage->getAuthentificatedUser(
-                $this->getUserEmail(), $this->getUserPassword());
+            $user = $userStorage->getAuthentificatedUserByAccessToken(
+                LearzingAuth::getCurrentAccessToken());
             $user->setAttributes($userApi->toUserFieldsArray());
 
-            if ($this->getUserEmail() != $user->getEmail() &&
-                $this->getUserPassword() != $user->getPassword())
-                $this->sendResponse(self::RESULT_AUTHORIZATION_FAILED,
-                        "You are not allowed to change this user's data");
             if (!$user->validate())
                 $this->sendResponse(self::RESULT_INVALID_ARGUMENT, $user->getErrors());
 

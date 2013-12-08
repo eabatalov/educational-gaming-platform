@@ -42,8 +42,8 @@ class ApiFriendsController extends ApiController {
             $friend = $customerStorage->getCustomerById($friendId);
 
             $authCustomer =
-                $customerStorage->getAuthCustomer($this->getUserEmail(),
-                        $this->getUserPassword());
+                $customerStorage->getAuthCustomerByAccessToken(
+                    LearzingAuth::getCurrentAccessToken());
             $authCustomer->addFriend($friend);
 
             $customerStorage->saveAuthCustomer($authCustomer);
@@ -71,8 +71,8 @@ class ApiFriendsController extends ApiController {
             $friend = $customerStorage->getCustomerById($friendId);
 
             $authCustomer =
-                $customerStorage->getAuthCustomer($this->getUserEmail(),
-                        $this->getUserPassword());
+                $customerStorage->getAuthCustomerByAccessToken(
+                    LearzingAuth::getCurrentAccessToken());
             $authCustomer->delFriend($friend);
 
             $customerStorage->saveAuthCustomer($authCustomer);

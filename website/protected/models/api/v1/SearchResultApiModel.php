@@ -5,7 +5,7 @@
  *
  * @author eugene
  */
-class SearchResultApiModel {
+class SearchResultApiModel extends SerializableApiModel {
 
     /*
      * @throws: InvalidArgumentException if very basic validation has failed
@@ -21,21 +21,6 @@ class SearchResultApiModel {
             default:
                throw new InvalidArgumentException("Unsupported object type");
         }
-    }
-
-    /*
-     * @param fields: if not NULL contains list of fields to put to resulting array
-     * @throws: InvalidArgumentException if very basic validation has failed
-     */
-    public function toArray($fields) {
-        $result = array();
-        $myFields = get_object_vars($this);
-
-        foreach ($myFields as $field => $fieldVal) {
-            if ($fields == NULL || in_array($field, $fields))
-                    $result[$field] = $fieldVal;
-        }
-        return $result;
     }
 
     public $object_type;

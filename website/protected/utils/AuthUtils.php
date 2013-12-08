@@ -4,6 +4,7 @@
  * @author eugene
  */
 class AuthUtils {
+    
     //TODO Remove shit code from here
     //Don't save stuff in cookies until we know that there is no user info
     //saved in them if we enable them

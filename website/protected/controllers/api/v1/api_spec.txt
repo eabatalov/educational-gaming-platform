@@ -1,22 +1,18 @@
 EGP RESTful API v1 specification.
 
 //TODO Add pagination to all the collections, add authentification with each request, remove PHP session dependency
-//TODO Rewrite GET urls if possible to url with parameters. GET with JSON as parameters have common style at the same time...
+===============================
+MAKING API REQUESTS
 
-For the purpose of authentification pass email and password with each request.
-Authentification mechanism will significantly change later.
+For security reasons all the interactions are performed via HTTPS.
+To unify things, all the API requests and responses data is represented in the form of JSON object.
+In the following spec we'll refer to response JSON object as "RESPONSE" and request JSON object as "REQUEST".
 
-JSON API request format:
-{
-  email: current user's email used for authentification,
-  password: current user's password used for authentification,
-  request: service specific request part - JSON object
-}
-This JSON object should be the body of request for all the HTTP request methods except GET.
-In case of GET request, set request parameter "data" of your URL to the JSON request object value
-and URL encode it.
+REQUEST object should be the body of request for all the HTTP request methods except GET.
+In case of GET request, set GET request parameter "request" of your URL to the url encoded REQUEST value.
+Example: https://learzing.com/api/user?request={%20userid:%20%2213rfefv39fj3f48j9838&#&#&"}
 
-JSON API response format:
+RESPONSE object is always passed in the body of your API response and has the following layout:
 {
   result: RESULT - defines status of requested operation. See RESULT values description below.
   texts: [String] List of human readable result explanation strings in current user's locale or in English.
@@ -33,64 +29,87 @@ RESULT values:
 API SERVICES DESCRIPTION
 URLs of all API services have the following form: /api/<service_name>
 
+===============================
+service_name: /auth/token
+
+API USER AUTHENTICATION SERVICE
+You need to obtain access token to interact with the API.
+To perform authorization of your API request you need to supply access token in HTTP header:
+"Authorization: <token_type> <access_token>"
+You obtain <token_type> and <access_token> from GET request to this service.
+
+HTTP methods:
+GET: get AccessTokenInfo object to use for authorization of API requests and authentication
+    as user with email @email and password @password. @client_id is your app id which you got
+    from Learzing.
+    REQUEST: { email: String, password: String, client_id: String }
+    RESPONSE: AccessTokenInfo
+
+DELETE: revoke (make invalid) @access_token. Also pass your client's @client_id which you got
+    from Learzing.
+    REQUEST: { access_token: String, client_id: String }
+
+Javascript types:
+AccessTokenInfo: { access_token: String, token_type: String }
+===============================
 service_name: user
 HTTP methods:
-GET (request : { userid : String }): get User object with id @userid and all the information avaliable for current user
-	RETURNS: user: User
+GET: get User object with id @userid and all the information avaliable for current user
+    REQUEST: { userid : String }
+    RESPONSE: { user: User }
 	
-POST (request : { User user, String password }): register new @user object with password @password
+POST: register new @user object with password @password. No access token is needed to perform the action.
+    After successful creation of user, get access token using API authentication endpoint.
+    REQUEST: { User user, String password } 
 
-PUT (request : { User user }): replace current user object with @user object supplied (update scenario)
+PUT: replace current user object with @user object supplied (update scenario)
+    REQUEST: { User user }
 
 DELETE (): not implemented
 
 Javascript types:
-User : { id: string, email: string, name: string, surname: string, is_online: "true"|"false", role: UserRole }
+User: { id: string, email: string, name: string, surname: string, is_online: "true"|"false", role: UserRole }
 UserRole: "customer" or ...
-===============================
-service_name: login
-HTTP methods:
-GET (request : { Credential cred } ): get User object of user with credential = @cred
-        RETURNS: user: User
-
-Javascript types:
-Credential: { email: string, password: string }
 ===============================
 service_name: friends
 HTTP methods:
-GET ( request : { userid : String } ): get list of friends visible to current user of user with id @userid
-	RETURNS: friends: [User]
+GET: get list of friends visible to current user of user with id @userid
+    REQUEST : { userid : String }
+    RESPONSE: { friends: [User] }
 
-POST ( request : { userid : String } ): add new friend with id @userid to current user's friend list
+POST: add new friend with id @userid to current user's friend list
+    REQUEST : { userid : String }
 
-PUT (): not implemented
+PUT: not implemented
 
-DELETE ( request : { userid : String } ): delete current user's friend with id @userid
+DELETE:  delete current user's friend with id @userid
+    REQUEST : { userid : String }
 
 ===============================
 service_name: messaging
 HTTP methods:
-GET ( request : { userid : String, start : String, end: String } ):
-        get list of messages with sequential number from @start to @end in conversation of current user and user with id @userid.
-	@start: message sequential number starting from 1
-	@end: message sequential number
-		You can use 'LAST-x' value for @start and @end, where x is some number to perform selection of messages relative to the last message.
-	RETURNS: messages: [Message]
+GET: get list of messages with sequential number from @start to @end in conversation of current user and user with id @userid.
+    @start: message sequential number starting from 1
+    @end: message sequential number
+    You can use 'LAST-x' value for @start and @end, where x is some number to perform selection of messages relative to the last message.
+    REQUEST: { userid : String, start : String, end: String }
+    RESPONSE: { messages: [Message] }
 
-POST ( request : { userid : String, text : String } ): send message with body @text from current user to user with id @userid
+POST: send message with body @text from current user to user with id @userid
+    REQUEST: { userid : String, text : String }
 
-PUT (): not implemented
+PUT: not implemented
 
-DELETE (): not implemented
+DELETE: not implemented
 
 Javascript types:
 Message: { from: userid, to: userid, date: string/date JS type, time: string/time JS type: body: string }
 ===============================
 service_name: search
 HTTP methods:
-GET ( request : { query : String, object_type = ObjectType | "all" } ):
-        Get search results for query @query looking for objects of type @object_type.
-	RETURNS: search_results: [ SearchResult ]
+GET: Get search results for query @query looking for objects of type @object_type.
+    REQUEST: { query : String, object_type = ObjectType | "all" } 
+    RESPONSE: { search_results: [ SearchResult ] }
 
 Javascript types:
 SearchResult: { object_type : ObjectType, object : Object }

@@ -10,12 +10,12 @@ class PostgresSearchService implements ISearchService {
     /*
      * Creates object and connects to postgres DB
      * @returns PostgresSearchService object connected to DB
-     * @throws StorageException if connection falied
+     * @throws InternalErrorException if connection falied
      */
     function __construct() {
         $this->conn = pg_connect(PostgresUtils::getConnString(), PGSQL_CONNECT_FORCE_NEW);
-        TU::throwIf($this->conn == FALSE, TU::STORAGE_EXCEPTION, pg_last_error(),
-            StorageException::ERROR_CONNECTION_PROBLEMS);
+        TU::throwIf($this->conn == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error(),
+            InternalErrorException::ERROR_CONNECTION_PROBLEMS);
     }
 
     /*
@@ -29,7 +29,7 @@ class PostgresSearchService implements ISearchService {
     }
 
     /*
-     * @throws: StorageException
+     * @throws: InternalErrorException
      */
     public function search(SearchRequest $request) {
         $searchResults = array();
@@ -39,7 +39,7 @@ class PostgresSearchService implements ISearchService {
             $request->getObjectType() == SearchRequest::OBJ_TYPE_USER) {
             $result = pg_query_params($this->conn, self::$SQL_SEARCH_USERS,
                 array($request->getQuery() . '%'));
-            TU::throwIf($result == FALSE, TU::STORAGE_EXCEPTION, pg_last_error());
+            TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
 
             //Everything for code reusage for now!
             $userStorage = new PostgresUserStorage();
