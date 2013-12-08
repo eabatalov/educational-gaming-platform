@@ -4,7 +4,7 @@
  * when user enters all the login/signup data manually.
  * @author eugene
  */
-class UserController extends EGPControllerBase {
+class UserController extends EGPWebFrontendController {
 
     private static $PAGE_NAME_SIGNUP = "SignUp";
     private static $PAGE_NAME_LOGIN = "Login";

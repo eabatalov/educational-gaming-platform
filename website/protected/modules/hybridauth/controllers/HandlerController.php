@@ -5,7 +5,7 @@
  * for different login providers.
  * @author eugene
  */
-class HandlerController extends EGPControllerBase {
+class HandlerController extends EGPWebFrontendController {
 
     private $haIdentity;
     private $isSafeContext;

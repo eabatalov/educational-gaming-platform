@@ -103,7 +103,10 @@ class HTTPStatusCodes {
     }
 
     public static function getMessageForCode($code) {
-        return self::$messages[$code];
+        if (isset(self::$messages[$code]))
+            return self::$messages[$code];
+        else
+            return "";
     }
 
     public static function isError($code) {

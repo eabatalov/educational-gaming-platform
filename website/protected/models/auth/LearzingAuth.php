@@ -69,7 +69,6 @@ class LearzingAuth {
         TU::throwIfNot(is_string($accessToken), TU::INVALID_ARGUMENT_EXCEPTION);
         TU::throwIfNot(is_string($clientId), TU::INVALID_ARGUMENT_EXCEPTION);
         try {
-
             $token = $this->storageGetAccessTokenInfo($accessToken);
 
             TU::throwIfNot($token->clientId == $clientId, TU::INVALID_ARGUMENT_EXCEPTION);

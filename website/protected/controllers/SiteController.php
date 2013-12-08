@@ -3,7 +3,7 @@
 /**
  * SiteController is the default controller to handle user requests.
  */
-class SiteController extends EGPControllerBase
+class SiteController extends EGPWebFrontendController
 {
 
     function __construct($id,$module=null)
@@ -11,7 +11,7 @@ class SiteController extends EGPControllerBase
         parent::__construct($id, $module);
         $this->pageTitle = "home";
     }
-    
+
     /**
      * Index action is the default action in a controller.
      */

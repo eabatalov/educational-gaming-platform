@@ -5,7 +5,7 @@
  *
  * @author eugene
  */
-class ApiController extends CController {
+class ApiController extends EGPControllerBase {
 
     //Operation results as defined in api specification
     const RESULT_SUCCESS = "SUCCESS";
@@ -56,14 +56,13 @@ class ApiController extends CController {
         Yii::app()->end();
     }
 
-    /*
-     * Call this func when unrecoverable error occured.
-     * For example when exception was caught.
-     * @returns: nothing
-     * @throws: nothing
-     */
-    protected function sendInternalError(Exception $exception = NULL)
-    {
+    protected function addHttpHeaderToResponse($header) {
+        $this->headers[] = $header;
+    }
+
+    private $headers = array();
+
+    protected function sendInternalError(Exception $exception = NULL) {
         $message = NULL;
         if (YII_DEBUG && ($exception != NULL)) {
             $message = $exception->getMessage() . PHP_EOL .
@@ -72,24 +71,21 @@ class ApiController extends CController {
         $this->sendResponse(self::RESULT_INTERNAL_ERROR, $message);
     }
 
-    /*
-     * Sends AUTHORIZATION_FAILED to client if user is not authentificated
-     */
-    protected function requireAuthentification()
-    {
-        if (LearzingAuth::getCurrentAccessToken() == NULL)
-            $this->sendResponse (self::RESULT_AUTHORIZATION_FAILED,
-                'Current user should be authentificated');
+    protected function sendBadRequest(\InvalidArgumentException $exception = NULL) {
+        $message = NULL;
+        if (YII_DEBUG && ($exception != NULL)) {
+            $message = $exception->getMessage() . PHP_EOL .
+                "Error code: " . $exception->getCode();
+        }
+        $this->sendResponse(self::RESULT_INVALID_ARGUMENT, $message);
     }
 
-    /*
-     * Sends AUTHORIZATION_FAILED to client if user is authentificated
-     */
-    protected function requireNoAuthentification()
-    {
-        if (LearzingAuth::getCurrentAccessToken() != NULL)
-            $this->sendResponse (self::RESULT_AUTHORIZATION_FAILED,
-                "Current user shouldn't be authentificated");
+    protected function sendUnAuthorized($message, $errorCode = NULL) {
+        if (YII_DEBUG && ($errorCode != NULL)) {
+            $message = $message . PHP_EOL .
+                "Error code: " . $errorCode;
+        }
+        $this->sendResponse(self::RESULT_INVALID_ARGUMENT, $message);
     }
 
     /*
@@ -107,13 +103,9 @@ class ApiController extends CController {
         return NULL;
     }
 
-    protected function addHttpHeaderToResponse($header) {
-        $this->headers[] = $header;
-    }
-
     protected function beforeAction($action) {
-        parent::beforeAction($action);
         try {
+            parent::beforeAction($action);
             $request = NULL;
             if (Yii::app()->request->getRequestType() === "GET") {
                 $request = Yii::app()->request->getParam("request", NULL);
@@ -125,8 +117,8 @@ class ApiController extends CController {
             }
             //echo var_export($request, true);
             $this->request = CJSON::decode($request, TRUE);
-            $auth = new LearzingAuth();
-            $auth->authenticateRequest();
+        } catch(InvalidArgumentException $ex) {
+            $this->sendBadRequest($ex);
         } catch(Exception $ex) {
             $this->sendInternalError($ex);
         }
@@ -134,41 +126,19 @@ class ApiController extends CController {
     }
 
     private $request = NULL;
-    private $headers = array();
-
-    const HTTP_STATUS_OK = 200;
-    const HTTP_STATUS_BAD_REQUEST = 400;
-    const HTTP_STATUS_UNAUTHORIZED = 401;
-    const HTTP_STATUS_PAYMENT_REQUIRED = 402;
-    const HTTP_STATUS_FORBIDDEN = 403;
-    const HTTP_STATUS_NOT_FOUND = 404;
-    const HTTP_STATUS_INTERNAL_ERROR = 500;
-    const HTTP_STATUS_NOT_IMPLEMENTED = 501;
 
     private static $RESULT_TO_HTTP_STATUS_CODE = Array(
-        self::RESULT_SUCCESS => self::HTTP_STATUS_OK,
-        self::RESULT_AUTHORIZATION_FAILED => self::HTTP_STATUS_UNAUTHORIZED,
-        self::RESULT_INVALID_ARGUMENT => self::HTTP_STATUS_BAD_REQUEST,
-        self::RESULT_INTERNAL_ERROR => self::HTTP_STATUS_INTERNAL_ERROR,
-    );
-
-    private static $HTTP_STATUS_CODE_TO_HTTP_MESSAGE = Array(
-        self::HTTP_STATUS_OK => 'OK',
-        self::HTTP_STATUS_BAD_REQUEST => 'Bad Request',
-        self::HTTP_STATUS_UNAUTHORIZED => 'Unauthorized',
-        self::HTTP_STATUS_PAYMENT_REQUIRED => 'Payment Required',
-        self::HTTP_STATUS_FORBIDDEN => 'Forbidden',
-        self::HTTP_STATUS_NOT_FOUND => 'Not Found',
-        self::HTTP_STATUS_INTERNAL_ERROR => 'Internal Server Error',
-        self::HTTP_STATUS_NOT_IMPLEMENTED => 'Not Implemented',
+        self::RESULT_SUCCESS => HTTPStatusCodes::HTTP_OK,
+        self::RESULT_AUTHORIZATION_FAILED => HTTPStatusCodes::HTTP_UNAUTHORIZED,
+        self::RESULT_INVALID_ARGUMENT => HTTPStatusCodes::HTTP_BAD_REQUEST,
+        self::RESULT_INTERNAL_ERROR => HTTPStatusCodes::HTTP_INTERNAL_SERVER_ERROR,
     );
 
     private static function resultToHttpStatusMessage($result)
     {
         if (isset(self::$RESULT_TO_HTTP_STATUS_CODE[$result])) {
             $code = self::$RESULT_TO_HTTP_STATUS_CODE[$result];
-            if (isset(self::$HTTP_STATUS_CODE_TO_HTTP_MESSAGE[$code]))
-                return self::$HTTP_STATUS_CODE_TO_HTTP_MESSAGE[$code];
+            return HTTPStatusCodes::getMessageForCode($code);
         }
         self::throwUnknownResultValue($result);
     }
@@ -182,7 +152,7 @@ class ApiController extends CController {
 
     private static function throwUnknownResultValue($result)
     {
-        throw new InvalidArgumentException('Unknown result value: '. $result);
+        throw new InvalidArgumentException('Unknown API result value: '. $result);
     }
 
     private static $RESULT_TO_HUMAN_READABLE_TEXT = array(

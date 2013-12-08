@@ -1,33 +1,60 @@
 <?php
+/*
+ * Basic functionality needed for any EGP controller
+ * @author eugene
+ */
 
-abstract class EGPControllerBase extends CController
-{
-    public static $DEFAULT_PAGE_TITLE = "NONE";
+abstract class EGPControllerBase extends CController {
 
-    public function __construct($id,$module=null)
-    {
-        parent::__construct($id, $module);
-        $this->pageTitle = EGPControllerBase::$DEFAULT_PAGE_TITLE;
+    protected function beforeAction($action) {
+        try {
+            parent::beforeAction($action);
+            $auth = new LearzingAuth();
+            $auth->authenticateRequest();
+        } catch(InvalidArgumentException $ex) {
+            $this->sendBadRequest();
+        } catch (Exception $ex) {
+            $this->sendInternalError();
+        }
+        return TRUE;
     }
-
-    //Utils
     /*
-     * @throws CHttpException
+     * Call this func when unrecoverable error occured.
+     * For example when exception of any origin was caught.
+     * @returns: nothing
+     * @throws: nothing
      */
-    protected function getPOSTVal($name) {
-        assert(is_string($name));
+    protected abstract function sendInternalError(Exception $exception = NULL);
+    /*
+     * Call this func when user's arguments are invalid in some way
+     * @returns: nothing
+     * @throws: nothing
+     */
+    protected abstract function sendBadRequest(InvalidArgumentException $exception = NULL);
+    /*
+     * Call this func when user is not authorized to perform requested operation
+     * @returns: nothing
+     * @throws: nothing
+     */
+    protected abstract function sendUnAuthorized($message,  $errorCode = NULL);
 
-        if (!isset($_POST[$name]))
-                throw new CHttpException(404);
-        else return $_POST[$name];
+    /*
+     * Sends response with AUTHORIZATION FAILED semantic to client if user is not authentificated
+     */
+    protected function requireAuthentification()
+    {
+        if (LearzingAuth::getCurrentAccessToken() == NULL)
+            $this->sendUnAuthorized('Current user should be authentificated '
+                    . 'to perform requested operation');
     }
 
-    protected function getGETVal($name) {
-        assert(is_string($name));
-
-        if (!isset($_GET[$name]))
-                throw new CHttpException(404);
-        else return $_GET[$name];
-        
+    /*
+     * Sends response with AUTHORIZATION FAILED semantic to client if user is authentificated
+     */
+    protected function requireNoAuthentification()
+    {
+        if (LearzingAuth::getCurrentAccessToken() != NULL)
+            $this->sendUnAuthorized("Current user shouldn't be authentificated "
+                    . 'to perform requested operation');
     }
 }

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
         <title><?php echo Yii::app()->name;?>
-            <?php echo $this->pageTitle == EGPControllerBase::$DEFAULT_PAGE_TITLE ? "" : (" : " . $this->pageTitle)?>
+            <?php echo $this->pageTitle == EGPWebFrontendController::$DEFAULT_PAGE_TITLE ? "" : (" : " . $this->pageTitle)?>
         </title>
 	<link rel="stylesheet" href="/media/css/style.css" type="text/css">
 </head>
