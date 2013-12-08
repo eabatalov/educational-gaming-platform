@@ -37,6 +37,9 @@ class TU {
      * and make it ready for rendering to HTML page
      */
     static public function htmlFormatExceptionForUser(Exception $ex) {
+        if ($ex == NULL)
+            return "";
+
         $message =
             'Sorry. Error occured.' . PHP_EOL .
             'Error code: ' . (string)$ex->getCode() . PHP_EOL .
