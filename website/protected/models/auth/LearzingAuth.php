@@ -13,8 +13,8 @@ class LearzingAuth {
     }
 
     /*
-     * @returns string which represents access token of currently authenticated user
-     *   if current user is not authenticated the returns NULL
+     * @returns string which represents access token of currently authenticated user.
+     *   Returns null if current user is not authenticated.
      */
     public static function getCurrentAccessToken() {
         return self::$currentAccessTokenInfo == NULL ? NULL :
@@ -44,7 +44,6 @@ class LearzingAuth {
                 $userStorage->getAuthentificatedUser($userLogin, $userPassword);
 
             $this->verifyClientId($clientId);
-            $this->storageDestroyUserClientAccessTokenIfExists($userLogin, $clientId);
 
             $apiToken = $this->genNewApiToken();
             $this->storageSaveAccessToken(new AccessTokenInfo(
@@ -152,14 +151,6 @@ class LearzingAuth {
         $clientId = $data->client_id;
         $userId = $data->user_id;
         return new AccessTokenInfo($accessToken, $userId, $clientId);
-    }
-
-    private function storageDestroyUserClientAccessTokenIfExists($userLogin, $clientId) {
-        $result = pg_query_params($this->conn,
-            self::$SQL_DELETE_ACCESS_TOKEN_BY_USER_LOGIN_AND_CLIENT,
-            array($userLogin, $clientId));
-        //WARNING: suppressing errors here
-        //TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
     }
 
     private function storageDestroyAccessToken($accessToken) {

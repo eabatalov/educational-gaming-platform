@@ -69,8 +69,7 @@ CREATE TABLE egp.api_access_tokens
 	CONSTRAINT fk_api_access_tokens_clientid FOREIGN KEY (client_id)
 	REFERENCES egp.api_clients (id),
 	CONSTRAINT fk_api_access_tokens_userid FOREIGN KEY (user_id)
-	REFERENCES egp.users (id),
-	CONSTRAINT unique_api_tokens_client_user UNIQUE (user_id, client_id)
+	REFERENCES egp.users (id)
 );
 --CMD
 --CMD

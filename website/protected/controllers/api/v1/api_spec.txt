@@ -7,7 +7,7 @@ EGP RESTful API v1 specification.
 MAKING API REQUESTS
 
 For security reasons all the interactions are performed via HTTPS.
-To unify things, all the API requests and responses data is represented in the form of JSON object.
+To unify things, all the API requests and responses data is represented in the form of JSON objects.
 In the following spec we'll refer to response JSON object as "RESPONSE" and request JSON object as "REQUEST".
 
 REQUEST object should be the body of request for all the HTTP request methods except GET.
