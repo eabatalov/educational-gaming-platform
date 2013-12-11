@@ -36,7 +36,7 @@ class ApiAuthController extends ApiController {
 
             $this->addHttpHeaderToResponse("Cache-Control: no-store");
             $this->addHttpHeaderToResponse("Pragma: no-cache");
-            $this->sendResponse(self::RESULT_SUCCESS, NULL, "token_info",
+            $this->sendResponse(self::RESULT_SUCCESS, NULL,
                 $apiTokenInfo->toArray($this->getFields()));
 
         } catch (InvalidArgumentException $ex) {

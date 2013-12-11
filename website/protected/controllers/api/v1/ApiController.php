@@ -18,13 +18,11 @@ class ApiController extends EGPControllerBase {
      * @returns: nothing
      * @throws: InvalidArgumentException
      */
-    protected function sendResponse($result, $texts = NULL, $body_field = NULL, $body = NULL)
+    protected function sendResponse($result, $texts = NULL, $body = NULL)
     {
         assert(is_string($result));
         if ($texts === NULL)
              $texts = self::resultToHumanReadableText ($result);
-        if ($body_field !== NULL && $body === NULL)
-            throw new InvalidArgumentException("body_field != NULL but body === NULL");
 
         //Output header
         header('HTTP/1.1 ' . self::resultToHttpStatusCode($result) . ' ' .
@@ -48,9 +46,9 @@ class ApiController extends EGPControllerBase {
 
         echo
         "{ " .
-            "result : " . $result . ", " .
-            "texts : " . $texts . ", " .
-             ($body_field != NULL ? $body_field . " : " . $body : '') .
+            "\"status\" : " . $result . ", " .
+            "\"texts\" : " . $texts . ", " .
+             "\"data\" : " . $body .
         " }";
         
         Yii::app()->end();

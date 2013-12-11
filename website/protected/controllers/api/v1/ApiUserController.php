@@ -16,7 +16,7 @@ class ApiUserController extends ApiController {
             $user = $userStorage->getUserById($userId);
             $userApi = new UserApiModel();
             $userApi->initFromUser($user);
-            $this->sendResponse(self::RESULT_SUCCESS, NULL, "user",
+            $this->sendResponse(self::RESULT_SUCCESS, NULL,
                 $userApi->toArray($this->getFields()));
         } catch (InvalidArgumentException $ex) {
             $message = $ex->getMessage();

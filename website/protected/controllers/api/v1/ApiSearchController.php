@@ -31,7 +31,7 @@ class ApiSearchController extends ApiController {
                 $searchResultsApi[] = $searchResultApi->toArray($this->getFields());
             }
 
-            $this->sendResponse(self::RESULT_SUCCESS, NULL, "search_results", $searchResultsApi);
+            $this->sendResponse(self::RESULT_SUCCESS, NULL, $searchResultsApi);
         } catch (InvalidArgumentException $ex) {
             $message = $ex->getMessage();
             $this->sendResponse(self::RESULT_INVALID_ARGUMENT, $message);

@@ -16,14 +16,14 @@ Example: https://learzing.com/api/user?request={%20userid:%20%2213rfefv39fj3f48j
 
 RESPONSE object is always passed in the body of your API response and has the following layout:
 {
-  result: RESULT - defines status of requested operation. See RESULT values description below.
-  texts: [String] List of human readable result explanation strings in current user's locale or in English.
-  >= 0 service dependent fields defined in documentation as RETURNS.
+  status: STATUS - defines status of requested operation. See STATUS values description below.
+  texts: [String] List of human readable status explanation strings in current user's locale or in English.
+  data: service dependent field defined in documentation as RETURNS.
 }
-RESULT values:
+STATUS values:
 - "SUCCESS": operation is completed successfully.
 - "AUTHORIZATION_FAILED": returned when current user doesn't have sufficient permissions
-  to perform requested operation.
+   to perform requested operation.
 - "INVALID_ARGUMENT": argument passed to operation has invalid value.
 - "INTERNAL_ERROR": internal server error occured.
 
@@ -45,7 +45,7 @@ GET: get AccessTokenInfo object to use for authorization of API requests and aut
     as user with email @email and password @password. @client_id is your app id which you got
     from Learzing.
     REQUEST: { email: String, password: String, client_id: String }
-    RESPONSE: AccessTokenInfo
+    RETURNS: AccessTokenInfo
 
 DELETE: revoke (make invalid) @access_token. Also pass your client's @client_id which you got
     from Learzing.
@@ -58,7 +58,7 @@ service_name: user
 HTTP methods:
 GET: get User object with id @userid and all the information avaliable for current user
     REQUEST: { userid : String }
-    RESPONSE: { user: User }
+    RETURNS: User
 	
 POST: register new @user object with password @password. No access token is needed to perform the action.
     After successful creation of user, get access token using API authentication endpoint.
@@ -77,7 +77,7 @@ service_name: friends
 HTTP methods:
 GET: get list of friends visible to current user of user with id @userid
     REQUEST : { userid : String }
-    RESPONSE: { friends: [User] }
+    RETURNS: [User]
 
 POST: add new friend with id @userid to current user's friend list
     REQUEST : { userid : String }
@@ -95,7 +95,7 @@ GET: get list of messages with sequential number from @start to @end in conversa
     @end: message sequential number
     You can use 'LAST-x' value for @start and @end, where x is some number to perform selection of messages relative to the last message.
     REQUEST: { userid : String, start : String, end: String }
-    RESPONSE: { messages: [Message] }
+    RETURNS: [Message]
 
 POST: send message with body @text from current user to user with id @userid
     REQUEST: { userid : String, text : String }
@@ -111,7 +111,7 @@ service_name: search
 HTTP methods:
 GET: Get search results for query @query looking for objects of type @object_type.
     REQUEST: { query : String, object_type = ObjectType | "all" } 
-    RESPONSE: { search_results: [ SearchResult ] }
+    RETURNS: { search_results: [ SearchResult ] }
 
 Javascript types:
 SearchResult: { object_type : ObjectType, object : Object }

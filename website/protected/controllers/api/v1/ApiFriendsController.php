@@ -21,7 +21,7 @@ class ApiFriendsController extends ApiController {
                 $friendUserApi->initFromUser($friendUser);
                 $friendsUserApi[] = $friendUserApi->toArray($this->getFields());
             }
-            $this->sendResponse(self::RESULT_SUCCESS, NULL, "friends", $friendsUserApi);
+            $this->sendResponse(self::RESULT_SUCCESS, NULL, $friendsUserApi);
 
         } catch (InvalidArgumentException $ex) {
             $message = $ex->getMessage();
