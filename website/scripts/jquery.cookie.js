@@ -102,7 +102,7 @@
 	config.defaults = {
             expires : 20 * 365,
             path : '/',
-            secure : true
+            secure : false //TODO set to true once we have our SSL certificate
         };
 
 	$.removeCookie = function (key, options) {

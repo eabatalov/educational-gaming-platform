@@ -113,8 +113,8 @@ class ApiController extends EGPControllerBase {
             } else {
                 $request = Yii::app()->request->getRawBody();
             }
-            //echo var_export($request, true);
             $this->request = CJSON::decode($request, TRUE);
+            //echo var_export($request, true);
         } catch(InvalidArgumentException $ex) {
             $this->sendBadRequest($ex);
         } catch(Exception $ex) {

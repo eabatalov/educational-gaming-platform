@@ -18,7 +18,7 @@
 
     function doLoginCallback(response) {
           if (response.status === LEARZING_STATUS_SUCCESS) {
-              alert(response.data);
+              document.location = "<?php echo $this->createUrl('site/index'); ?>";
           } else {
               alert("Errors have occured: \n" +
                 response.texts.toString() + "\n" +

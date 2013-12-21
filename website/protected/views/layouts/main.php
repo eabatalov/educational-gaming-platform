@@ -5,7 +5,12 @@
         <title><?php echo Yii::app()->name;?>
             <?php echo $this->pageTitle == EGPWebFrontendController::$DEFAULT_PAGE_TITLE ? "" : (" : " . $this->pageTitle)?>
         </title>
-	<link rel="stylesheet" href="/media/css/style.css" type="text/css">
+	<link type="text/css" rel="stylesheet" href="/media/css/style.css">
+        <script src="/scripts/jquery-1.10.2-dev.js"></script>
+        <script src="/scripts/jquery.cookie.js"></script>
+        <script src="/scripts/angular.js"></script>
+        <script src="/scripts/sdk/learzing.js"></script>
+        <script src="/scripts/learzing.js"></script>
 </head>
 <body>
     <div id="container">

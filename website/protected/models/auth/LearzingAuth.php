@@ -23,6 +23,8 @@ class LearzingAuth {
 
     //AccessTokenInfo
     private static $currentAccessTokenInfo;
+    const AUTH_COOKIE_KEY = "LEARZING_API_TOKEN";
+    const AUTH_HTTP_HEADER_KEY = "HTTP_AUTHORIZATION";
 
     /*
      * User authentication is performed here and api access token is generated
@@ -53,7 +55,7 @@ class LearzingAuth {
             return $apiToken;
 
         } catch (InvalidArgumentException $ex) {
-            throw new InvalidArgumentException("Couldn't login", $ex->getCode());
+            throw new InvalidArgumentException("Invalid email or password", $ex->getCode());
         } catch (Exception $ex) {
             throw new InternalErrorException($ex->getMessage(), $ex->getCode());
         }
@@ -87,10 +89,16 @@ class LearzingAuth {
      */
     public function authenticateRequest() {
         try {
-            TU::throwIfNot(isset($_SERVER['HTTP_AUTHORIZATION']), TU::INVALID_ARGUMENT_EXCEPTION,
-                "HTTP header 'Authorization' with your access token should be passed");
-
-            $accessToken = $this->cleanAccessTokenType($_SERVER['HTTP_AUTHORIZATION']);
+            if (isset($_SERVER[self::AUTH_HTTP_HEADER_KEY])) {
+                $accessToken = $this->cleanAccessTokenType($_SERVER[self::AUTH_HTTP_HEADER_KEY]);
+            } else if (isset($_COOKIE[self::AUTH_COOKIE_KEY])) {
+                $accessToken = $_COOKIE[self::AUTH_COOKIE_KEY];
+            } else {
+                throw new InvalidArgumentException(
+                    "HTTP header " . self::AUTH_HTTP_HEADER_KEY . " or " .
+                    "HTTP cookie " . self::AUTH_COOKIE_KEY .  PHP_EOL .
+                    "with your access token should be passed");
+            }
 
             $accessTokenInfo = $this->storageGetAccessTokenInfo($accessToken);
             //TU::throwIfNot($accessTokenInfo->expiresIn > 0, TU::INTERNAL_ERROR_EXCEPTION);
