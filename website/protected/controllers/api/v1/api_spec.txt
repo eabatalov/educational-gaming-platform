@@ -63,7 +63,7 @@ GET: get User object with id @userid and all the information avaliable for curre
 	
 POST: register new @user object with password @password. No access token is needed to perform the action.
     After successful creation of user, get access token using API authentication endpoint.
-    REQUEST: { User user, String password } 
+    REQUEST: { user: user, password : String }
 
 PUT: replace current user object with @user object supplied (update scenario)
     REQUEST: { User user }

@@ -1,10 +1,12 @@
-<div class="row">
-    <label for="email">Email</label>
-    <input type="text" name="email" id="input_email" value="4_Email@example.com"/>
-</div>
-<div class="row">
-    <label for="password">Password</label>
-    <input type="password" name="password" id="input_password" value="Password_4"/>
+<div class="form">
+    <div class="row">
+        <label for="email">Email</label>
+        <input type="text" name="email" id="input_email"/>
+    </div>
+    <div class="row">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="input_password"/>
+    </div>
 </div>
 
 <a class="btn" onclick="doLogin();">Login</a>

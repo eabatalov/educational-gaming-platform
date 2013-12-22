@@ -170,10 +170,10 @@ _authService = {
     _clientId : null
 };
 
-function User(id, email, name, surname, isOnline, role) {
+function User(email, name, surname, isOnline, role, id) {
     this.id = id;
     this.email = email;
-    this.name;
+    this.name = name;
     this.surname = surname;
     this.isOnline = isOnline;
     this.role = role; 
@@ -188,9 +188,9 @@ function apiUserToUser(apiUser) {
 }
 
 function UserToApiUser(user) {
-    return new {
+    return {
         id : user.id,
-        email : user.emil,
+        email : user.email,
         name : user.name,
         surname : user.surname,
         is_online : user.isOnline ? "true" : "false",
@@ -200,7 +200,16 @@ function UserToApiUser(user) {
 
 _userService = {
     get : function(userId, completionCallback) {},
-    register : function(user, password, completionCallback) {},
+    register : function(user, password, completionCallback) {
+        var apiUser = UserToApiUser(user);
+        LEARZ._api.post(_API_EP_USER,
+            { user : apiUser, password : password },
+            function(apiResponse) {
+                if (completionCallback !== null)
+                    completionCallback(apiResponse);
+            }, this
+        );
+    },
     update : function(user, completionCallback) {}
 };
 

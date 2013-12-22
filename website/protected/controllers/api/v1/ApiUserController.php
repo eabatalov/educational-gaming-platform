@@ -34,8 +34,7 @@ class ApiUserController extends ApiController {
             $this->requireNoAuthentification();
             $newUserPassword = TU::getValueOrThrow("password", $this->getRequest());
             $newUserApi = new UserApiModel();
-            $newUserApi->initFromArray(TU::getValueOrThrow("user", $this->getRequest()));
-            $newUserApi->id = 0; //Required to pass validation. Need use scenario based validation to omit it
+            $newUserApi->initFromArrayOnCreate(TU::getValueOrThrow("user", $this->getRequest()));
 
             $newUser = $newUserApi->toUser();
             if (!$newUser->validate())
@@ -63,7 +62,7 @@ class ApiUserController extends ApiController {
         try {
             $this->requireAuthentification();
             $userApi = new UserApiModel();
-            $userApi->initFromArray(TU::getValueOrThrow("user", $this->getRequest()));
+            $userApi->initFromArrayOnUpdate(TU::getValueOrThrow("user", $this->getRequest()));
 
             $userStorage = new PostgresUserStorage();
             $user = $userStorage->getAuthentificatedUserByAccessToken(

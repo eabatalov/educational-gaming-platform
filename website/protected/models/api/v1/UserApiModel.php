@@ -22,7 +22,17 @@ class UserApiModel extends SerializableApiModel {
     /*
      * @throws: InvalidArgumentException if very basic validation has failed
      */
-    public function initFromArray($fieldArray) {
+    public function initFromArrayOnCreate($fieldArray) {
+        $this->email = TU::getValueOrThrow("email", $fieldArray);
+        $this->name = TU::getValueOrThrow("name", $fieldArray);
+        $this->surname = TU::getValueOrThrow("surname", $fieldArray);
+        //Set defaults for this model object
+        $this->id = 0;
+        $this->is_online = self::toAPIIsOnline(FALSE);
+        $this->role = self::toAPIRole(UserRole::CUSTOMER);
+    }
+
+    public function initFromArrayOnUpdate($fieldArray) {
         $this->id = TU::getValueOrThrow("id", $fieldArray);
         $this->email = TU::getValueOrThrow("email", $fieldArray);
         $this->name = TU::getValueOrThrow("name", $fieldArray);

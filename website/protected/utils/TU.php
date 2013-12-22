@@ -68,6 +68,14 @@ class TU {
         }
     }
 
+    public static function getValueOrNull($key, $array) {
+        if (isset($array[$key])) {
+            return $array[$key];
+        } else {
+            return NULL;
+        }
+    }
+
     //Exceptions names constants for convenience
     const EXCEPTION = 'Exception';
     const INVALID_ARGUMENT_EXCEPTION = 'InvalidArgumentException';

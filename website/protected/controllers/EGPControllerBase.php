@@ -44,7 +44,7 @@ abstract class EGPControllerBase extends CController {
     protected function requireAuthentification()
     {
         if (LearzingAuth::getCurrentAccessToken() == NULL)
-            $this->sendUnAuthorized('Current user should be authentificated '
+            $this->sendUnAuthorized('Current user should be authenticated '
                     . 'to perform requested operation');
     }
 
@@ -54,7 +54,7 @@ abstract class EGPControllerBase extends CController {
     protected function requireNoAuthentification()
     {
         if (LearzingAuth::getCurrentAccessToken() != NULL)
-            $this->sendUnAuthorized("Current user shouldn't be authentificated "
+            $this->sendUnAuthorized("Current user shouldn't be authenticated "
                     . 'to perform requested operation');
     }
 }
