@@ -91,15 +91,16 @@ class User extends ModelObject {
         $this->role = $role;
     }
 
-    public function rules() {
-        return array(
+    static private $validationRules = array(
             array('email, name, surname, role', 'required'),
             //value checking
             array('email, name, surname', 'length', 'min' => 1, 'max' => 50, 'encoding' => 'utf-8'),
             array('email', 'email'),
-        );
+    );
+
+    public function rules() {
+        return self::$validationRules;
     }
-    
 
     //public just because we can't hide constructor if it was public in one of parent classes
     public function __construct($mkEmpty, $email = NULL, $name = NULL, $surname = NULL,

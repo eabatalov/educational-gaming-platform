@@ -1,1 +1,5 @@
 Learzing SDK v1
+Depends on JQuery javascript library.
+Dependability on big frameworks such as AngularJS should be avoided until we are sure that
+we all the javascript clients can use AngularJS on their machines and that clients would like to
+use such not easy javascript frameworks like AngularJS.

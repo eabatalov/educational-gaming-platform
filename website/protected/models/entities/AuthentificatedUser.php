@@ -73,16 +73,23 @@ class AuthentificatedUser extends User {
         );
     }
 
-    public function rules() {
-        $rules = parent::rules();
-        array_push($rules,
-            array("password" ,'required'),
-            array('password', 'length', 'min' => 6, 'max' => 100,
+    public static function staticInit() {
+        self::$validationRulesAll =
+            array_merge(parent::rules(), self::$validationRulesSelf);
+    }
+
+    static private $validationRulesSelf = array(
+        array("password" ,'required'),
+        array('password', 'length', 'min' => 6, 'max' => 100,
                 'encoding' => 'utf-8')
-            //array('password_repeat', 'required', 'on'=>'register'),
-            //array('password', 'compare', 'compareAttribute'=>'password_repeat', 'on'=>'register'),
-        );
-        return $rules;
+        //array('password_repeat', 'required', 'on'=>'register'),
+        //array('password', 'compare', 'compareAttribute'=>'password_repeat', 'on'=>'register'),
+    );
+
+    static private $validationRulesAll;
+
+    public function rules() {
+        return self::$validationRulesAll;
     }
 
     //public just because we can't hide constructor if it was public in one of parent classes
@@ -104,3 +111,4 @@ class AuthentificatedUser extends User {
     //ModelObject constants for changes supply
     const CH_PASS = parent::CH_LAST;
 }
+AuthentificatedUser::staticInit();

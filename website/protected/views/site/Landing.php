@@ -1,4 +1,4 @@
-<div>
+<div ng-app="LearzingLandingPageModule">
     <img src="/media/images/pl_team_lbl.png" alt="Img" height="342" width="368" style="float: right;">
     <h1><?php echo Yii::app()->name;?></h1>
     <br/>
@@ -14,9 +14,11 @@
     <br/>
     <h3>Already a member?</h3>
     <?php echo CHtml::link("Login", $this->createUrl("user/login"), array("class" => "btn")); ?>
-    <br/>
-    <h3>Staying for too long? Try brand new functionality!</h3>
-    <a class="btn" onclick="doLogout();">Logout</a>
+
+    <div  ng-controller="LearzingLogoutController">
+        <h3>Staying for too long? Try brand new functionality!</h3>
+        <a class="btn" ng-click="doLogout()">Logout</a>
+    </div>
 
     <p>
         <?php echo var_dump(LearzingAuth::getCurrentAccessToken(), true); ?>
@@ -24,18 +26,6 @@
 </div>
 
 <script type="text/javascript">
-    function doLogout() {
-        LEARZ.auth.logout(doLogoutCallback);
-    }
-
-    function doLogoutCallback(response) {
-        //TODO
-        if (response.status === LEARZING_STATUS_SUCCESS) {
-            document.location = "<?php echo $this->createUrl('site/index'); ?>";
-        } else {
-            alert("Errors have occured: \n" +
-              response.texts.toString() + "\n" +
-              "Learzing API status: " + response.status);
-        }
-    }
+    var LearzingLandingPageModule =
+        angular.module('LearzingLandingPageModule', ['LearzingLogoutModule']);
 </script>

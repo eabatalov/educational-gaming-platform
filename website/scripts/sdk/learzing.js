@@ -133,7 +133,7 @@ _authService = {
             if (completionCallback !== null) {
                 completionCallback({
                     status : LEARZING_STATUS_INVALID_ARGUMENT,
-                    texts : "You shouldn't be logged in to perform login action"
+                    texts : ["You shouldn't be logged in to perform login action"]
                 });
             }
         }
@@ -156,7 +156,7 @@ _authService = {
             if (completionCallback !== null) {
                 completionCallback({
                     status : LEARZING_STATUS_INVALID_ARGUMENT,
-                    texts : "You should be logged in to perform logout action"
+                    texts : ["You should be logged in to perform logout action"]
                 });
             }
     },
