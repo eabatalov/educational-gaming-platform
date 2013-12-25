@@ -17,7 +17,7 @@
 
     <div  ng-controller="LearzingLogoutController">
         <h3>Staying for too long? Try brand new functionality!</h3>
-        <a class="btn" ng-click="doLogout()">Logout</a>
+        <a class="btn" href="" ng-click="doLogout()">Logout</a>
     </div>
 
     <p>

@@ -170,7 +170,7 @@ _authService = {
     _clientId : null
 };
 
-function User(email, name, surname, isOnline, role, id) {
+function _User(email, name, surname, isOnline, role, id) {
     this.id = id;
     this.email = email;
     this.name = name;
@@ -179,7 +179,7 @@ function User(email, name, surname, isOnline, role, id) {
     this.role = role; 
 }
 
-function apiUserToUser(apiUser) {
+function _apiUserToUser(apiUser) {
     return new User(apiUser.id,
         apiUser.name,
         apiUser.surname,
@@ -187,7 +187,7 @@ function apiUserToUser(apiUser) {
         apiUser.role);
 }
 
-function UserToApiUser(user) {
+function _UserToApiUser(user) {
     return {
         id : user.id,
         email : user.email,
@@ -201,7 +201,7 @@ function UserToApiUser(user) {
 _userService = {
     get : function(userId, completionCallback) {},
     register : function(user, password, completionCallback) {
-        var apiUser = UserToApiUser(user);
+        var apiUser = _UserToApiUser(user);
         LEARZ._api.post(_API_EP_USER,
             { user : apiUser, password : password },
             function(apiResponse) {
@@ -210,7 +210,7 @@ _userService = {
             }, this
         );
     },
-    update : function(user, completionCallback) {}
+    update : function(user, completionCallback) {},
 };
 
 _friendsService = {
@@ -254,5 +254,8 @@ LEARZ = {
     friends : _friendsService,
     messaging : _messagingService,
     search : _searchService,
+    /* public helper functions */
+    User : _User,
+    /* private part */
     _api : _apiCommunicationService
 };
