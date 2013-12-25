@@ -1,25 +1,37 @@
 <div ng-app="LearzingLoginFormModule" ng-controller="LearzingLoginController">
-    <form name="login_form" novalidate ng-submit="doLogin()">
+    <form name="loginForm" novalidate ng-submit="loginFormSubmit()">
         <fieldset>
         <legend>Login</legend>
-            <div class="validation-errors">
-                <!-- TODO Make unified validation errors rendering -->
-                {{ user.validationErrors | json }}
+            <div class="validation-errors" ng-hide="user.validationErrors.length === 0">
+                <div>Please fix the following errors:</div>
+                <ul>
+                <li ng-repeat="validationError in user.validationErrors">
+                    {{ validationError }}
+                </li>
+                </ul>
             </div>
-            <label for="email">Email</label>
+            <label for="uEmail">Email</label>
             <div class="row">
-                <input type="email" name="email" ng-model="user.email" placeholder="Email" required/>
+                <input type="email" name="uEmail" ng-model="user.email" placeholder="Email" required/>
+                <ul ng-show="showLoginFormValidationErrors && loginForm.uEmail.$invalid">
+                    <li ng-show="loginForm.uEmail.$error.required">Please fill your email</li>
+                    <li ng-show="loginForm.uEmail.$error.email">This email is not valid</li>
+                </ul>
             </div>
 
-            <label for="password">Password</label>
+            <label>Password</label>
             <div class="row">
-                <input type="password" name="password"
-                    ng-model="user.password" ng-minlength="{6}" ng-maxlength="{100}"
+                <input type="password" name="uPassword"
+                    ng-model="user.password" ng-minlength="6" ng-maxlength="100"
                     placeholder="Password" required/>
+                <ul ng-show="showLoginFormValidationErrors && loginForm.uPassword.$invalid">
+                    <li ng-show="loginForm.uPassword.$error.required">Please enter your password</li>
+                    <li ng-show="loginForm.uPassword.$error.minlength">Password length should be at least 6 characters</li>
+                    <li ng-show="loginForm.uPassword.$error.maxlength">Password length should be less or equal 100 characters</li>
+                </ul>
             </div>
 
-            <button type="submit" class="button radius"
-                ng-disabled="login_form.$invalid || isUnchanged(user)">Login</button>
+            <button type="submit" class="button radius">Login</button>
         </fieldset>
     </form>
 </div>
@@ -31,10 +43,19 @@
         function($scope, LEARZ) {
 
             $scope.reset = function() {
-                $scope.user = { email : "", password : "" };
+                $scope.user = { email : "", password : "", validationErrors : [] };
+                $scope.showLoginFormValidationErrors = false;
             };
 
             $scope.reset();
+
+            $scope.loginFormSubmit = function() {
+                if ($scope.loginForm.$valid) {
+                    $scope.doLogin();
+                } else {
+                    $scope.showLoginFormValidationErrors = true;
+                }
+            }
 
             $scope.doLogin = function() {
                 LEARZ.auth.login($scope.user.email, $scope.user.password, $scope._doLoginCallback);
@@ -44,9 +65,6 @@
                 if (response.status === LEARZING_STATUS_SUCCESS) {
                     document.location = "<?php echo $this->createUrl('site/index'); ?>";
                 } else {
-                    /*alert("Errors have occured: \n" +
-                      response.texts.toString() + "\n" +
-                      "Learzing API status: " + response.status);*/
                     $scope.user.validationErrors = response.texts;                    
                 }
             };
