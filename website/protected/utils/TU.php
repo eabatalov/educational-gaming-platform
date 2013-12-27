@@ -76,6 +76,14 @@ class TU {
         }
     }
 
+    public static function getValueOrDefault($key, $array, $default) {
+        if (isset($array[$key])) {
+            return $array[$key];
+        } else {
+            return $default;
+        }
+    }
+
     //Exceptions names constants for convenience
     const EXCEPTION = 'Exception';
     const INVALID_ARGUMENT_EXCEPTION = 'InvalidArgumentException';

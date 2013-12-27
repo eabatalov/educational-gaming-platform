@@ -21,7 +21,8 @@ function createUser(){
 	$POST_JSON '{ user : { id: "NULL", email: "'$EMAIL'",
 		name: "Eugene", surname: "Batalov", is_online: true, role: "customer" }, password: "'$PASSWORD'" }' $HOST\api/user
 
-	ACCESS_TOKEN=$(curl -X GET -G --data-urlencode 'request={email: "'$EMAIL'", password: "'$PASSWORD'", client_id: "'$LEARZING_TEST_CLIENT_ID'"}' $TOKEN_URL |\
+	ACCESS_TOKEN=$(
+	curl -X GET -G --data-urlencode 'request={email: "'$EMAIL'", password: "'$PASSWORD'", client_id: "'$LEARZING_TEST_CLIENT_ID'"}' $TOKEN_URL |\
 		egrep -o 'access_token":".+",' | sed 's/access_token":"//' | sed 's/"//' | sed 's/,//')
 	echo "Got ACCESS_TOKEN of new user:" $ACCESS_TOKEN
 	echo
@@ -49,7 +50,7 @@ function testApiUserController(){
 
 	echo
 	echo "Test actionGetUser on another user"
-	$GET_JSON 'request={ userid : 2 }' $AUTH_HEADER $HOST/api/user
+	$GET_JSON 'request={ userid : 2, fields: ["name", "role", "email", "is_online"] }' $AUTH_HEADER $HOST/api/user
 
 	echo
 }
@@ -70,7 +71,7 @@ function testApiFriendsController(){
 
 	echo
 	echo "Test actionGetFriends"
-	$GET_JSON 'request={ userid : "'$USERID'" }' $AUTH_HEADER $HOST/api/friends
+	$GET_JSON 'request={ userid : "'$USERID'", fields : ["email"] }' $AUTH_HEADER $HOST/api/friends
 
 	echo
 }

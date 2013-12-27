@@ -142,7 +142,7 @@ class PostgresUserStorage implements IUserStorage {
             $authUser->getName(),
             $authUser->getSurname(),
             $authUser->getEmail(),
-            $authUser->getIsActive(),
+            PostgresUtils::boolToPGBool($authUser->getIsActive()),
             $authUser->getPassword(),
             $authUser->getRole()));
         TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());

@@ -98,7 +98,7 @@ class ApiController extends EGPControllerBase {
      * NULL if no fields are filtered
      */
     protected function getFields() {
-        return NULL;
+        return $this->fields;
     }
 
     protected function beforeAction($action) {
@@ -113,7 +113,14 @@ class ApiController extends EGPControllerBase {
             } else {
                 $request = Yii::app()->request->getRawBody();
             }
+
             $this->request = CJSON::decode($request, TRUE);
+
+            if (isset($this->request["fields"])) {
+                $this->fields = new FieldsFilterApiModel();
+                $this->fields->initFromArray($this->request["fields"]);
+            }
+
             //echo var_export($request, true);
         } catch(InvalidArgumentException $ex) {
             $this->sendBadRequest($ex);
@@ -124,6 +131,7 @@ class ApiController extends EGPControllerBase {
     }
 
     private $request = NULL;
+    private $fields = NULL;
 
     private static $RESULT_TO_HTTP_STATUS_CODE = Array(
         self::RESULT_SUCCESS => HTTPStatusCodes::HTTP_OK,

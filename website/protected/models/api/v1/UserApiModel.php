@@ -28,8 +28,8 @@ class UserApiModel extends SerializableApiModel {
         $this->surname = TU::getValueOrThrow("surname", $fieldArray);
         //Set defaults for this model object
         $this->id = 0;
-        $this->is_online = self::toAPIIsOnline(FALSE);
-        $this->role = self::toAPIRole(UserRole::CUSTOMER);
+        $this->is_online = $this->toAPIIsOnline(FALSE);
+        $this->role = $this->toAPIRole(UserRole::CUSTOMER);
     }
 
     public function initFromArrayOnUpdate($fieldArray) {
@@ -90,30 +90,30 @@ class UserApiModel extends SerializableApiModel {
     }
 
     protected static function fromAPIRole($value) {
-        if ($value == "customer")
+        if ($value === "customer")
             return UserRole::CUSTOMER;
         self::throwInvalidConversionError($value, "role", FALSE);
     }
 
     protected static function toAPIIsOnline($value) {
-        if ($value == TRUE)
-            return "true";
-        if ($value == FALSE)
-            return "false";
+        if ($value === TRUE)
+            return TRUE;
+        if ($value === FALSE)
+            return FALSE;
         self::throwInvalidConversionError($value, "is_online", TRUE);
     }
 
     protected static function fromAPIIsOnline($value) {
-        if ($value == "true")
+        if ($value === TRUE)
             return TRUE;
-        if ($value == "false")
+        if ($value === FALSE)
             return FALSE;
-        self::throwInvalidConversionError($value, "is_online", FALSE);
+        self::throwInvalidConversionError($value, "is_online ", FALSE);
     }
 
     protected static function throwInvalidConversionError($value, $field, $toApi) {
         throw new InvalidArgumentException("Invalid value of field " . $field . PHP_EOL .
-            "To API conversion: " . $toApi . PHP_EOL .
+            "To API conversion: " . var_export($toApi, TRUE) . PHP_EOL .
             "Value: " . var_export($value, TRUE));
     }
 }
