@@ -11,7 +11,7 @@ LearzingLogoutModule.controller('LearzingLogoutController', ['$scope', 'LEARZ',
     function($scope, LEARZ) {
 
         $scope.doLogout = function() {
-            LEARZ.auth.logout($scope._doLogoutCallback);
+            LEARZ.services.auth.logout($scope._doLogoutCallback);
         };
 
         $scope._doLogoutCallback = function(response) {

@@ -15,6 +15,14 @@ LEARZING_STATUS_UNAUTHORIZED = "AUTHORIZATION_FAILED";
 LEARZING_STATUS_INVALID_ARGUMENT = "INVALID_ARGUMENT";
 LEARZING_STATUS_INTERNAL_SERVER_ERROR = "INTERNAL_ERROR";
 LEARZING_STATUS_AJAX_ERROR = "AJAX_ERROR";
+
+/*================= OTHER =================*/
+function _LearzingInvalidArgumentException(message) {
+    this.name = "Invalid argument exception";
+    this.message = message;
+    this.htmlMessage = "Error detected. Please contact the system administrator</a>.";
+    this.toString = function(){ return this.name + ": " + this.message; };
+}
 /*
  * function completionCallback(APIResponse)
  * APIResponse : { status, texts, data }
@@ -117,7 +125,7 @@ _COOKEY_TOKEN_KEY = "LEARZING_API_TOKEN";
 _authService = {
     login : function(email, password, completionCallback) {
         if (this._accessTokenInfo === null) {
-            LEARZ._api.get(_API_EP_AUTH_TOKEN,
+            LEARZ._services.api.get(_API_EP_AUTH_TOKEN,
                 { email: email, password: password, client_id: this._clientId },
                 function(apiResponse) {
                     if (apiResponse.status === LEARZING_STATUS_SUCCESS) {
@@ -140,7 +148,7 @@ _authService = {
     },
     logout : function(completionCallback) {
         if (this._accessTokenInfo !== null) {
-            LEARZ._api.del(_API_EP_AUTH_TOKEN,
+            LEARZ._services.api.del(_API_EP_AUTH_TOKEN,
                 { access_token: this._accessTokenInfo.access_token, client_id: this._clientId },
                 function(apiResponse) {
                     if (apiResponse.status === LEARZING_STATUS_SUCCESS) {
@@ -198,11 +206,23 @@ function _UserToApiUser(user) {
     };
 }
 
+/*
+ * @param [String] fields
+ * @returns {_FieldsFilter object}
+ */
+function _FieldsFilter(fields) {
+    if (!$.isArray(fields))
+        throw LEARZ.exceptions.invalidArgumentException("Fields filter should be array");
+    this.fields = fields;
+}
+
 _userService = {
-    get : function(userId, completionCallback) {},
+    get : function(userId, completionCallback, fieldsFilter) {
+        
+    },
     register : function(user, password, completionCallback) {
         var apiUser = _UserToApiUser(user);
-        LEARZ._api.post(_API_EP_USER,
+        LEARZ._services.api.post(_API_EP_USER,
             { user : apiUser, password : password },
             function(apiResponse) {
                 if (completionCallback !== null)
@@ -210,7 +230,9 @@ _userService = {
             }, this
         );
     },
-    update : function(user, completionCallback) {},
+    update : function(user, completionCallback) {
+        
+    },
 };
 
 _friendsService = {
@@ -242,20 +264,32 @@ function formatErrorMessage(apiResponse) {
 LEARZ = {
     init : function(config) {
         this.config.clientId = config.clientId;
-        this.auth._init(this.config.clientId);
-        this._api._init(this.auth);
+        this.services.auth._init(this.config.clientId);
+        this._services.api._init(this.auth);
         if (!clientSupportsHTML5LocalStorage()) {
             alert("Fatal error. You need latest version of your browser to use Learzing");
         }
     },
-    config : {},
-    auth : _authService,
-    user : _userService,
-    friends : _friendsService,
-    messaging : _messagingService,
-    search : _searchService,
+    services : {
+        auth : _authService,
+        user : _userService,
+        friends : _friendsService,
+        messaging : _messagingService,
+        search : _searchService,
+    },
+    /* exceptions */
+    exceptions : {
+        invalidArgumentException : _LearzingInvalidArgumentException
+    },
     /* public helper functions */
-    User : _User,
+    objs : {
+        User : _User,
+        FieldsFilter : _FieldsFilter
+    },
+
     /* private part */
-    _api : _apiCommunicationService
+    _services : {
+        api : _apiCommunicationService
+    },
+    _config : {},
 };

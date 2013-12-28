@@ -62,7 +62,7 @@
             };
 
             $scope.doLogin = function() {
-                LEARZ.auth.login($scope.user.email, $scope.user.password, $scope._doLoginCallback);
+                LEARZ.services.auth.login($scope.user.email, $scope.user.password, $scope._doLoginCallback);
             };
 
             $scope._doLoginCallback = function(response) {

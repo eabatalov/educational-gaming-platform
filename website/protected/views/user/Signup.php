@@ -68,7 +68,7 @@
         ['$scope', 'LEARZ', function($scope, LEARZ) {
 
             $scope.reset = function() {
-                $scope.user = new LEARZ.User("", "", "");
+                $scope.user = new LEARZ.objs.User("", "", "");
                 $scope.userPassword = "";
                 $scope.validationErrors = [];
                 $scope.showSignupFormValidationErrors = false;
@@ -85,12 +85,12 @@
             };
 
             $scope.doSignup = function() {
-                LEARZ.user.register($scope.user, $scope.userPassword, $scope.doSignupCallback);
+                LEARZ.objs.user.register($scope.user, $scope.userPassword, $scope.doSignupCallback);
             };
 
             $scope.doSignupCallback = function(response) {
                 if (response.status === LEARZING_STATUS_SUCCESS) {
-                    LEARZ.auth.login($scope.user.email, $scope.userPassword, $scope.doLoginCallback);
+                    LEARZ.services.auth.login($scope.user.email, $scope.userPassword, $scope.doLoginCallback);
                 } else {
                     $scope.validationErrors = response.texts;
                     $scope.$digest();
