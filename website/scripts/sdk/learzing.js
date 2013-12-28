@@ -263,8 +263,8 @@ function formatErrorMessage(apiResponse) {
 /* ================= SDK MAIN OBJECT ================= */
 LEARZ = {
     init : function(config) {
-        this.config.clientId = config.clientId;
-        this.services.auth._init(this.config.clientId);
+        this._config.clientId = config.clientId;
+        this.services.auth._init(this._config.clientId);
         this._services.api._init(this.auth);
         if (!clientSupportsHTML5LocalStorage()) {
             alert("Fatal error. You need latest version of your browser to use Learzing");
@@ -275,7 +275,7 @@ LEARZ = {
         user : _userService,
         friends : _friendsService,
         messaging : _messagingService,
-        search : _searchService,
+        search : _searchService
     },
     /* exceptions */
     exceptions : {
@@ -291,5 +291,5 @@ LEARZ = {
     _services : {
         api : _apiCommunicationService
     },
-    _config : {},
+    _config : {}
 };
