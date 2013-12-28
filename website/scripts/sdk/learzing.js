@@ -20,7 +20,6 @@ LEARZING_STATUS_AJAX_ERROR = "AJAX_ERROR";
 function _LearzingInvalidArgumentException(message) {
     this.name = "Invalid argument exception";
     this.message = message;
-    this.htmlMessage = "Error detected. Please contact the system administrator</a>.";
     this.toString = function(){ return this.name + ": " + this.message; };
 }
 /*

@@ -21,6 +21,13 @@ class LearzingAuth {
             self::$currentAccessTokenInfo->accessToken;
     }
 
+    /*
+     * @returns TRUE if current user is authenticated, FALSE otherwise
+     */
+    public static function isGuest() {
+        return self::getCurrentAccessToken() === NULL ? TRUE : FALSE;
+    }
+
     //AccessTokenInfo
     private static $currentAccessTokenInfo;
     const AUTH_COOKIE_KEY = "LEARZING_API_TOKEN";
