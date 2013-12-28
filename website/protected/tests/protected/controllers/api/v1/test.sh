@@ -74,6 +74,9 @@ function testApiFriendsController(){
 	$GET_JSON 'request={ userid : "'$USERID'", fields : ["email"] }' $AUTH_HEADER $HOST/api/friends
 
 	echo
+	echo "Test actionGetFriends paginated"
+	$GET_JSON 'request={ userid : "'$USERID'", paging : { offset: 0, limit: 2, total: 4} }' $AUTH_HEADER $HOST/api/friends
+	echo
 }
 
 function testApiSearchController(){
@@ -85,6 +88,10 @@ function testApiSearchController(){
 	echo
 	echo "Test actionSearch with BIG result"
 	$GET_JSON 'request={ query : "Surname_", object_type : "all" }' $AUTH_HEADER $HOST/api/search
+	echo
+	echo "Test actionSearch with BIG result and pagination"
+	$GET_JSON 'request={ query : "Surname_", object_type : "all", paging : {offset : "8", limit : 2} }' $AUTH_HEADER $HOST/api/search
+
 }
 
 #Only one should be uncommented at the same time

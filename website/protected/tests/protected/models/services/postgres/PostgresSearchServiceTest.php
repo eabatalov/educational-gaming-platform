@@ -48,4 +48,15 @@ class PostgresSearchServiceTest extends PHPUnit_Framework_TestCase {
         );
     }
 
+    /**
+     * @covers PostgresSearchService::search
+     * @todo   Implement testSearchWithPaging().
+     */
+    public function testSearchWithPaging() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
 }

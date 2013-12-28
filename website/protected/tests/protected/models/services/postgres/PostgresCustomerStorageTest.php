@@ -106,6 +106,30 @@ class PostgresCustomerStorageTest extends PHPUnit_Framework_TestCase {
      * @covers PostgresCustomerStorage::saveAuthCustomer
      */
     public function testInvalidAuthCustomerSave() {
-            //PASS - no invalid customer for now
+            //TODO fucking important method!
+    }
+    /**
+     * @covers PostgresCustomerStorage::getCustomer
+     */
+    public function testGetCustomerFriends() {
+        $customer = self::mkCustomer();
+        $userFromDb = self::$storage->getUser($customer->getUser()->getEmail());
+        $paging = new Paging();
+        $friends = self::$storage->getCustomerFriends($userFromDb->getId(), $paging);
+        assert(count($friends) === count($customer->getFriends()) ||
+                count($customer->getFriends()) == Paging::MAX_LIMIT);
+    }
+
+    /**
+     * @covers PostgresCustomerStorage::getCustomer
+     */
+    public function testGetCustomerFriendsAndPaging() {
+        $customer = self::mkCustomer();
+        $userFromDb = self::$storage->getUser($customer->getUser()->getEmail());
+        $paging = new Paging("0", count($customer->getFriends()) - 1);
+        $friends = self::$storage->getCustomerFriends($userFromDb->getId(), $paging);
+        assert(count($friends) === count($customer->getFriends()) - 1 ||
+            count($friends) === Paging::MAX_LIMIT);
+        assert(count($customer->getFriends()) === $paging->getTotal());
     }
 }

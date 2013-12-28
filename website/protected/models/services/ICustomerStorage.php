@@ -42,13 +42,14 @@ interface ICustomerStorage {
     function getCustomerById($id);
     /*
      * @param id: customer's user id
+     * @param paging: in/out parameter which specifies resulting friends collection paging
      * @returns: array(Customer) - array of friends
      * @throws InternalErrorException if failed on storage problem
      * @throws InvalidArgumentException
      *  if failed on customer's storage level validation
      * Relevant InvalidArgumentException codes: (ERROR_NO_CUSTOMER_WITH_SUCH_ID)
      */
-    function getCustomerFriends($id);
+    function getCustomerFriends($id, Paging &$paging);
     /*
      * @param email: customer's email
      * @param password: customer's password

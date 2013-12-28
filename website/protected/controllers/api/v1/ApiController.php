@@ -18,7 +18,7 @@ class ApiController extends EGPControllerBase {
      * @returns: nothing
      * @throws: InvalidArgumentException
      */
-    protected function sendResponse($result, $texts = NULL, $body = NULL)
+    protected function sendResponse($result, $texts = NULL, $body = NULL, $sendPaging = FALSE)
     {
         assert(is_string($result));
         if ($texts === NULL)
@@ -44,11 +44,18 @@ class ApiController extends EGPControllerBase {
         $body = CJSON::encode($body);
         $texts = CJSON::encode($texts);
 
+        if ($sendPaging) {
+            $pagingApi = new PagingApiModel();
+            $pagingApi->initFromPaging($this->paging);
+            $paging = ", \"paging\" : " . CJSON::encode($pagingApi);
+        } else $paging = "";
+
         echo
         "{ " .
             "\"status\" : " . $result . ", " .
             "\"texts\" : " . $texts . ", " .
              "\"data\" : " . $body .
+             $paging .
         " }";
         
         Yii::app()->end();
@@ -101,6 +108,13 @@ class ApiController extends EGPControllerBase {
         return $this->fields;
     }
 
+    /*
+     * Returns collection Paging instance which client has requested
+     */
+    protected function getPaging() {
+        return $this->paging;
+    }
+
     protected function beforeAction($action) {
         try {
             parent::beforeAction($action);
@@ -121,6 +135,14 @@ class ApiController extends EGPControllerBase {
                 $this->fields->initFromArray($this->request["fields"]);
             }
 
+            if (isset($this->request["paging"])) {
+                $pagingApi = new PagingApiModel();
+                $pagingApi->initFromArray($this->request["paging"]);
+                $this->paging = $pagingApi->toPaging();
+            } else {
+                $this->paging = new Paging();
+            }
+
             //echo var_export($request, true);
         } catch(InvalidArgumentException $ex) {
             $this->sendBadRequest($ex);
@@ -132,6 +154,7 @@ class ApiController extends EGPControllerBase {
 
     private $request = NULL;
     private $fields = NULL;
+    private $paging = NULL;
 
     private static $RESULT_TO_HTTP_STATUS_CODE = Array(
         self::RESULT_SUCCESS => HTTPStatusCodes::HTTP_OK,

@@ -6,6 +6,6 @@
  */
 interface ISearchService {
 
-    function search(SearchRequest $request);
+    function search(SearchRequest $request, Paging &$paging);
 
 }

@@ -1,9 +1,9 @@
 EGP RESTful API v1 specification.
 
 //TODO Add pagination to all the collections
-//TODO remove PHP session dependency
 //TODO Add facebook hybrid auth
 //TODO remove all old authentication classes
+//TODO remove PHP session dependency
 ===============================
 MAKING API REQUESTS
 
@@ -93,16 +93,18 @@ Javascript types:
 Paging: { offset: String, limit: Int64, [total : Int64] }
 Paging: if set in REQUEST, asks to return only limited set of objects in RETURNS set.
 When set in RETURNS, specify what actually was returned.
-Paging.offset number which determines the first item of RETURNS collection.
-You can use LAST or LAST-x special values to count from the end of RETURNS collection.
-Paging.limit number which determines maximum size of RETURNS collection.
-Paging.total number which determines total size of RETURNS collection.
+Paging.offset - number which determines the first item of RETURNS collection starting from 0.
+If specified in api methods explicitly,
+you can use LAST or LAST-x special values to count from the end of RETURNS collection.
+Paging.limit - number which determines maximum size of RETURNS collection.
+Paging.total - number which determines total size of RETURNS collection.
 Paging.total is ignored when Paging is inside REQEUST object.
 ===============================
 service_name: messaging
 HTTP methods:
 GET: get list of messages in conversation of current user and user with id @userid.
     REQUEST: { userid : String, [fields : FieldsFilter, paging : Paging] }
+        paging.offset LAST value can be used
     RETURNS: [Message]
 
 POST: send message with body @text from current user to user with id @userid

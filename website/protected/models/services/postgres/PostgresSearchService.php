@@ -30,15 +30,18 @@ class PostgresSearchService implements ISearchService {
 
     /*
      * @throws: InternalErrorException
+     * @throws: InvalidArgumentException
      */
-    public function search(SearchRequest $request) {
+    public function search(SearchRequest $request, Paging &$paging) {
+        TU::throwIfNot(is_numeric($paging->getOffset()), TU::INVALID_ARGUMENT_EXCEPTION,
+            "Onlu numeric paging.offset is supported for this service");
         $searchResults = array();
 
         //Users search
         if ($request->getObjectType() == SearchRequest::OBJ_TYPE_ALL ||
             $request->getObjectType() == SearchRequest::OBJ_TYPE_USER) {
             $result = pg_query_params($this->conn, self::$SQL_SEARCH_USERS,
-                array($request->getQuery() . '%'));
+                array($request->getQuery() . '%', $paging->getOffset(), $paging->getLimit()));
             TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
 
             //Everything for code reusage for now!
@@ -50,6 +53,8 @@ class PostgresSearchService implements ISearchService {
         }
         //Other object types search appending to $searchResults
         //var_dump($searchResults);
+        $paging->setTotal(count($searchResults));
+        
         return $searchResults;
     }
 
@@ -58,5 +63,6 @@ class PostgresSearchService implements ISearchService {
         "SELECT id
          FROM egp.users
          WHERE name LIKE $1 OR surname LIKE $1 OR email LIKE $1
-         LIMIT 20"; //hardcoded limit for now
+         OFFSET $2
+         LIMIT $3";
 }

@@ -30,26 +30,37 @@ class PostgresCustomerStorage extends PostgresUserStorage implements ICustomerSt
     public function getCustomer($email) {
         $user = $this->getUser($email);
         return Customer::createCInstance($user,
-            $this->getCustomerFriends($user->getId()));
+            $this->getCustomerFriends($user->getId(), new Paging()));
     }
 
     public function getCustomerById($id) {
         $user = $this->getUserById($id);
         return Customer::createCInstance($user,
-            $this->getCustomerFriends($user->getId()));
+            $this->getCustomerFriends($user->getId(), new Paging()));
     }
 
-    public function getCustomerFriends($id) {
+    public function getCustomerFriends($id, Paging &$paging) {
+        TU::throwIfNot(is_numeric($paging->getOffset()), TU::INVALID_ARGUMENT_EXCEPTION,
+            "Onlu numeric paging.offset is supported for this service");
+
         $user = $this->getUserById($id); //as inefficient $id validation
         $friends = array();
 
-        $result = pg_query_params($this->conn, self::$SQL_SELECT_FRIENDS, array($id));
+        $result = pg_query_params($this->conn, self::$SQL_SELECT_FRIENDS,
+            array($id, $paging->getOffset(), $paging->getLimit()));
         TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
 
         while(($data = pg_fetch_object($result)) != FALSE) {
             $friends[$data->acceptor] =
                 $this->getCustomerWithNoFriendsById($data->acceptor);
         }
+
+        $result = pg_query_params($this->conn, self::$SQL_SELECT_ALL_FRIENDS_COUNT,
+            array($id));
+        TU::throwIf($result === FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
+        $data = pg_fetch_object($result);
+        TU::throwIf($data === FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
+        $paging->setTotal(intval($data->cnt));
         return $friends;
     }
 
@@ -59,7 +70,7 @@ class PostgresCustomerStorage extends PostgresUserStorage implements ICustomerSt
         $authUser = $this->getAuthentificatedUser($email, $password);
 
         return AuthentificatedCustomer::createACInstance($authUser,
-            $this->getCustomerFriends($authUser->getId()));
+            $this->getCustomerFriends($authUser->getId(), new Paging()));
     }
 
     function getAuthCustomerByAccessToken($accessToken) {
@@ -67,7 +78,7 @@ class PostgresCustomerStorage extends PostgresUserStorage implements ICustomerSt
         $authUser = $this->getAuthentificatedUserByAccessToken($accessToken);
 
         return AuthentificatedCustomer::createACInstance($authUser,
-            $this->getCustomerFriends($authUser->getId()));
+            $this->getCustomerFriends($authUser->getId(), new Paging()));
     }
 
     public function saveAuthCustomer(AuthentificatedCustomer $authCustomer) {
@@ -111,6 +122,12 @@ class PostgresCustomerStorage extends PostgresUserStorage implements ICustomerSt
 
     private static $SQL_SELECT_FRIENDS =
         "SELECT acceptor
+         FROM egp.friendnships
+         WHERE requestor = $1
+         OFFSET $2
+         LIMIT $3;";
+    private static $SQL_SELECT_ALL_FRIENDS_COUNT =
+        "SELECT count(*) AS cnt
          FROM egp.friendnships
          WHERE requestor = $1;";
     private static $SQL_INSERT_FRIEND =

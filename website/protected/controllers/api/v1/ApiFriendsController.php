@@ -12,7 +12,7 @@ class ApiFriendsController extends ApiController {
             $this->requireAuthentification();
             $userId = TU::getValueOrThrow("userid", $this->getRequest());
             $customerStorage = new PostgresCustomerStorage();
-            $friends = $customerStorage->getCustomerFriends($userId);
+            $friends = $customerStorage->getCustomerFriends($userId, $this->getPaging());
 
             $friendsUserApi = array();
             foreach ($friends as $friendCustomer) {
@@ -21,7 +21,7 @@ class ApiFriendsController extends ApiController {
                 $friendUserApi->initFromUser($friendUser);
                 $friendsUserApi[] = $friendUserApi->toArray($this->getFields());
             }
-            $this->sendResponse(self::RESULT_SUCCESS, NULL, $friendsUserApi);
+            $this->sendResponse(self::RESULT_SUCCESS, NULL, $friendsUserApi, TRUE);
 
         } catch (InvalidArgumentException $ex) {
             $message = $ex->getMessage();

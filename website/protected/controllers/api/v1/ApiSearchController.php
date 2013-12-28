@@ -22,7 +22,8 @@ class ApiSearchController extends ApiController {
             $searchRequestApi->initFromArray($this->getRequest());
 
             $searchService = new PostgresSearchService();
-            $searchResults = $searchService->search($searchRequestApi->toSearchRequest());
+            $searchResults = $searchService->search(
+                $searchRequestApi->toSearchRequest(), $this->getPaging());
 
             $searchResultsApi = array();
             foreach ($searchResults as $searchResult) {
@@ -31,7 +32,7 @@ class ApiSearchController extends ApiController {
                 $searchResultsApi[] = $searchResultApi->toArray($this->getFields());
             }
 
-            $this->sendResponse(self::RESULT_SUCCESS, NULL, $searchResultsApi);
+            $this->sendResponse(self::RESULT_SUCCESS, NULL, $searchResultsApi, TRUE);
         } catch (InvalidArgumentException $ex) {
             $message = $ex->getMessage();
             $this->sendResponse(self::RESULT_INVALID_ARGUMENT, $message);
