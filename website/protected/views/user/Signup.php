@@ -85,7 +85,7 @@
             };
 
             $scope.doSignup = function() {
-                LEARZ.objs.user.register($scope.user, $scope.userPassword, $scope.doSignupCallback);
+                LEARZ.services.user.register($scope.user, $scope.userPassword, $scope.doSignupCallback);
             };
 
             $scope.doSignupCallback = function(response) {

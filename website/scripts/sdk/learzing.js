@@ -264,7 +264,7 @@ LEARZ = {
     init : function(config) {
         this._config.clientId = config.clientId;
         this.services.auth._init(this._config.clientId);
-        this._services.api._init(this.auth);
+        this._services.api._init(this.services.auth);
         if (!clientSupportsHTML5LocalStorage()) {
             alert("Fatal error. You need latest version of your browser to use Learzing");
         }
