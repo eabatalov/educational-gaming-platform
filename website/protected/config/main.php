@@ -53,7 +53,10 @@ return array(
                 array('api/v1/ApiMessaging/SendMessage', 'pattern' => 'api/messaging', 'verb' => 'POST'),
                 //search service
                 array('api/v1/ApiSearch/Search', 'pattern' => 'api/search', 'verb' => 'GET'),
-                // Other controllers
+                //Rules for web pages
+                array('user/ShowUserProfile', 'pattern' => 'user/profile/<userid:.*>', 'verb' => 'GET'),
+                array('user/ShowUserProfile', 'pattern' => 'user/profile', 'verb' => 'GET'),
+                // Default rule
                 '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
             ),
         ),

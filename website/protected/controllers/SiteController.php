@@ -19,4 +19,12 @@ class SiteController extends EGPWebFrontendController
     {
         $this->render("Landing");
     }
+
+    /**
+     * Action to render website search page
+     */
+    public function actionSearch()
+    {
+        $this->render("Search");
+    }
 }

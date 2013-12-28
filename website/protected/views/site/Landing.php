@@ -20,6 +20,20 @@
         <a class="btn" href="" ng-click="doLogout()">Logout</a>
     </div>
 
+    <?php if(!LearzingAuth::isGuest()) { ?>
+        <h3>Have a look at your profile here</h3>
+    <?php
+        echo CHtml::link("Profile",
+            $this->createUrl("user/ShowUserProfile", array("userid" => NULL)),
+            array("class" => "btn"));
+    }
+    ?>
+
+    <br/>
+    <h3>Our tiny Google</h3>
+    <?php echo CHtml::link("Search", $this->createUrl("Search"), array("class" => "btn")); ?>
+    
+
     <p>
         <?php echo var_dump(LearzingAuth::getCurrentAccessToken(), true); ?>
     </p>
