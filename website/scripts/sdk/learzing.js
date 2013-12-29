@@ -6,7 +6,7 @@ _API_EP_AUTH_TOKEN = _LEARZING_HOST + "auth/token";
 _API_EP_USER = _LEARZING_API_ENDPOINT + "user";
 _API_EP_FRIENDS = _LEARZING_API_ENDPOINT + "friends";
 _API_EP_MESSAGING = _LEARZING_API_ENDPOINT + "messaging";
-_API_EP_Search = _LEARZING_API_ENDPOINT + "search";
+_API_EP_SEARCH = _LEARZING_API_ENDPOINT + "search";
 
 _ACCESS_TOKEN_SAVE_DIV_ID = "_learz_acc_token_saved";
 
@@ -222,8 +222,44 @@ _messagingService = {
     
 };
 
+_SearchObjectTypes = {
+    all : "all",
+    user : "user"
+};
+
+function _SearchRequest(query, objectType) {
+    this.query = query;
+    this.object_type = objectType;
+}
+
+function _SearchResult(objectType, object) {
+    this.object_type = objectType;
+    this.object = object;
+}
+
+function _Paging(offset, limit, total) {
+    this.offset = offset;
+    this.limit = limit;
+    this.total = total;
+}
+
 _searchService = {
-    
+    get : function(searchRequest, completionCallback, paging) {
+        var requestData = {
+            query : searchRequest.query,
+            object_type : searchRequest.object_type
+        };
+        if (paging !== undefined && paging !== null) {
+            requestData.paging = paging;
+        }
+        LEARZ._services.api.get(_API_EP_SEARCH,
+            requestData,
+            function(apiResponse) {
+                if (completionCallback !== null)
+                    completionCallback(apiResponse);
+            }, this
+        );
+    }
 };
 
 function clientSupportsHTML5LocalStorage() {
@@ -263,7 +299,11 @@ LEARZ = {
     /* public helper functions */
     objs : {
         User : _User,
-        FieldsFilter : _FieldsFilter
+        FieldsFilter : _FieldsFilter,
+        SearchObjectTypes : _SearchObjectTypes,
+        SearchRequest : _SearchRequest,
+        SearchResult : _SearchResult,
+        Paging : _Paging
     },
 
     /* private part */

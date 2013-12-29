@@ -44,3 +44,18 @@ LearzingAngularExtensionsModule.directive('ngFocus', [function() {
         }
     };
  }]);
+ 
+ LearzingAngularExtensionsModule.factory('urlConverterService', function() {
+    return {
+        encode : urlEncode,
+        decode : urlDecode
+    };
+
+    function urlEncode(target){
+        return encodeURIComponent(target);
+    }
+
+    function urlDecode(target){
+        return encodeURIComponent(target);
+    }
+});

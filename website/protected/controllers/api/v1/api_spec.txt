@@ -120,11 +120,11 @@ Message: { from: userid, to: userid, date: string/date JS type, time: string/tim
 service_name: search
 HTTP methods:
 GET: Get search results for query @query looking for objects of type @object_type.
-    REQUEST: { query : String, object_type = ObjectType | "all", [paging : Paging] }
+    REQUEST: { query : String, object_type = SearchObjectType, [paging : Paging] }
     RETURNS: { search_results: [ SearchResult ] }
 
 Javascript types:
-SearchResult: { object_type : ObjectType, object : Object }
-ObjectType: "user" | ...
+SearchResult: { object_type : SearchObjectType, object : Object }
+SearchObjectType: "all" | "user" | ...
 Object : User | ...
 =============================

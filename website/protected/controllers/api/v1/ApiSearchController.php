@@ -6,15 +6,6 @@
  * @author eugene
  */
 class ApiSearchController extends ApiController {
-    /*
-     GET ( request : { query : String, object_type = ObjectType | "all" } ): get search results for query @query
-	RETURNS: search_results: [ SearchResult ]
-
-        Javascript types:
-        SearchResult: { object_type : ObjectType, object : Object }
-        ObjectType: "user" | ...
-        Object : User | ...
-     */
     public function actionSearch() {
         try {
             $this->requireAuthentification();
@@ -27,9 +18,10 @@ class ApiSearchController extends ApiController {
 
             $searchResultsApi = array();
             foreach ($searchResults as $searchResult) {
+                //TODO Add searchResults fields filtering for each object type here
                 $searchResultApi = new SearchResultApiModel();
                 $searchResultApi->initFromSearchResult($searchResult);
-                $searchResultsApi[] = $searchResultApi->toArray($this->getFields());
+                $searchResultsApi[] = $searchResultApi->toArray();
             }
 
             $this->sendResponse(self::RESULT_SUCCESS, NULL, $searchResultsApi, TRUE);

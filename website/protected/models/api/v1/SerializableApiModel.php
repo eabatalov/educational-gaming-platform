@@ -10,7 +10,7 @@ class SerializableApiModel {
      * @param filterFields: NULL or FieldsFilterApiModel.
      *  if not NULL contains list of fields to put to resulting array.
      */
-    public function toArray($filterFields) {
+    public function toArray($filterFields = NULL) {
         $myFields = get_object_vars($this);
         if ($filterFields === NULL) {
             return $myFields;

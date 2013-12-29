@@ -41,7 +41,7 @@ class PostgresSearchService implements ISearchService {
         if ($request->getObjectType() == SearchRequest::OBJ_TYPE_ALL ||
             $request->getObjectType() == SearchRequest::OBJ_TYPE_USER) {
             $result = pg_query_params($this->conn, self::$SQL_SEARCH_USERS,
-                array($request->getQuery() . '%', $paging->getOffset(), $paging->getLimit()));
+                array('%' . $request->getQuery() . '%', $paging->getOffset(), $paging->getLimit()));
             TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
 
             //Everything for code reusage for now!
