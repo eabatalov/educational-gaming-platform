@@ -182,27 +182,8 @@ function _User(email, name, surname, isOnline, role, id) {
     this.email = email;
     this.name = name;
     this.surname = surname;
-    this.isOnline = isOnline;
+    this.is_online = isOnline;
     this.role = role; 
-}
-
-function _apiUserToUser(apiUser) {
-    return new User(apiUser.id,
-        apiUser.name,
-        apiUser.surname,
-        apiUser.is_online === "true" ? true : false,
-        apiUser.role);
-}
-
-function _UserToApiUser(user) {
-    return {
-        id : user.id,
-        email : user.email,
-        name : user.name,
-        surname : user.surname,
-        is_online : user.isOnline ? "true" : "false",
-        role: user.role
-    };
 }
 
 /*
@@ -220,9 +201,8 @@ _userService = {
         
     },
     register : function(user, password, completionCallback) {
-        var apiUser = _UserToApiUser(user);
         LEARZ._services.api.post(_API_EP_USER,
-            { user : apiUser, password : password },
+            { user : user, password : password },
             function(apiResponse) {
                 if (completionCallback !== null)
                     completionCallback(apiResponse);

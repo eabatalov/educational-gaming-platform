@@ -11,17 +11,6 @@
                 </ul>
             </div>
 
-            <label for="uEmail">Email</label>
-            <div class="row">
-                <input type="email" name="uEmail" ng-model="user.email" placeholder="Email"
-                    required ng-maxlength="50"/>
-                <ul ng-show="showSignupFormValidationErrors && signupForm.uEmail.$invalid">
-                    <li ng-show="signupForm.uEmail.$error.required">Please fill your email</li>
-                    <li ng-show="signupForm.uEmail.$error.email">This email is not valid</li>
-                    <li ng-show="signupForm.uEmail.$error.maxlength">Email length should be less or equal 50 characters</li>
-                </ul>
-            </div>
-
             <label for="uName">Name</label>
             <div class="row">
                 <input type="text" name="uName" ng-model="user.name" placeholder="Name"
@@ -39,6 +28,17 @@
                 <ul ng-show="showSignupFormValidationErrors && signupForm.uSurname.$invalid">
                     <li ng-show="signupForm.uSurname.$error.required">Please fill your surname</li>
                     <li ng-show="signupForm.uSurname.$error.maxlength">Surname length should be less or equal 50 characters</li>
+                </ul>
+            </div>
+
+            <label for="uEmail">Email</label>
+            <div class="row">
+                <input type="email" name="uEmail" ng-model="user.email" placeholder="Email"
+                    required ng-maxlength="50"/>
+                <ul ng-show="showSignupFormValidationErrors && signupForm.uEmail.$invalid">
+                    <li ng-show="signupForm.uEmail.$error.required">Please fill your email</li>
+                    <li ng-show="signupForm.uEmail.$error.email">This email is not valid</li>
+                    <li ng-show="signupForm.uEmail.$error.maxlength">Email length should be less or equal 50 characters</li>
                 </ul>
             </div>
 
