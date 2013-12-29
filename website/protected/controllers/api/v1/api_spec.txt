@@ -65,7 +65,7 @@ POST: register new @user object with password @password. No access token is need
     REQUEST: { user: user, password : String }
 
 PUT: replace current user object with @user object supplied (update scenario)
-    REQUEST: { User user }
+    REQUEST: User
 
 DELETE (): not implemented
 

@@ -198,7 +198,19 @@ function _FieldsFilter(fields) {
 
 _userService = {
     get : function(userId, completionCallback, fieldsFilter) {
-        
+        var requestData = {
+            userid : userId
+        };
+        if (fieldsFilter !== undefined && fieldsFilter !== null) {
+            requestData.fields = fieldsFilter.fields;
+        }
+        LEARZ._services.api.get(_API_EP_USER,
+            requestData,
+            function(apiResponse) {
+                if (completionCallback !== null)
+                    completionCallback(apiResponse);
+            }, this
+        );
     },
     register : function(user, password, completionCallback) {
         LEARZ._services.api.post(_API_EP_USER,
@@ -210,12 +222,62 @@ _userService = {
         );
     },
     update : function(user, completionCallback) {
-        
-    },
+        LEARZ._services.api.put(_API_EP_USER,
+            user,
+            function(apiResponse) {
+                if (completionCallback !== null)
+                    completionCallback(apiResponse);
+            }, this
+        );
+    }
 };
 
 _friendsService = {
-    
+    get : function(userId, completionCallback, fieldsFilter, paging) {
+        var requestData = {
+            userid : userId
+        };
+        if (fieldsFilter !== undefined && fieldsFilter !== null) {
+            requestData.feilds = fieldsFilter;
+        }
+        if (paging !== undefined && paging !== null) {
+            requestData.paging = paging;
+        }
+
+        LEARZ._services.api.get(_API_EP_FRIENDS,
+            requestData,
+            function(apiResponse) {
+                if (completionCallback !== null)
+                    completionCallback(apiResponse);
+            }, this
+        );
+    },
+    add : function(userId, completionCallback) {
+        var requestData = {
+            userid : userId
+        };
+
+        LEARZ._services.api.post(_API_EP_FRIENDS,
+            requestData,
+            function(apiResponse) {
+                if (completionCallback !== null)
+                    completionCallback(apiResponse);
+            }, this
+        );
+    },
+    remove : function(userId, completionCallback) {
+        var requestData = {
+            userid : userId
+        };
+
+        LEARZ._services.api.del(_API_EP_FRIENDS,
+            requestData,
+            function(apiResponse) {
+                if (completionCallback !== null)
+                    completionCallback(apiResponse);
+            }, this
+        );
+    }
 };
 
 _messagingService = {
