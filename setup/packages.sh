@@ -13,3 +13,5 @@ apt-get install postgresql-contrib
 apt-get install postgresql-common
 apt-get install nodejs
 apt-get install node
+curl https://npmjs.org/install.sh | sh
+npm install -g socket.io
