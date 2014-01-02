@@ -72,6 +72,7 @@ print('CREATING API CLIENTS')
 insert_api_client_ps("LearzingTestingAPIClient123456", "Learzing testing")
 insert_api_client_ps("8FbuxX7wMSjOJtp4hniVL7QimO7X9r", "Learzing website")
 insert_api_client_ps("OlWkSbius0IIx6924BMBg58F38Xea5", "Learzing server backend")
+insert_api_client_ps("fbf4aRfDx88dnvIdwwavX3C5EVH06c", "English idioms game")
 print('CREATED API CLIENTS')
 
 print('CREATING API TOKENS')
