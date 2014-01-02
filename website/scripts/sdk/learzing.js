@@ -1,5 +1,5 @@
 /*================= CONSTANTS =================*/
-_LEARZING_HOST = "http://localhost:8080/";
+_LEARZING_HOST = "http://learzing.com/";
 _LEARZING_API_ENDPOINT = _LEARZING_HOST + "api/";
 
 _API_EP_AUTH_TOKEN = _LEARZING_HOST + "auth/token";

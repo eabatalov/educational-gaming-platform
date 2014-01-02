@@ -1,0 +1,10 @@
+RewriteEngine on
+
+# Don't allow httpd to return files, starting from dot (.htaccess, .svn, .git, etc)
+RedirectMatch 403 /\..*$
+RedirectMatch 403 /protected.*
+# Return file or directory if it exists
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+# Redirect request to index.php otherwise
+RewriteRule . index.php
