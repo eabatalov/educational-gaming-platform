@@ -11,3 +11,5 @@ apt-get install postgresql
 apt-get install postgresql-client
 apt-get install postgresql-contrib
 apt-get install postgresql-common
+apt-get install nodejs
+apt-get install node
