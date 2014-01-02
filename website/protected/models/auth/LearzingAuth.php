@@ -30,7 +30,8 @@ class LearzingAuth {
 
     //AccessTokenInfo
     private static $currentAccessTokenInfo;
-    const AUTH_COOKIE_KEY = "LEARZING_API_TOKEN";
+    const AUTH_COOKIE_KEY_TOKEN = "LEARZING_API_TOKEN_KEY";
+    const AUTH_COOKIE_KEY_TYPE = "LEARZING_API_TOKEN_TYPE";
     const AUTH_HTTP_HEADER_KEY = "HTTP_AUTHORIZATION";
 
     /*
@@ -98,12 +99,12 @@ class LearzingAuth {
         try {
             if (isset($_SERVER[self::AUTH_HTTP_HEADER_KEY])) {
                 $accessToken = $this->cleanAccessTokenType($_SERVER[self::AUTH_HTTP_HEADER_KEY]);
-            } else if (isset($_COOKIE[self::AUTH_COOKIE_KEY])) {
-                $accessToken = $_COOKIE[self::AUTH_COOKIE_KEY];
+            } else if (isset($_COOKIE[self::AUTH_COOKIE_KEY_TOKEN])) {
+                $accessToken = $_COOKIE[self::AUTH_COOKIE_KEY_TOKEN];
             } else {
                 throw new InvalidArgumentException(
                     "HTTP header " . self::AUTH_HTTP_HEADER_KEY . " or " .
-                    "HTTP cookie " . self::AUTH_COOKIE_KEY .  PHP_EOL .
+                    "HTTP cookie " . self::AUTH_COOKIE_KEY_TOKEN .  PHP_EOL .
                     "with your access token should be passed");
             }
 

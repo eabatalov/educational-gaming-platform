@@ -120,7 +120,8 @@ _apiCommunicationService = {
 };
 
 _LOCAL_STORAGE_TOKEN_KEY = "LEARZING_API_TOKEN";
-_COOKEY_TOKEN_KEY = "LEARZING_API_TOKEN";
+_AUTH_COOKIE_KEY_TOKEN = "LEARZING_API_TOKEN_KEY";
+_AUTH_COOKIE_KEY_TYPE = "LEARZING_API_TOKEN_TYPE";
 _authService = {
     login : function(email, password, completionCallback) {
         if (this._accessTokenInfo === null) {
@@ -130,7 +131,8 @@ _authService = {
                     if (apiResponse.status === LEARZING_STATUS_SUCCESS) {
                         localStorage.setItem(_LOCAL_STORAGE_TOKEN_KEY, JSON.stringify(apiResponse.data));
                         this._accessTokenInfo = apiResponse.data;
-                        $.cookie(_COOKEY_TOKEN_KEY, apiResponse.data.access_token);
+                        $.cookie(_AUTH_COOKIE_KEY_TOKEN, apiResponse.data.access_token);
+                        $.cookie(_AUTH_COOKIE_KEY_TYPE, apiResponse.data.token_type);
                     }
                     if (completionCallback !== null)
                         completionCallback(apiResponse);
@@ -153,7 +155,8 @@ _authService = {
                     if (apiResponse.status === LEARZING_STATUS_SUCCESS) {
                         this._accessTokenInfo = null;
                         localStorage.removeItem(_LOCAL_STORAGE_TOKEN_KEY);
-                        $.removeCookie(_COOKEY_TOKEN_KEY);
+                        $.removeCookie(_AUTH_COOKIE_KEY_TOKEN);
+                        $.removeCookie(_AUTH_COOKIE_KEY_TYPE);
                     }
                     if (completionCallback !== null)
                         completionCallback(apiResponse);
@@ -169,12 +172,20 @@ _authService = {
     },
     _init : function(clientId) {
         this._clientId = clientId;
-        if (localStorage.getItem(_LOCAL_STORAGE_TOKEN_KEY) !== null) {
-            this._accessTokenInfo = $.parseJSON(localStorage.getItem(_LOCAL_STORAGE_TOKEN_KEY));
+        var tokenCookie = $.cookie(_AUTH_COOKIE_KEY_TOKEN);
+        var tokenInfoStorage = localStorage.getItem(_LOCAL_STORAGE_TOKEN_KEY);
+        
+        if (tokenInfoStorage !== null) {
+            this._accessTokenInfo = $.parseJSON(tokenInfoStorage);
+        } else if (tokenCookie !== undefined) {
+            this._accessTokenInfo = {
+                access_token : tokenCookie,
+                token_type :  $.cookie(_AUTH_COOKIE_KEY_TYPE)
+            };
         }
     },
     _accessTokenInfo : null,
-    _clientId : null
+    _clientId : null,
 };
 
 function _User(email, name, surname, isOnline, role, id) {
