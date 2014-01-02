@@ -14,7 +14,7 @@
             <label for="uName">Name</label>
             <div class="row">
                 <input type="text" name="uName" ng-model="user.name" placeholder="Name"
-                    required ng-maxlength="50"/>
+                    required ng-maxlength="50" autofocus/>
                 <ul ng-show="showSignupFormValidationErrors && signupForm.uName.$invalid">
                     <li ng-show="signupForm.uName.$error.required">Please fill your name</li>
                     <li ng-show="signupForm.uName.$error.maxlength">Name length should be less or equal 50 characters</li>

@@ -13,7 +13,7 @@
             <label for="uEmail">Email</label>
             <div class="row">
                 <input type="email" name="uEmail" ng-model="user.email" placeholder="Email"
-                    required ng-maxlength="50"/>
+                    required ng-maxlength="50" autofocus/>
                 <ul ng-show="showLoginFormValidationErrors && loginForm.uEmail.$invalid">
                     <li ng-show="loginForm.uEmail.$error.required">Please fill your email</li>
                     <li ng-show="loginForm.uEmail.$error.email">This email is not valid</li>
