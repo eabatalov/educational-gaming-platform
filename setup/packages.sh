@@ -14,4 +14,6 @@ apt-get install postgresql-common
 apt-get install nodejs
 apt-get install node
 curl https://npmjs.org/install.sh | sh
-npm install -g socket.io
+#do this local install in NodeJS server dir
+#npm install socket.io
+npm install -g node-gyp
