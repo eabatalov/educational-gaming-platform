@@ -26,8 +26,9 @@ CREATE TABLE egp.users (
 );
 --CMD
 CREATE TABLE egp.friendnships (
-	requestor int8 NULL,
-	acceptor int8 NULL
+	requestor int8 NOT NULL,
+	acceptor int8 NOT NULL,
+	CONSTRAINT pk_friendship PRIMARY KEY (requestor, acceptor)
 );
 --CMD
 ALTER TABLE egp.friendnships

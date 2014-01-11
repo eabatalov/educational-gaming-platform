@@ -36,6 +36,7 @@ default_user = { 'name' : 'Name_', 'surname' : 'Surname_',
 
 CUSTOMER_NUM = 10
 FRIEND_MAX_NUM = 10
+SERIAL_START = 1
 
 print('CREATING USER')
 for i in range(0, CUSTOMER_NUM):
@@ -58,14 +59,16 @@ for i in range(0, CUSTOMER_NUM):
 print('CREATED USERS')
 
 print('CREATING FRIENDSHIPS')
-SERIAL_START = 1
+friendships = []
 for user_id in range(SERIAL_START, CUSTOMER_NUM + SERIAL_START):
 	for friend_num in range(1, randint(0, FRIEND_MAX_NUM)):
 		new_friend_id = randint(SERIAL_START, CUSTOMER_NUM)
 		if (user_id == new_friend_id):
 			continue
-		insert_friendship_ps(user_id, new_friend_id)
-		insert_friendship_ps(new_friend_id, user_id)
+		friendships += [(user_id, new_friend_id), (new_friend_id, user_id)]
+
+for (uid1, uid2) in set(friendships):
+		insert_friendship_ps(uid1, uid2)
 print('CREATED FRIENDSHIPS')
 
 print('CREATING API CLIENTS')
