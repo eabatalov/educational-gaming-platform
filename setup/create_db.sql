@@ -73,4 +73,27 @@ CREATE TABLE egp.api_access_tokens
 	REFERENCES egp.users (id)
 );
 --CMD
+--Handles all the skills known to platform and maintains them in tree form
+CREATE TABLE egp.skills
+(
+	id serial NOT NULL PRIMARY KEY,
+	name varchar,
+	parent_skill int,
+	is_leaf boolean NOT NULL DEFAULT FALSE,
+	CONSTRAINT fk_skills_parent_id_skill_id FOREIGN KEY (parent_skill)
+	REFERENCES egp.skills (id)
+);
+-- Stores user skills
+--CMD
+CREATE TABLE egp.user_skills
+(
+	user_id int NOT NULL,
+	skill_id int NOT NULL,
+	value int NOT NULL DEFAULT 0,
+	CONSTRAINT pk_user_skills PRIMARY KEY (user_id, skill_id),
+	CONSTRAINT fk_user_skills_skill_id FOREIGN KEY (skill_id)
+	REFERENCES egp.skills (id),
+	CONSTRAINT fk_user_skills_user_id FOREIGN KEY (user_id)
+	REFERENCES egp.users (id)
+);
 --CMD

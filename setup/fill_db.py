@@ -24,10 +24,24 @@ INSERT_API_TOKEN_SQL = """
 	VALUES ($1::varchar, $2::bigint, (SELECT id from egp.api_clients WHERE global_id=$3::varchar));
 	"""
 
+INSERT_SKILL_SQL = """
+	INSERT INTO egp.skills
+		(name, parent_skill, is_leaf)
+	VALUES ($1::varchar, $2::int, $3::bool);
+	"""
+
+INSERT_USER_SKILL_SQL = """
+	INSERT INTO egp.user_skills
+		(user_id, skill_id, value)
+	VALUES ($1::int, $2::int, $3::int);
+	"""
+
 insert_user_ps = conn.prepare(INSERT_USER_SQL)
 insert_friendship_ps = conn.prepare(INSERT_FRIENDSHIP_SQL)
 insert_api_client_ps = conn.prepare(INSERT_API_CLIENT_SQL)
 insert_api_token_ps = conn.prepare(INSERT_API_TOKEN_SQL)
+insert_skill_ps = conn.prepare(INSERT_SKILL_SQL);
+insert_user_skill_ps = conn.prepare(INSERT_USER_SKILL_SQL);
 
 
 default_user = { 'name' : 'Name_', 'surname' : 'Surname_',
@@ -81,3 +95,35 @@ print('CREATED API CLIENTS')
 print('CREATING API TOKENS')
 insert_api_token_ps("LearzingTestingAPIToken1234567", 1, "LearzingTestingAPIClient123456")
 print('CREATED API TOKENS')
+
+print('CREATING SKILLS')
+# TODO It is better to form a tree of skills in memory and then dump it as table rows
+LEAF_SKILL_IDS = []
+insert_skill_ps('Languages', None, False)
+PREV_SKILL_ID = SERIAL_START
+insert_skill_ps('English', PREV_SKILL_ID, False)
+PREV_SKILL_ID += 1
+ENGLISH_SKILL_ID = PREV_SKILL_ID
+insert_skill_ps('Idioms', ENGLISH_SKILL_ID, True)
+PREV_SKILL_ID += 1
+LEAF_SKILL_IDS += [PREV_SKILL_ID]
+insert_skill_ps('Slang', ENGLISH_SKILL_ID, True)
+PREV_SKILL_ID += 1
+LEAF_SKILL_IDS += [PREV_SKILL_ID]
+insert_skill_ps('Vocabulary', ENGLISH_SKILL_ID, True)
+PREV_SKILL_ID += 1
+LEAF_SKILL_IDS += [PREV_SKILL_ID]
+print('CREATED SKILLS')
+
+print('CREATING USER SKILLS')
+LEAF_SKILLS_LAST_IX = len(LEAF_SKILL_IDS) - 1
+user_skills = []
+for user_id in range(SERIAL_START, CUSTOMER_NUM + SERIAL_START):
+	for skill_num in range(1, randint(1, len(LEAF_SKILL_IDS))):
+		skill_id = LEAF_SKILL_IDS[randint(0, LEAF_SKILLS_LAST_IX)]
+		user_skills += [(user_id, skill_id)]
+
+for (user_id, skill_id) in set(user_skills):
+	skill_value = randint(0, 100)
+	insert_user_skill_ps(user_id, skill_id, skill_value)
+print('CREATED USER SKILLS')
