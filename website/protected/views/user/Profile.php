@@ -1,9 +1,6 @@
 <div ng-app="LearzingUserProfilePageModule" ng-controller="LearzingUserProfilePageController">
     <h1>
-        Hello, User with id <?php echo $userid; ?>!
-    </h1>
-    <h1>
-        Here is your profile.
+        Hello! This is profile of user with id <?php echo $userid; ?>.
     </h1>
     <br/>
     <div id="user" style="border-style: solid; padding: 12pt;">
@@ -26,6 +23,16 @@
             </li>
         </ul>    
     </div>
+    <br/>
+    <div id="skills" style="border-style: solid; padding: 12pt;">
+        <p><strong>skills</strong></p>
+        <ul>
+            <li ng-repeat="userSkill in skills">
+                <p>skill: {{ LEARZ.consts.SKILLS[userSkill.skill_id].name }}</p>
+                <p>level: {{ userSkill.value }}</p>
+            </li>
+        </ul>    
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -38,6 +45,7 @@
             $scope.userId = <?php echo $userid; ?>;
             $scope.user = null;
             $scope.friends = null;
+            $scope.skills = null;
 
             $scope.showUserProfile = function() {
                 LEARZ.services.user.get($scope.userId, function(apiResponse) {
@@ -52,6 +60,15 @@
                 LEARZ.services.friends.get($scope.userId, function(apiResponse) {
                     if (apiResponse.status === LEARZING_STATUS_SUCCESS) {
                         $scope.friends = apiResponse.data;
+                        $scope.$digest();
+                    } else {
+                        alert("Error occured:\n" + apiResponse.texts.toString());
+                    }    
+                });
+
+                LEARZ.services.skills.get($scope.userId, function(apiResponse) {
+                    if (apiResponse.status === LEARZING_STATUS_SUCCESS) {
+                        $scope.skills = apiResponse.data;
                         $scope.$digest();
                     } else {
                         alert("Error occured:\n" + apiResponse.texts.toString());

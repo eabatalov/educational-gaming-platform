@@ -7,6 +7,7 @@ _API_EP_USER = _LEARZING_API_ENDPOINT + "user";
 _API_EP_FRIENDS = _LEARZING_API_ENDPOINT + "friends";
 _API_EP_MESSAGING = _LEARZING_API_ENDPOINT + "messaging";
 _API_EP_SEARCH = _LEARZING_API_ENDPOINT + "search";
+_API_EP_SKILLS = _LEARZING_API_ENDPOINT + "skills";
 
 _ACCESS_TOKEN_SAVE_DIV_ID = "_learz_acc_token_saved";
 
@@ -335,6 +336,48 @@ _searchService = {
     }
 };
 
+function _UserSkill(userId, skillId, value) {
+    this.user_id = userId;
+    this.skill_id = skillId;
+    this.value = value;
+}
+
+_skillsService = {
+    get : function(userId, completionCallback, fieldsFilter, paging) {
+        var requestData = {
+            user_id : userId
+        };
+        if (fieldsFilter !== undefined && fieldsFilter !== null) {
+            requestData.feilds = fieldsFilter;
+        }
+        if (paging !== undefined && paging !== null) {
+            requestData.paging = paging;
+        }
+
+        LEARZ._services.api.get(_API_EP_SKILLS,
+            requestData,
+            function(apiResponse) {
+                if (completionCallback !== null)
+                    completionCallback(apiResponse);
+            }, this
+        );
+    },
+    put : function(skillId, value, completionCallback) {
+        var requestData = {
+            skill_id : skillId,
+            value : value
+        };
+
+        LEARZ._services.api.put(_API_EP_SKILLS,
+            requestData,
+            function(apiResponse) {
+                if (completionCallback !== null)
+                    completionCallback(apiResponse);
+            }, this
+        );
+    }
+};
+
 function clientSupportsHTML5LocalStorage() {
     try {
         return 'localStorage' in window && window['localStorage'] !== null;
@@ -358,12 +401,18 @@ LEARZ = {
             alert("Fatal error. You need latest version of your browser to use Learzing");
         }
     },
+    /* services */
     services : {
         auth : _authService,
         user : _userService,
         friends : _friendsService,
         messaging : _messagingService,
-        search : _searchService
+        search : _searchService,
+        skills : _skillsService
+    },
+    /* public constants */
+    consts : {
+        SKILLS : LEARZ_SKILLS_MAP
     },
     /* exceptions */
     exceptions : {
@@ -376,7 +425,8 @@ LEARZ = {
         SearchObjectTypes : _SearchObjectTypes,
         SearchRequest : _SearchRequest,
         SearchResult : _SearchResult,
-        Paging : _Paging
+        Paging : _Paging,
+        UserSkill : _UserSkill
     },
 
     /* private part */

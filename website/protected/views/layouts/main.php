@@ -10,6 +10,7 @@
         <script src="/scripts/jquery-1.10.2-dev.js"></script>
         <script src="/scripts/jquery.cookie.js"></script>
         <script src="/scripts/angular.js"></script>
+        <script src="/scripts/sdk/skills.js"></script>
         <script src="/scripts/sdk/learzing.js"></script>
         <script src="/scripts/learzing-angular.js"></script>
 </head>

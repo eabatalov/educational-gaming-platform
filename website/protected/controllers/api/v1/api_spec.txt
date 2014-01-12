@@ -134,12 +134,15 @@ GET: Get all skills of user with id @user_id
     REQUEST: { user_id : String, [fields : FieldsFilter, paging : Paging] }
     RETURNS: [ UserSkill ]
 
-PUT: set current user's skill with @skill_id to value @value
+PUT: set current user's skill with @skill_id to value @value.
+    Setting skill @value is only allowed for leaf skill nodes.
     REQUEST: { skill_id : String, value : Int32 }
 
 Javascript types:
 UserSkill: { user_id : String, skill_id : String, value : Int32 }
     skillid : you can find human readable values for all the skill ids in SDK file "skills.js"
 
-Global vars: LEARZ.consts.SKILLS : map skillid => { id : String, name : String, parent_id : String, is_leaf : bool }
+Global vars:
+    LEARZ.consts.SKILLS : map skillid => { id : String, name : String, parent_id : String, is_leaf : bool }
+        Contains all the skills avaliable now.
 ===============================
