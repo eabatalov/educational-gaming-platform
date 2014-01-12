@@ -26,6 +26,10 @@
         echo CHtml::link("Profile",
             $this->createUrl("user/ShowUserProfile", array("userid" => NULL)),
             array("class" => "btn"));
+    } else {
+    ?>
+        <h3>You are guest!</h3>
+    <?php
     }
     ?>
 
