@@ -34,7 +34,7 @@ class PostgresSearchService implements ISearchService {
      */
     public function search(SearchRequest $request, Paging &$paging) {
         TU::throwIfNot(is_numeric($paging->getOffset()), TU::INVALID_ARGUMENT_EXCEPTION,
-            "Onlu numeric paging.offset is supported for this service");
+            "Only numeric paging.offset is supported for this service");
         $searchResults = array();
 
         //Users search
@@ -54,7 +54,7 @@ class PostgresSearchService implements ISearchService {
         //Other object types search appending to $searchResults
         //var_dump($searchResults);
         $paging->setTotal(count($searchResults));
-        
+
         return $searchResults;
     }
 
