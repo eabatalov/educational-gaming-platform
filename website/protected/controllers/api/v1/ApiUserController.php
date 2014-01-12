@@ -11,9 +11,15 @@ class ApiUserController extends ApiController {
     {
         try {
             $this->requireAuthentification();
-            $userId = TU::getValueOrThrow("userid", $this->getRequest());
             $userStorage = new PostgresUserStorage();
-            $user = $userStorage->getUserById($userId);
+            if (isset($this->getRequest()["userid"])) {
+                $userId = TU::getValueOrThrow("userid", $this->getRequest());
+                $user = $userStorage->getUserById($userId);
+            } else {
+                $user = $userStorage->getAuthentificatedUserByAccessToken(
+                    LearzingAuth::getCurrentAccessToken());
+            }
+
             $userApi = new UserApiModel();
             $userApi->initFromUser($user);
             $this->sendResponse(self::RESULT_SUCCESS, NULL,

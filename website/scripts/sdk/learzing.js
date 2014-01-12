@@ -209,10 +209,11 @@ function _FieldsFilter(fields) {
 }
 
 _userService = {
-    get : function(userId, completionCallback, fieldsFilter) {
-        var requestData = {
-            userid : userId
-        };
+    get : function(completionCallback, userId, fieldsFilter) {
+        var requestData = {};
+        if (userId !== undefined && userId !== null) {
+            requestData['userid'] = userId;
+        }
         if (fieldsFilter !== undefined && fieldsFilter !== null) {
             requestData.fields = fieldsFilter.fields;
         }

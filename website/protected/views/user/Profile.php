@@ -48,14 +48,14 @@
             $scope.skills = null;
 
             $scope.showUserProfile = function() {
-                LEARZ.services.user.get($scope.userId, function(apiResponse) {
+                LEARZ.services.user.get(function(apiResponse) {
                     if (apiResponse.status === LEARZING_STATUS_SUCCESS) {
                         $scope.user = apiResponse.data;
                         $scope.$digest();
                     } else {
                         alert("Error occured:\n" + apiResponse.texts.toString());
                     }    
-                });
+                }, $scope.userId);
 
                 LEARZ.services.friends.get($scope.userId, function(apiResponse) {
                     if (apiResponse.status === LEARZING_STATUS_SUCCESS) {

@@ -56,8 +56,9 @@ AccessTokenInfo: { access_token: String, token_type: String }
 ===============================
 service_name: user
 HTTP methods:
-GET: get User object with id @userid and all the information avaliable for current user
-    REQUEST: { userid : String, [fields : FieldsFilter] }
+GET: get current User object.
+    If @userid is cpecified, get all the information about user with id @userid avaliable for current user.
+    REQUEST: { [userid : String, fields : FieldsFilter] }
     RETURNS: User
 	
 POST: register new @user object with password @password. No access token is needed to perform the action.
