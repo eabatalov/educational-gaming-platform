@@ -13,8 +13,17 @@ class ApiSkillsController extends ApiController {
             $userIdApi = TU::getValueOrThrow("user_id", $this->getRequest());
 
             $userSkillsService = new UserSkillsService();
-            $userSkills = $userSkillsService->getUserSkills(
-                UserSkillApiModel::userIdFromApi($userIdApi), $this->getPaging());
+            if (isset($this->getRequest()["skill_id"])) {
+                $skillIdApi = TU::getValueOrThrow("skill_id", $this->getRequest());
+                $userSkills = array();
+                $userSkills[] = $userSkillsService->getUserSkill(
+                    UserSkillApiModel::userIdFromApi($userIdApi),
+                    UserSkillApiModel::skillIdFromApi($skillIdApi));
+                 $this->getPaging()->setTotal(1);
+            } else {
+                $userSkills = $userSkillsService->getUserSkills(
+                    UserSkillApiModel::userIdFromApi($userIdApi), $this->getPaging());
+            }
 
             $userSkillsApi = array();
             foreach ($userSkills as $userSkill) {

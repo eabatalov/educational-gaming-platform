@@ -35,11 +35,7 @@ class PostgresUserSkillsStorage {
         TU::throwIf($result === FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
 
         while(($data = pg_fetch_object($result)) != FALSE) {
-            $skills[] = new UserSkill(
-                $data->user_id,
-                $data->skill_id,
-                self::pgValueToUserSkillValue($data->value)
-            );
+            $skills[] = self::userSkillFromDBData($data);
         }
 
         $result = pg_query_params($this->conn, self::$SQL_SELECT_BY_USER_ID_TOTAL_COUNT,
@@ -51,11 +47,11 @@ class PostgresUserSkillsStorage {
         return $skills;
     }
     /*
-     * @returns Int
+     * @returns UserSkill object
      * @throws InternalErrorException if failed on storage problem
      * @throws InvalidArgumentException if failed on input validation
      */
-    public function getUserSkillValue($userId, $skillId) {
+    public function getUserSkill($userId, $skillId) {
         UserSkill::validateUserId($userId);
         UserSkill::validateSkillId($skillId);
 
@@ -63,12 +59,13 @@ class PostgresUserSkillsStorage {
             array($userId, $skillId));
         TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
 
-        $data= pg_fetch_object($result);
-        if ($data === FALSE) {
-            return 0;
+        $userSkill = new UserSkill($userId, $skillId, 0);
+        $data = pg_fetch_object($result);
+        if ($data !== FALSE) {
+             $userSkill->setValue(self::pgValueToUserSkillValue($data->value));
         }
 
-        return self::pgValueToUserSkillValue($data->value);
+        return $userSkill;
     }
     /*
      * @returns array of UserSkill objects
@@ -93,6 +90,14 @@ class PostgresUserSkillsStorage {
         }
     }
 
+    private static function userSkillFromDBData($data) {
+        return new UserSkill(
+            $data->user_id,
+            $data->skill_id,
+            self::pgValueToUserSkillValue($data->value)
+        );
+    }
+
     private static function pgValueToUserSkillValue($pgValue) {
         return intval($pgValue);
     }
@@ -102,7 +107,7 @@ class PostgresUserSkillsStorage {
     static private $SQL_INSERT =
         "INSERT INTO egp.user_skills
             (user_id, skill_id, value)
-        VALUES ($1, $2, $3);";
+        VALUES ($1, $2, $3) RETURNING user_id;";
     static private $SQL_UPDATE =
         "UPDATE egp.user_skills
             SET value=$3

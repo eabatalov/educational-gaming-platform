@@ -42,7 +42,7 @@
     LearzingUserProfilePageModule.controller('LearzingUserProfilePageController', ['$scope', 'LEARZ',
         function($scope, LEARZ) {
             $scope.LEARZ = LEARZ;
-            $scope.userId = <?php echo $userid; ?>;
+            $scope.userId = "<?php echo $userid; ?>";
             $scope.user = null;
             $scope.friends = null;
             $scope.skills = null;
@@ -66,7 +66,7 @@
                     }    
                 });
 
-                LEARZ.services.skills.get($scope.userId, function(apiResponse) {
+                LEARZ.services.skills.getAllUserSkills($scope.userId, function(apiResponse) {
                     if (apiResponse.status === LEARZING_STATUS_SUCCESS) {
                         $scope.skills = apiResponse.data;
                         $scope.$digest();

@@ -104,6 +104,10 @@ function testApiSkillsController(){
 	$PUT_JSON '{ skill_id : "4", value : 9 }' $AUTH_HEADER $HOST/api/skills
 	echo
 
+	echo "Test action GetUserSkill"
+	$GET_JSON 'request={ user_id : "'$USERID'", skill_id : "30" }' $AUTH_HEADER $HOST/api/skills
+	echo
+
 	echo "Test action GetUserSkills"
 	$GET_JSON 'request={ user_id : "'$USERID'"}' $AUTH_HEADER $HOST/api/skills
 	echo

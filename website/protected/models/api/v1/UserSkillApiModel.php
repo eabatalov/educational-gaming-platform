@@ -19,18 +19,24 @@ class UserSkillApiModel extends SerializableApiModel {
     }
 
     public function toUserSkill() {
-        TU::throwIfNot(is_numeric($this->skill_id), TU::INVALID_ARGUMENT_EXCEPTION, "skill id must be integer");
         TU::throwIfNot(is_int($this->value), TU::INVALID_ARGUMENT_EXCEPTION, "value must be integer");
         return new UserSkill(
             self::userIdFromApi($this->user_id),
-            $this->skill_id,
+            self::skillIdFromApi($this->skill_id),
             $this->value
         );
     }
 
     public static function userIdFromApi($userId) {
-        TU::throwIfNot(is_numeric($userId), TU::INVALID_ARGUMENT_EXCEPTION, "user id must be integer");
+        TU::throwIfNot(is_numeric($userId), TU::INVALID_ARGUMENT_EXCEPTION, "user id must be numeric");
+        TU::throwIfNot(is_string($userId), TU::INVALID_ARGUMENT_EXCEPTION, "user id must be string");
         return $userId;
+    }
+
+    public static function skillIdFromApi($skillId) {
+        TU::throwIfNot(is_numeric($skillId), TU::INVALID_ARGUMENT_EXCEPTION, "skill id must be numeric");
+        TU::throwIfNot(is_string($skillId), TU::INVALID_ARGUMENT_EXCEPTION, "skill id must be string");
+        return $skillId;
     }
     
     //String
