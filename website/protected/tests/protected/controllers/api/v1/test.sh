@@ -11,7 +11,7 @@ python3 setup.py > /dev/null
 cd $PWD
 
 EMAIL="foo@bar.com"
-PASSWORD="111111"
+PASSWORD="foobar"
 USERID="11"
 LEARZING_TEST_CLIENT_ID="LearzingTestingAPIClient123456"
 LEARZING_TEST_ACCESS_TOKEN="LearzingTestingAPIToken1234567"
