@@ -119,7 +119,7 @@ print('CREATING USER SKILLS')
 LEAF_SKILLS_LAST_IX = len(LEAF_SKILL_IDS) - 1
 user_skills = []
 for user_id in range(SERIAL_START, CUSTOMER_NUM + SERIAL_START):
-	for skill_num in range(1, randint(1, len(LEAF_SKILL_IDS))):
+	for skill_num in range(0, randint(1, len(LEAF_SKILL_IDS))):
 		skill_id = LEAF_SKILL_IDS[randint(0, LEAF_SKILLS_LAST_IX)]
 		user_skills += [(user_id, skill_id)]
 
