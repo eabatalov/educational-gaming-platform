@@ -185,7 +185,7 @@ class ApiController extends EGPControllerBase {
     }
 
     private static $RESULT_TO_HUMAN_READABLE_TEXT = array(
-        self::RESULT_SUCCESS => "Operation is completed successfully",
+        self::RESULT_SUCCESS => "Operation has completed successfully",
         self::RESULT_AUTHORIZATION_FAILED => "Current user doesn't have sufficient permissions 
 to perform requested operation",
         self::RESULT_INVALID_ARGUMENT => "Passed argument has invalid value",
