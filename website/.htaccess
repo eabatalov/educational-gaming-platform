@@ -1,3 +1,6 @@
+# Explicitly set HTTP_AUTHORIZATION SERVER variable as Apache can reclaim it
+SetEnvIf Authorization "(.+)" HTTP_AUTHORIZATION=$1
+
 RewriteEngine on
 
 # Don't allow httpd to return files, starting from dot (.htaccess, .svn, .git, etc)
