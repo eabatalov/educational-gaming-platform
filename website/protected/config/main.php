@@ -53,6 +53,9 @@ return array(
                 array('api/v1/ApiMessaging/SendMessage', 'pattern' => 'api/messaging', 'verb' => 'POST'),
                 //search service
                 array('api/v1/ApiSearch/Search', 'pattern' => 'api/search', 'verb' => 'GET'),
+                //skills service
+                array('api/v1/ApiSkills/GetUserSkills', 'pattern' => 'api/skills', 'verb' => 'GET'),
+                array('api/v1/ApiSkills/ModifyCurrentUserSkill', 'pattern' => 'api/skills', 'verb' => 'PUT'),
                 //Rules for web pages
                 array('user/ShowUserProfile', 'pattern' => 'user/profile/<userid:.*>', 'verb' => 'GET'),
                 array('user/ShowUserProfile', 'pattern' => 'user/profile', 'verb' => 'GET'),

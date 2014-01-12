@@ -4,7 +4,7 @@ GET_JSON="curl -v -X GET -G --data-urlencode "
 PUT_JSON="curl -v -X PUT -d "
 DELETE_JSON="curl -v -X DELETE -d "
 #' 2>&1 | grep result'
-HOST="http://localhost:8080/"
+HOST="http://learzing.com/"
 
 cd ../../../../../../../setup/
 python3 setup.py > /dev/null
@@ -94,7 +94,31 @@ function testApiSearchController(){
 
 }
 
+function testApiSkillsController(){
+	echo
+	createUser
+	echo
+
+	echo "Test action ModifyCurrentUserSkill"
+	$PUT_JSON '{ skill_id : "3", value : 10 }' $AUTH_HEADER $HOST/api/skills
+	$PUT_JSON '{ skill_id : "4", value : 9 }' $AUTH_HEADER $HOST/api/skills
+	echo
+
+	echo "Test action GetUserSkills"
+	$GET_JSON 'request={ user_id : "'$USERID'"}' $AUTH_HEADER $HOST/api/skills
+	echo
+	
+	echo "Test action GetCurrentUserSkills with fields filtering"
+	$GET_JSON 'request={ user_id : "'$USERID'", fields : ["skill_id"] }' $AUTH_HEADER $HOST/api/skills
+	echo
+
+	echo "Test action GetCurrentUserSkills with paging"
+	$GET_JSON 'request={ user_id : "'$USERID'", paging : { offset : "1", limit: 2} }' $AUTH_HEADER $HOST/api/skills
+	echo
+}
+
 #Only one should be uncommented at the same time
 #testApiUserController
 #testApiFriendsController
-testApiSearchController
+#testApiSearchController
+testApiSkillsController
