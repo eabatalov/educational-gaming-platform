@@ -1,5 +1,7 @@
 <?php
 
+require_once(dirname(__FILE__) . '/config.php');
+
 /**
  * @author eugene
  */
@@ -24,21 +26,20 @@ class PostgresUtils {
             return FALSE;
         }
     }
-
     static public function getHostName() {
-        return "localhost";
+        return _PG_HOST;
     }
 
     static public function getDbName() {
-        return "postgres";
+        return _PG_DB_NAME;
     }
 
     static public function getUserName() {
-        return "postgres";
+        return _PG_USER;
     }
 
     static public function getPassword() {
-        return "111";
+        return _PG_PASSWORD;
     }
 
     static public function getConnString() {
