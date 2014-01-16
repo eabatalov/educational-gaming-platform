@@ -68,17 +68,18 @@ class ModelObject extends CFormModel {
             return;
         }
 
-        if (array_key_exists($fieldId, $this->getChanges())) {
-            $change = $this->getChanges()[$fieldId];
+        $changes = &$this->getChanges();
+        if (array_key_exists($fieldId, $changes)) {
+            $change = $changes[$fieldId];
             if ($newVal == $change->getOldVal()) {
                 //wired way to delete array elem in php
-                unset($this->getChanges()[$fieldId]);
+                unset($changes[$fieldId]);
             } else {
                 $change->setNewVal($newVal);
             }
         } else {
             if ($newVal != $oldVal) {
-                $this->getChanges()[$fieldId] =
+                $changes[$fieldId] =
                     new ModelChangeRecord($fieldId, $oldVal, $newVal);
             }
         }
