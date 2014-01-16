@@ -101,7 +101,8 @@ _apiCommunicationService = {
         if (!isObject(response) || !('status' in response))
             response = {
                 status : LEARZING_STATUS_INTERNAL_SERVER_ERROR,
-                texts : [ "Empty data was recieved from the server" ]
+                texts : [ "Internal server error has occured. "
+                          + "Please try to send your request later." ]
             };
         return response;
     },
