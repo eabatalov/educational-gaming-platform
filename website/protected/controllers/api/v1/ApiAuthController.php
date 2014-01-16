@@ -21,16 +21,16 @@ class ApiAuthController extends ApiController {
     public function actionGetAccessToken() {
         $this->requireNoAuthentification();
         try {
-            TU::throwIfNot(isset($this->getRequest()["email"]), TU::INVALID_ARGUMENT_EXCEPTION,
+            TU::throwIfNot(AU::arrayHasKey($this->getRequest(), "email"), TU::INVALID_ARGUMENT_EXCEPTION,
                 "REQUEST field 'email' should be passed", self::ERROR_ABSENT_ARGUMENT);
-            TU::throwIfNot(isset($this->getRequest()["password"]), TU::INVALID_ARGUMENT_EXCEPTION,
+            TU::throwIfNot(AU::arrayHasKey($this->getRequest(), "password"), TU::INVALID_ARGUMENT_EXCEPTION,
                 "REQUEST field 'password' should be passed", self::ERROR_ABSENT_ARGUMENT);
-            TU::throwIfNot(isset($this->getRequest()["client_id"]), TU::INVALID_ARGUMENT_EXCEPTION,
+            TU::throwIfNot(AU::arrayHasKey($this->getRequest(), "client_id"), TU::INVALID_ARGUMENT_EXCEPTION,
                 "REQUEST field 'client_id' should be passed", self::ERROR_ABSENT_ARGUMENT);
 
-            $email = $this->getRequest()["email"];
-            $password = $this->getRequest()["password"];
-            $client_id = $this->getRequest()["client_id"];
+            $email = AU::arrayValue($this->getRequest(), "email");
+            $password = AU::arrayValue($this->getRequest(), "password");
+            $client_id = AU::arrayValue($this->getRequest(), "client_id");
 
             $apiTokenInfo = $this->auth->getAccessToken($email, $password, $client_id);
 
@@ -49,13 +49,13 @@ class ApiAuthController extends ApiController {
     public function actionDestroyAccessToken() {
         $this->requireAuthentification();
         try {
-            TU::throwIfNot(isset($this->getRequest()["client_id"]), TU::INVALID_ARGUMENT_EXCEPTION,
+            TU::throwIfNot(AU::arrayHasKey($this->getRequest(), "client_id"), TU::INVALID_ARGUMENT_EXCEPTION,
                 "REQUEST field 'client_id' should be passed", self::ERROR_ABSENT_ARGUMENT);
-            TU::throwIfNot(isset($this->getRequest()["access_token"]), TU::INVALID_ARGUMENT_EXCEPTION,
+            TU::throwIfNot(AU::arrayHasKey($this->getRequest(), "access_token"), TU::INVALID_ARGUMENT_EXCEPTION,
                 "REQUEST field 'access_token' should be passed", self::ERROR_ABSENT_ARGUMENT);
 
-            $clientId = $this->getRequest()["client_id"];
-            $accessToken = $this->getRequest()["access_token"];
+            $clientId = AU::arrayValue($this->getRequest(), "client_id");
+            $accessToken = AU::arrayValue($this->getRequest(), "access_token");
 
             $this->auth->destroyAccessToken($accessToken, $clientId);
 
