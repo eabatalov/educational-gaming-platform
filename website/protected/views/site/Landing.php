@@ -1,13 +1,15 @@
 <div ng-app="LearzingLandingPageModule">
-    <img src="/media/images/pl_team_lbl.png" alt="Img" height="342" width="368" style="float: right;">
-    <h1><?php echo Yii::app()->name;?></h1>
+    <h1 style="text-align: center;">Under development</h1>
     <br/>
+    <br/>
+    <img src="/media/images/pl_team_lbl.png" alt="Img" height="342" width="368" style="float: right;">
     <h2>
             Multiplayer?
             Social?<br/>
             Attention catching?<br/>
             It's all about <b>education!</b>
     </h2>
+    <br/>
     <br/>
     
     <?php echo CHtml::link("Signup", $this->createUrl("user/signup"), array("class" => "btn")); ?>
