@@ -90,7 +90,7 @@ class PostgresCustomerStorage extends PostgresUserStorage implements ICustomerSt
         }
 
         $friendsChanges =
-            $authCustomer->getValueChanges()[AuthentificatedCustomer::CH_FRIENDS];
+            AU::arrayValue($authCustomer->getValueChanges(), AuthentificatedCustomer::CH_FRIENDS);
         foreach ($friendsChanges->getNewVal() as $friendId => $friend) {
             if (!array_key_exists($friendId, $friendsChanges->getOldVal())) {
                 $this->addFriend($authCustomer->getUser()->getId(), $friendId);
