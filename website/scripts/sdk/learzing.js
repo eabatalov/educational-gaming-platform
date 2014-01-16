@@ -87,23 +87,23 @@ _apiCommunicationService = {
     _ajaxSuccess : function(completionCallback, thisObject) {
         return function(data, textStatus, jqXHR) {
             if (completionCallback !== null)
-                completionCallback.call(thisObject, data);
+                completionCallback.call(thisObject, this._mkResponse(data));
         };
     },
     _ajaxError : function(completionCallback, thisObject) {
         return function(jqXHR, textStatus, errorThrown) {
-            /*alert("Got ajax error:\n" +
-                  textStatus.toString( + "\n" +
-                  errorThrown.toString()));*/
             if (completionCallback !== null) {
-                var resultObject = jqXHR.responseJSON !== null ?
-                    jqXHR.responseJSON :
-                    { status : LEARZING_STATUS_AJAX_ERROR, texts : [
-                        "We are having troubles with sending request to server.\n\
-                         Please try sending your request again."]};
-                completionCallback.call(thisObject, resultObject);
+                completionCallback.call(thisObject, this._mkResponse(jqXHR.responseJSON));
             }
         };
+    },
+    _mkResponse : function(response) {
+        if (!isObject(response) || !('status' in response))
+            response = {
+                status : LEARZING_STATUS_INTERNAL_SERVER_ERROR,
+                texts : [ "Empty data was recieved from the server" ]
+            };
+        return response;
     },
     _mkRequestHeaders : function() {
         var result = {};
