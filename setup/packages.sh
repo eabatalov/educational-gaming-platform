@@ -17,3 +17,22 @@ curl https://npmjs.org/install.sh | sh
 #do this local install in NodeJS server dir
 #npm install socket.io
 npm install -g node-gyp
+
+
+
+
+
+
+
+#CentOS
+#sudo yum groupinstall "Development tools"
+#sudo yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel
+#sudo yum install php
+#sudo yum install php-pecl-xdebug.x86_64
+#sudo yum install php-pgsql.x86_64
+#suddenly no python 3.3 on the system. See installation tutorial here:
+#http://toomuchdata.com/2012/06/25/how-to-install-python-2-7-3-on-centos-6-2/
+#sudo yum install postgresql postgresql-server
+#sudo yum install postgresql-contrib.x86_64
+#sudo yum install php-phpunit-PHPUnit.noarch
+#sudo yum install php-phpunit-PHPUnit-SkeletonGenerator.noarch
