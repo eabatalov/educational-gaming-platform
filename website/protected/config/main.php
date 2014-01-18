@@ -21,8 +21,6 @@ return array(
         'application.controllers.*',
         'application.controllers.api.*',
         'application.controllers.api.v1.*',
-        'application.modules.hybridauth.*',
-        'application.modules.hybridauth.controllers.*'
     ),
     // application components
     'components'=>array(
@@ -67,7 +65,10 @@ return array(
             'returnUrl' => '/'
         )
     ),
-
+    /*
+     * We don't use hybrid auth module now. But don't delete this info.
+     * We'll need it implement our own hybrid auth.
+     */
     'modules'=> array(
         'hybridauth' => array(
             'baseUrl' => 'http://'. $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . '/hybridauth',

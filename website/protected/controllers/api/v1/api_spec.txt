@@ -1,9 +1,6 @@
 EGP RESTful API v1 specification.
 
-//TODO Add pagination to all the collections
 //TODO Add facebook hybrid auth
-//TODO remove all old authentication classes
-//TODO remove PHP session dependency
 ===============================
 MAKING API REQUESTS
 

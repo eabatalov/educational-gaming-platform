@@ -10,7 +10,6 @@ set_include_path(get_include_path() . PATH_SEPARATOR .
         $protectedDir ."/controllers/" . PATH_SEPARATOR .
         $protectedDir ."/controllers/api/" . PATH_SEPARATOR .
         $protectedDir ."/controllers/api/v1/" . PATH_SEPARATOR .
-        $protectedDir ."/modules/hybridauth/controllers/" . PATH_SEPARATOR .
         $protectedDir ."/models/" . PATH_SEPARATOR .
         $protectedDir ."/models/api/" . PATH_SEPARATOR .
         $protectedDir ."/models/api/v1/" . PATH_SEPARATOR .
@@ -24,7 +23,6 @@ set_include_path(get_include_path() . PATH_SEPARATOR .
 
 define('YII_DEBUG',true);
 require_once $protectedDir . '/external/yii/framework/yii.php';
-require_once $protectedDir . '/modules/hybridauth/HybridauthModule.php';
 
 require_once('PHPUnit/Runner/Version.php');
 require_once('PHPUnit/Autoload.php');
