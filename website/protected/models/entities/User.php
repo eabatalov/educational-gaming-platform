@@ -55,7 +55,7 @@ class User extends ModelObject {
     }
 
     private function setId($id) {
-        TU::throwIfNot(is_numeric($id), TU::INVALID_ARGUMENT_EXCEPTION);
+        self::validateId($id);
         $this->valueChanged(self::CH_ID, $this->id, $id);
         $this->id = $id;
     }
@@ -127,6 +127,14 @@ class User extends ModelObject {
                     "User id cannot be changed");
         }
         parent::setAttributes($values, $safeOnly);
+    }
+
+    /*
+     * @throws InvalidArgumentException if @id is not valid
+     */
+    public static function validateId($id) {
+        TU::throwIfNot(is_numeric($id), TU::INVALID_ARGUMENT_EXCEPTION,
+            "User id should be numeric string or integer");
     }
 
     //Int

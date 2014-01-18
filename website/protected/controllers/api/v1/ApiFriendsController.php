@@ -11,23 +11,20 @@ class ApiFriendsController extends ApiController {
         try {
             $this->requireAuthentification();
             $userId = TU::getValueOrThrow("userid", $this->getRequest());
-            $customerStorage = new PostgresCustomerStorage();
-            $friends = $customerStorage->getCustomerFriends($userId, $this->getPaging());
+            $user = $this->getUserById($userId); //as inefficient $id validation
+            $friendsStorage = new PostgresFriendsStorage();
+            $friends = $friendsStorage->getUserFriends($userId, $this->getPaging());
 
-            $friendsUserApi = array();
-            foreach ($friends as $friendCustomer) {
-                $friendUser = $friendCustomer->getUser();
-                $friendUserApi = new UserApiModel();
-                $friendUserApi->initFromUser($friendUser);
-                $friendsUserApi[] = $friendUserApi->toArray($this->getFields());
+            $friendsApi = array();
+            foreach ($friends as $friend) {
+                $friendApi = new UserApiModel();
+                $friendApi->initFromUser($friend);
+                $friendsApi[] = $friendApi->toArray($this->getFields());
             }
             $this->sendResponse(self::RESULT_SUCCESS, NULL, $friendsUserApi, TRUE);
 
         } catch (InvalidArgumentException $ex) {
-            $message = $ex->getMessage();
-            if ($ex->getCode() == ICustomerStorage::ERROR_NO_CUSTOMER_WITH_SUCH_ID)
-                $message = "No user with such id";
-            $this->sendResponse(self::RESULT_INVALID_ARGUMENT, $message);
+            $this->sendResponse(self::RESULT_INVALID_ARGUMENT, $ex->getMessage());
         } catch (Exception $ex) {
             $this->sendInternalError($ex);
         }
@@ -36,26 +33,27 @@ class ApiFriendsController extends ApiController {
     public function actionAddFriend() {
         try {
             $this->requireAuthentification();
-            $customerStorage = new PostgresCustomerStorage();
-
+            $friendsStorage = new PostgresFriendsStorage();
+            
+            $currentUser = $friendsStorage->getAuthentificatedUserByAccessToken(
+                LearzingAuth::getCurrentAccessToken());
+            $currentUserId = $currentUser->getId();
             $friendId = TU::getValueOrThrow("userid", $this->getRequest());
-            $friend = $customerStorage->getCustomerById($friendId);
+            $friend = $friendsStorage->getUserById($friendId); //Rude user id validity check
 
-            $authCustomer =
-                $customerStorage->getAuthCustomerByAccessToken(
-                    LearzingAuth::getCurrentAccessToken());
-            $authCustomer->addFriend($friend);
+            TU::throwIf($friendsStorage->hasFriend($currentUserId, $friendId),
+                TU::INVALID_ARGUMENT_EXCEPTION, "User has friend with id " .
+                    strval($friendId) . " yet");
 
-            $customerStorage->saveAuthCustomer($authCustomer);
+            $friendsStorage->addFriend($currentUserId, $friendId);
 
             $this->sendResponse(self::RESULT_SUCCESS);
 
         } catch (InvalidArgumentException $ex) {
             $message = $ex->getMessage();
-            if ($ex->getCode() == ICustomerStorage::ERROR_NO_CUSTOMER_WITH_SUCH_ID ||
-                $ex->getCode() == ICustomerStorage::ERROR_NO_CUSTOMER_WITH_SUCH_EMAIL ||
-                $ex->getCode() == IUserStorage::ERROR_INVALID_PASSWORD)
-                    $message = "Invalid user id, email or password";
+            if ($ex->getCode() === self::ERROR_NO_USER_WITH_SUCH_ID) {
+                $message = "Invalid friend id";
+            }
             $this->sendResponse(self::RESULT_INVALID_ARGUMENT, $message);
         } catch (Exception $ex) {
             $this->sendInternalError($ex);
@@ -65,26 +63,27 @@ class ApiFriendsController extends ApiController {
     public function actionDeleteFriend() {
         try {
             $this->requireAuthentification();
-            $customerStorage = new PostgresCustomerStorage();
-
+            $friendsStorage = new PostgresFriendsStorage();
+            
+            $currentUser = $friendsStorage->getAuthentificatedUserByAccessToken(
+                LearzingAuth::getCurrentAccessToken());
+            $currentUserId = $currentUser->getId();
             $friendId = TU::getValueOrThrow("userid", $this->getRequest());
-            $friend = $customerStorage->getCustomerById($friendId);
+            $friend = $friendsStorage->getUserById($friendId); //Rude user id validity check
 
-            $authCustomer =
-                $customerStorage->getAuthCustomerByAccessToken(
-                    LearzingAuth::getCurrentAccessToken());
-            $authCustomer->delFriend($friend);
+            TU::throwIfNot($friendsStorage->hasFriend($currentUserId, $friendId),
+                TU::INVALID_ARGUMENT_EXCEPTION, "User doesn't have friend with id " .
+                    strval($friendId) . " to delete");
 
-            $customerStorage->saveAuthCustomer($authCustomer);
+            $friendsStorage->delFriend($currentUserId, $friendId);
 
             $this->sendResponse(self::RESULT_SUCCESS);
 
         } catch (InvalidArgumentException $ex) {
             $message = $ex->getMessage();
-            if ($ex->getCode() == ICustomerStorage::ERROR_NO_CUSTOMER_WITH_SUCH_ID ||
-                $ex->getCode() == ICustomerStorage::ERROR_NO_CUSTOMER_WITH_SUCH_EMAIL ||
-                $ex->getCode() == IUserStorage::ERROR_INVALID_PASSWORD)
-                    $message = "Invalid user id, email or password";
+            if ($ex->getCode() === self::ERROR_NO_USER_WITH_SUCH_ID) {
+                $message = "Invalid friend id";
+            }
             $this->sendResponse(self::RESULT_INVALID_ARGUMENT, $message);
         } catch (Exception $ex) {
             $this->sendInternalError($ex);

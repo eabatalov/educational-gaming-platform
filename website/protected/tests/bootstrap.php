@@ -4,6 +4,7 @@
  * @author eugene
  */
 $protectedDir = \dirname(__FILE__)."/../";
+$testDir = \dirname(__FILE__) . "/";
 
 set_include_path(get_include_path() . PATH_SEPARATOR .
         $protectedDir ."/utils/" . PATH_SEPARATOR .
@@ -18,7 +19,8 @@ set_include_path(get_include_path() . PATH_SEPARATOR .
         $protectedDir ."/models/auth/hybrid_auth/postgres/" . PATH_SEPARATOR .
         $protectedDir ."/models/entities/" . PATH_SEPARATOR .
         $protectedDir ."/models/services/" . PATH_SEPARATOR .
-        $protectedDir ."/models/services/postgres/" . PATH_SEPARATOR
+        $protectedDir ."/models/services/postgres/" . PATH_SEPARATOR .
+        $testDir . "protected/models/services/postgres/" . PATH_SEPARATOR
 );
 
 define('YII_DEBUG',true);
