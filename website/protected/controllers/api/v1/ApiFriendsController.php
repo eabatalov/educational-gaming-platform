@@ -10,9 +10,9 @@ class ApiFriendsController extends ApiController {
     public function actionGetFriends() {
         try {
             $this->requireAuthentification();
-            $userId = TU::getValueOrThrow("userid", $this->getRequest());
-            $user = $this->getUserById($userId); //as inefficient $id validation
             $friendsStorage = new PostgresFriendsStorage();
+            $userId = TU::getValueOrThrow("userid", $this->getRequest());
+            $user = $friendsStorage->getUserById($userId); //as inefficient $id validation
             $friends = $friendsStorage->getUserFriends($userId, $this->getPaging());
 
             $friendsApi = array();
@@ -21,7 +21,7 @@ class ApiFriendsController extends ApiController {
                 $friendApi->initFromUser($friend);
                 $friendsApi[] = $friendApi->toArray($this->getFields());
             }
-            $this->sendResponse(self::RESULT_SUCCESS, NULL, $friendsUserApi, TRUE);
+            $this->sendResponse(self::RESULT_SUCCESS, NULL, $friendsApi, TRUE);
 
         } catch (InvalidArgumentException $ex) {
             $this->sendResponse(self::RESULT_INVALID_ARGUMENT, $ex->getMessage());

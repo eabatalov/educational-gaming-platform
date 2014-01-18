@@ -123,6 +123,6 @@ function testApiSkillsController(){
 
 #Only one should be uncommented at the same time
 #testApiUserController
-#testApiFriendsController
+testApiFriendsController
 #testApiSearchController
-testApiSkillsController
+#testApiSkillsController
