@@ -345,7 +345,7 @@ function _UserSkill(userId, skillId, value) {
 }
 
 _skillsService = {
-    getAllUserSkills : function(userId, completionCallback, fieldsFilter, paging) {
+    getAllUserSkills : function(completionCallback, userId, fieldsFilter, paging) {
         var requestData = {
             user_id : userId
         };
@@ -354,6 +354,9 @@ _skillsService = {
         }
         if (paging !== undefined && paging !== null) {
             requestData.paging = paging;
+        }
+        if (userId !== undefined && userId !== null) {
+            requestData.user_id = userId;
         }
 
         LEARZ._services.api.get(_API_EP_SKILLS,
@@ -364,15 +367,21 @@ _skillsService = {
             }, this
         );
     },
-    getUserSkill : function(userId, skillId, completionCallback) {
+    getUserSkill : function(skillId, completionCallback, userId, fieldsFilter) {
         //client side skill_id validation for now
         if (!(skillId in LEARZ.consts.SKILLS)) {
             throw LEARZ.exceptions.invalidArgumentException("Invalid skillId '" + skillId.toString() + "' passed");
         }
         var requestData = {
-            user_id : userId,
             skill_id : skillId
         };
+        if (userId !== undefined && userId !== null) {
+            requestData.user_id = userId;
+        }
+        if (fieldsFilter !== undefined && fieldsFilter !== null) {
+            requestData.feilds = fieldsFilter;
+        }
+
         LEARZ._services.api.get(_API_EP_SKILLS,
             requestData,
             function(apiResponse) {

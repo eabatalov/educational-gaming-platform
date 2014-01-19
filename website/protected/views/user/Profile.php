@@ -66,14 +66,14 @@
                     }    
                 });
 
-                LEARZ.services.skills.getAllUserSkills($scope.userId, function(apiResponse) {
+                LEARZ.services.skills.getAllUserSkills(function(apiResponse) {
                     if (apiResponse.status === LEARZING_STATUS_SUCCESS) {
                         $scope.skills = apiResponse.data;
                         $scope.$digest();
                     } else {
                         alert("Error occured:\n" + apiResponse.texts.toString());
                     }    
-                });
+                }, $scope.userId);
             };
 
             $scope.showUserProfile();
