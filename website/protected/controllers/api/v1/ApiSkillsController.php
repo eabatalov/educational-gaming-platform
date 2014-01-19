@@ -10,19 +10,27 @@ class ApiSkillsController extends ApiController {
     public function actionGetUserSkills() {
         try {
             $this->requireAuthentification();
-            $userIdApi = TU::getValueOrThrow("user_id", $this->getRequest());
+
+            if (AU::arrayHasKey($this->getRequest(), "user_id")) {
+                $userIdApi = AU::arrayValue($this->getRequest(), "user_id");
+                $userId = UserSkillApiModel::userIdFromApi($userIdApi);
+            } else {
+                $userStorage = new PostgresUserStorage();
+                $user = $userStorage->getAuthentificatedUserByAccessToken(
+                    LearzingAuth::getCurrentAccessToken());
+                $userId = $user->getId();
+            }
 
             $userSkillsService = new UserSkillsService();
             if (AU::arrayHasKey($this->getRequest(), "skill_id")) {
                 $skillIdApi = TU::getValueOrThrow("skill_id", $this->getRequest());
                 $userSkills = array();
-                $userSkills[] = $userSkillsService->getUserSkill(
-                    UserSkillApiModel::userIdFromApi($userIdApi),
+                $userSkills[] = $userSkillsService->getUserSkill($userId,
                     UserSkillApiModel::skillIdFromApi($skillIdApi));
                  $this->getPaging()->setTotal(1);
             } else {
                 $userSkills = $userSkillsService->getUserSkills(
-                    UserSkillApiModel::userIdFromApi($userIdApi), $this->getPaging());
+                    UserSkillApiModel::userIdFromApi($userId), $this->getPaging());
             }
 
             $userSkillsApi = array();

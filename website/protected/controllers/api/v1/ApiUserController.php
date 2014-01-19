@@ -12,7 +12,7 @@ class ApiUserController extends ApiController {
         try {
             $this->requireAuthentification();
             $userStorage = new PostgresUserStorage();
-            if (AU::arrayValue($this->getRequest(), "userid")) {
+            if (AU::arrayHasKey($this->getRequest(), "userid")) {
                 $userId = AU::arrayValue($this->getRequest(), "userid");
                 $user = $userStorage->getUserById($userId);
             } else {

@@ -54,7 +54,7 @@ AccessTokenInfo: { access_token: String, token_type: String }
 service_name: user
 HTTP methods:
 GET: get current User object.
-    If @userid is cpecified, get all the information about user with id @userid avaliable for current user.
+    If @userid is specified, get all the information about user with id @userid avaliable for current user.
     REQUEST: { [userid : String, fields : FieldsFilter] }
     RETURNS: User
 	
@@ -129,8 +129,9 @@ Object : User | ...
 service_name: skills
 HTTP methods:
 GET: Get all skills of user with id @user_id.
+     If @userid is not specified, then use id of current user.
      If @skill_id is specified then ignore @paging and get only skill with skill_id @skill_id.
-    REQUEST: { user_id : String, [ skill_id : String, fields : FieldsFilter, paging : Paging] }
+    REQUEST: { [ user_id : String, skill_id : String, fields : FieldsFilter, paging : Paging] }
     RETURNS: [ UserSkill ]
 
 PUT: set current user's skill with @skill_id to value @value.

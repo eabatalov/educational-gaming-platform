@@ -104,6 +104,10 @@ function testApiSkillsController(){
 	$PUT_JSON '{ skill_id : "4", value : 9 }' $AUTH_HEADER $HOST/api/skills
 	echo
 
+	echo "Test action current user: GetUserSkill"
+	$GET_JSON 'request={ skill_id : "30" }' $AUTH_HEADER $HOST/api/skills
+	echo
+
 	echo "Test action GetUserSkill"
 	$GET_JSON 'request={ user_id : "'$USERID'", skill_id : "30" }' $AUTH_HEADER $HOST/api/skills
 	echo
@@ -123,6 +127,6 @@ function testApiSkillsController(){
 
 #Only one should be uncommented at the same time
 #testApiUserController
-testApiFriendsController
+#testApiFriendsController
 #testApiSearchController
-#testApiSkillsController
+testApiSkillsController
