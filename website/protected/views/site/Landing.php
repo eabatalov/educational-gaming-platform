@@ -11,38 +11,33 @@
     </h2>
     <br/>
     <br/>
-    
-    <?php echo CHtml::link("Signup", $this->createUrl("user/signup"), array("class" => "btn")); ?>
-    <br/>
-    <h3>Already a member?</h3>
-    <?php echo CHtml::link("Login", $this->createUrl("user/login"), array("class" => "btn")); ?>
-
-    <div  ng-controller="LearzingLogoutController">
-        <h3>Staying for too long? Try brand new functionality!</h3>
-        <a class="btn" href="" ng-click="doLogout()">Logout</a>
-    </div>
-
     <?php if(!LearzingAuth::isGuest()) { ?>
+        <h3>Play that educational games!</h3>
+        <?php echo CHtml::link("The Games", $this->createUrl("games/catalog"),
+                array("class" => "btn"));?>
+        <br/>
         <h3>Have a look at your profile here</h3>
-    <?php
-        echo CHtml::link("Profile",
-            $this->createUrl("user/ShowUserProfile", array("userid" => NULL)),
-            array("class" => "btn"));
-    } else {
-    ?>
-        <h3>You are guest!</h3>
+        <?php echo CHtml::link("Profile",
+                $this->createUrl("user/ShowUserProfile", array("userid" => NULL)),
+                array("class" => "btn"));?>
+        <br/>
+        <h3>Our tiny Google</h3>
+        <?php echo CHtml::link("Search", $this->createUrl("Search"), array("class" => "btn")); ?>
+        <br/>
+        <div  ng-controller="LearzingLogoutController">
+            <h3>Staying for too long? Try brand new functionality!</h3>
+            <a class="btn" href="" ng-click="doLogout()">Logout</a>
+        </div>
+    <?php } else { ?>
+        <h2>Signup to checkout some cool stuff!</h2>
+        <?php echo CHtml::link("Signup", $this->createUrl("user/signup"), array("class" => "btn")); ?>
+        <br/>
+        <br/>
+        <h3>Already a member?</h3>
+        <?php echo CHtml::link("Login", $this->createUrl("user/login"), array("class" => "btn")); ?>
     <?php
     }
     ?>
-
-    <br/>
-    <h3>Our tiny Google</h3>
-    <?php echo CHtml::link("Search", $this->createUrl("Search"), array("class" => "btn")); ?>
-    
-
-    <p>
-        <?php echo var_dump(LearzingAuth::getCurrentAccessToken(), true); ?>
-    </p>
 </div>
 
 <script type="text/javascript">

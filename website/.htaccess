@@ -6,8 +6,14 @@ RewriteEngine on
 # Don't allow httpd to return files, starting from dot (.htaccess, .svn, .git, etc)
 RedirectMatch 403 /\..*$
 RedirectMatch 403 /protected.*
+
+#Don't allow to list games directory but allow
+#to get particular games from it
+RedirectMatch 403 ^/games.{0,1}$
+
 # Return file or directory if it exists
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+
 # Redirect request to index.php otherwise
 RewriteRule . index.php

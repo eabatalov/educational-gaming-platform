@@ -128,10 +128,6 @@ div {
 	margin: 0 auto;
 	padding: 10px;
 }
-#contents > div img {
-	float: right;
-	margin-left: 60px;
-}
 #contents h1, #contents h2 {
 	color: #2c2c2c;
 	font-size: 60px;
