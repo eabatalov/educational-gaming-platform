@@ -18,9 +18,12 @@ set_include_path(get_include_path() . PATH_SEPARATOR .
         $protectedDir ."/models/auth/hybrid_auth/" . PATH_SEPARATOR .
         $protectedDir ."/models/auth/hybrid_auth/postgres/" . PATH_SEPARATOR .
         $protectedDir ."/models/entities/" . PATH_SEPARATOR .
-        $protectedDir ."/models/services/" . PATH_SEPARATOR .
-        $protectedDir ."/models/services/postgres/" . PATH_SEPARATOR .
-        $testDir . "protected/models/services/postgres/" . PATH_SEPARATOR
+        $protectedDir ."/services/" . PATH_SEPARATOR .
+        $protectedDir ."/services/postgres/" . PATH_SEPARATOR .
+        $protectedDir ."/services/auth/" . PATH_SEPARATOR .
+        $protectedDir ."/services/auth/hybrid_auth/" . PATH_SEPARATOR .
+        $protectedDir ."/services/auth/hybrid_auth/postgres/" . PATH_SEPARATOR .
+        $testDir . "protected/services/postgres/" . PATH_SEPARATOR
 );
 
 define('YII_DEBUG',true);
