@@ -11,6 +11,10 @@ RedirectMatch 403 /protected.*
 #to get particular games from it
 RedirectMatch 403 ^/games.{0,1}$
 
+#Forbid access to protected images which can only be delivered
+#through authorization
+#RedirectMatch 403 /imgs_protected.*
+
 # Return file or directory if it exists
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
