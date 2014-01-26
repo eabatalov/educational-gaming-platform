@@ -90,6 +90,9 @@ _apiCommunicationService = {
     },
     _ajaxError : function(completionCallback, thisObject) {
         return function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseJSON.status === LEARZING_STATUS_UNAUTHORIZED) {
+                this._authService._revokeCreds();
+            }
             if (completionCallback !== null) {
                 completionCallback.call(thisObject, this._mkResponse(jqXHR.responseJSON));
             }
@@ -183,6 +186,15 @@ _authService = {
                 token_type :  $.cookie(_AUTH_COOKIE_KEY_TYPE)
             };
         }
+    },
+    _revokeCreds : function() {
+        if (this._accessTokenInfo !== null) {
+            this._accessTokenInfo.access_token = null;
+            this._accessTokenInfo.token_type = null;
+        }
+        localStorage.setItem(_LOCAL_STORAGE_TOKEN_KEY, null);
+        $.removeCookie(_AUTH_COOKIE_KEY_TOKEN);
+        $.removeCookie(_AUTH_COOKIE_KEY_TYPE);
     },
     _accessTokenInfo : null,
     _clientId : null,

@@ -90,7 +90,7 @@ class ApiController extends EGPControllerBase {
             $message = $message . PHP_EOL .
                 "Error code: " . $errorCode;
         }
-        $this->sendResponse(self::RESULT_INVALID_ARGUMENT, $message);
+        $this->sendResponse(self::RESULT_AUTHORIZATION_FAILED, $message);
     }
 
     /*
