@@ -25,7 +25,7 @@ class UserSkillsService {
      * @throws InternalErrorException if failed on storage problem
      * @throws InvalidArgumentException if failed on input validation
      */
-    public function getUserSkills($userId, Paging &$paging) {
+    public function getUserSkills($userId, Paging $paging) {
         return $this->userSkillsStorage->getUserSkills($userId, $paging);
     }
 

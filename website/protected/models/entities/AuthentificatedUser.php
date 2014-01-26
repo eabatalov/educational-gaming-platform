@@ -12,9 +12,9 @@ class AuthentificatedUser extends User {
      * @param id: optional, used for internal data provider and testing purposes
      */
     static public function createAUInstance($email, $name, $surname, $isActive,
-                            $role, $password, $id = NULL) {
+                            $role, $password, $optionals = NULL, $id = NULL) {
         return new AuthentificatedUser(FALSE, $email, $name, $surname, $isActive,
-                            $role, $password, $id);
+                            $role, $password, $optionals, $id);
     }
 
     /*
@@ -59,8 +59,20 @@ class AuthentificatedUser extends User {
         parent::setDescription($userDesc);
     }
 
+    public function setGender($gender) {
+        parent::setGender($gender);
+    }
+
+    public function setBirthDate($birthDate) {
+        parent::setBirthDate($birthDate);
+    }
+
+    public function setAvatar($avatar) {
+        parent::setAvatar($avatar);
+    }
+
     /*
-     * @returns: User object which represents the same user
+     * @returns: new User object which represents the same user
      */
     public function getUser() {
         return User::createUInstance(
@@ -69,16 +81,21 @@ class AuthentificatedUser extends User {
                 $this->getSurname(),
                 $this->getIsActive(),
                 $this->getRole(),
+                array(
+                    self::OPT_AVATAR => $this->getAvatar(),
+                    self::OPT_BIRTH_DATE => $this->getBirthDate(),
+                    self::OPT_GENDER => $this->getGender()
+                ),
                 $this->getId()
         );
     }
 
     public static function staticInit() {
-        self::$validationRulesAll =
-            array_merge(parent::rules(), self::$validationRulesSelf);
+        self::$validationRules =
+            array_merge(parent::$validationRules, self::$validationRulesSelf);
     }
 
-    static private $validationRulesSelf = array(
+    static protected $validationRulesSelf = array(
         array("password" ,'required'),
         array('password', 'length', 'min' => 6, 'max' => 100,
                 'encoding' => 'utf-8')
@@ -86,19 +103,20 @@ class AuthentificatedUser extends User {
         //array('password', 'compare', 'compareAttribute'=>'password_repeat', 'on'=>'register'),
     );
 
-    static private $validationRulesAll;
+    static protected $validationRules;
 
     public function rules() {
-        return self::$validationRulesAll;
+        return self::$validationRules;
     }
 
     //public just because we can't hide constructor if it was public in one of parent classes
     public function __construct($mkEmpty, $email = NULL, $name = NULL, $surname = NULL,
-                            $isActive = NULL, $role = NULL, $password = NULL, $id = NULL) {
+                            $isActive = NULL, $role = NULL, $password = NULL, $optionals = NULL,
+                            $id = NULL) {
         assert(is_bool($mkEmpty));
         if (!$mkEmpty) {
             parent::__construct(FALSE, $email, $name, $surname, $isActive,
-                            $role, $id);
+                            $role, $optionals, $id);
             $this->dsChangeTracking();
             $this->setPassword($password);
             $this->enChangeTracking();
@@ -106,7 +124,7 @@ class AuthentificatedUser extends User {
     }
 
     //Str[100]
-    //TODO add more rules to password validation, add password confirmation
+    //TODO add more rules to password validation
     private $password;
     //ModelObject constants for changes supply
     const CH_PASS = parent::CH_LAST;

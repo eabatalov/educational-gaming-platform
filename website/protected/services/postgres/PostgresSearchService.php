@@ -32,7 +32,7 @@ class PostgresSearchService implements ISearchService {
      * @throws: InternalErrorException
      * @throws: InvalidArgumentException
      */
-    public function search(SearchRequest $request, Paging &$paging) {
+    public function search(SearchRequest $request, Paging $paging) {
         TU::throwIfNot(is_numeric($paging->getOffset()), TU::INVALID_ARGUMENT_EXCEPTION,
             "Only numeric paging.offset is supported for this service");
         $searchResults = array();

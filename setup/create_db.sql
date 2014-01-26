@@ -12,6 +12,9 @@ BEGIN
 IF NOT EXISTS (SELECT 1 FROM pg_type where typname = 'role_t') THEN
 	CREATE TYPE egp.role_t AS ENUM ('CUSTOMER', 'ADMIN', 'ANALYST');
 END IF;
+IF NOT EXISTS (SELECT 1 FROM pg_type where typname = 'gender_t') THEN
+	CREATE TYPE egp.gender_t AS ENUM ('MALE', 'FEMALE');
+END IF;
 END;
 $BODY$;
 --CMD
@@ -22,7 +25,11 @@ CREATE TABLE egp.users (
 	email varchar(50) NOT NULL UNIQUE,
 	is_active boolean NOT NULL DEFAULT FALSE,
 	password varchar(100) NOT NULL,
-	role egp.role_t NOT NULL
+	role egp.role_t NOT NULL,
+	-- name of avatar picture
+	avatar varchar NULL,
+	birthday date NULL,
+	gender egp.gender_t NULL
 );
 --CMD
 CREATE TABLE egp.friendnships (

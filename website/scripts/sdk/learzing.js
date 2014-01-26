@@ -9,8 +9,6 @@ _API_EP_MESSAGING = _LEARZING_API_ENDPOINT + "messaging";
 _API_EP_SEARCH = _LEARZING_API_ENDPOINT + "search";
 _API_EP_SKILLS = _LEARZING_API_ENDPOINT + "skills";
 
-_ACCESS_TOKEN_SAVE_DIV_ID = "_learz_acc_token_saved";
-
 LEARZING_STATUS_SUCCESS = "SUCCESS";
 LEARZING_STATUS_UNAUTHORIZED = "AUTHORIZATION_FAILED";
 LEARZING_STATUS_INVALID_ARGUMENT = "INVALID_ARGUMENT";
@@ -190,13 +188,17 @@ _authService = {
     _clientId : null,
 };
 
-function _User(email, name, surname, isOnline, role, id) {
+function _User(email, name, surname, isOnline, role, avatar,
+    birthdate, gender, id) {
     this.id = id;
     this.email = email;
     this.name = name;
     this.surname = surname;
     this.is_online = isOnline;
     this.role = role; 
+    this.avatar = avatar;
+    this.birthdate = birthdate;
+    this.gender = gender;
 }
 
 /*
@@ -243,7 +245,7 @@ _userService = {
                     completionCallback(apiResponse);
             }, this
         );
-    }
+    },
 };
 
 _friendsService = {

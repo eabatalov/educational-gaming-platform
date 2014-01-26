@@ -13,7 +13,7 @@ class PostgresFriendsStorage extends PostgresUserStorage implements IFriendsStor
         parent::__construct();
     }
 
-    public function getUserFriends($reqId, Paging &$paging) {
+    public function getUserFriends($reqId, Paging $paging) {
         TU::throwIfNot(is_numeric($paging->getOffset()), TU::INVALID_ARGUMENT_EXCEPTION,
             "Only numeric paging.offset is supported for this service");
         $friends = array();

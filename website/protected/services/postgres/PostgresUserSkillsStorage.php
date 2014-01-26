@@ -24,7 +24,7 @@ class PostgresUserSkillsStorage {
      * @throws InternalErrorException if failed on storage problem
      * @throws InvalidArgumentException if failed on input validation
      */
-    public function getUserSkills($userId, Paging &$paging) {
+    public function getUserSkills($userId, Paging $paging) {
         UserSkill::validateUserId($userId);
         TU::throwIfNot(is_numeric($paging->getOffset()), TU::INVALID_ARGUMENT_EXCEPTION,
             "Only numeric paging.offset is supported for this service");

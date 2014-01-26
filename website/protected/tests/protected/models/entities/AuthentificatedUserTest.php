@@ -24,7 +24,7 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         $pass = array_key_exists("pass", $fields) ? $fields['pass'] : $id . self::PASS_SUFFIX;
         $role = array_key_exists("role", $fields) ? $fields['role'] : UserTest::ROLE;
         return AuthentificatedUser::createAUInstance($email, $name, $surname, $isActive,
-                                        $role, $pass, $id);
+                                        $role, $pass, NULL, $id);
     }
 
     /**
@@ -126,6 +126,7 @@ class AuthentificatedUserTest extends PHPUnit_Framework_TestCase {
         $user->setRole($newRole);
 
         $changes = $user->getValueChanges();
+        echo var_dump($changes, TRUE) . PHP_EOL;
         assert(empty($changes));
     }
 

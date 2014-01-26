@@ -9,7 +9,10 @@
         <link type="text/css" rel="stylesheet" href="/media/css/validation.css">
         <script src="/scripts/jquery-1.10.2-dev.js"></script>
         <script src="/scripts/jquery.cookie.js"></script>
+        <script src='/scripts/angular-file-upload-1.2.5/dist/angular-file-upload-shim.js'></script>
         <script src="/scripts/angular.js"></script>
+        <script src='/scripts/angular-file-upload-1.2.5/dist/angular-file-upload.js'></script>
+        
         <script src="/scripts/sdk/utils.js"></script>
         <script src="/scripts/sdk/skills.js"></script>
         <script src="/scripts/sdk/learzing.js"></script>

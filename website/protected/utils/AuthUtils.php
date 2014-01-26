@@ -10,10 +10,6 @@ class AuthUtils {
      * @returns: random string suitable to be a password
      */
     static public function genPassword() {
-        $length = 16;
-        $chars = array_merge(range(0,9), range('a','z'), range('A','Z'));
-        shuffle($chars);
-        $password = implode('', array_slice($chars, 0, $length));
-        return $password;
+        return Rand::gen(16);
     }
 }

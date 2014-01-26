@@ -6,7 +6,7 @@
  *
  * @author eugene
  */
-class PagingApiModel {
+class PagingApiModel extends SerializableApiModel {
 
     /*
      * @throws: InvalidArgumentException if very basic validation has failed

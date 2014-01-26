@@ -10,7 +10,7 @@ class PostgresTest extends PHPUnit_Framework_TestCase {
     static public function setUpBeforeClass() {
         $output = array();
         $status = 0;
-        assert(chdir(dirname(__FILE__) . "/../../../../../../../setup/"));
+        assert(chdir(dirname(__FILE__) . "/../../../../../../setup/"));
         $setup_db = "./setup.py --host=" . PostgresUtils::getHostName() .
                 " --db=" . PostgresUtils::getDbName() .
                 " --user=" . PostgresUtils::getUserName() .

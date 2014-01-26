@@ -1,0 +1,7 @@
+path: learzing.com/papi/<service_name>
+
+service: avatar
+POST: set new avatar picture. Image file name is "avatar".
+    previous avatar file is deleted
+RETURNS: { new_avatar : String }
+    where new_avatar is name of new avatar file name

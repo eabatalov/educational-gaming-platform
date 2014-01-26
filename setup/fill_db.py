@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 from random import randint
+from datetime import date
 
 INSERT_USER_SQL = """
 	INSERT INTO egp.users(name, surname, email, is_active,
-		password, role)
+		password, role, avatar, birthday, gender)
 	VALUES ($1::varchar, $2::varchar, $3::varchar,
-		$4::boolean, $5::varchar, $6::egp.role_t);
+		$4::boolean, $5::varchar, $6::egp.role_t, $7::varchar,
+		$8::date, $9::egp.gender_t);
 	"""
 
 INSERT_FRIENDSHIP_SQL = """
@@ -46,7 +48,8 @@ insert_user_skill_ps = conn.prepare(INSERT_USER_SKILL_SQL);
 
 default_user = { 'name' : 'Name_', 'surname' : 'Surname_',
 	'email' : '_Email@example.com', 'is_active' : False,
-	'password' : 'Password_', 'role' : 'CUSTOMER'}
+	'password' : 'Password_', 'role' : 'CUSTOMER',
+	'avatar' : None, 'birthday' : None, 'gender' : None }
 
 CUSTOMER_NUM = 10
 FRIEND_MAX_NUM = 10
@@ -62,6 +65,9 @@ for i in range(0, CUSTOMER_NUM):
 		default_user['is_active'],
 		default_user['password'] + unique,
 		default_user['role'],
+		default_user['avatar'],
+		default_user['birthday'],
+		default_user['gender'],
 		]
 	insert_user_ps(new_user[0],
 			new_user[1],
@@ -69,6 +75,9 @@ for i in range(0, CUSTOMER_NUM):
 			new_user[3],
 			new_user[4],
 			new_user[5],
+			new_user[6],
+			new_user[7],
+			new_user[8],
 			)
 print('CREATED USERS')
 

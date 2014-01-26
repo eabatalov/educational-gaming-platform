@@ -7,7 +7,7 @@
  * @author eugene
  */
 interface IFriendsStorage {
-    public function getUserFriends($reqId, Paging &$paging);
+    public function getUserFriends($reqId, Paging $paging);
     public function delFriend($reqId, $accId);
     public function addFriend($reqId, $accId);
     public function hasFriend($reqId, $accId);

@@ -1,4 +1,5 @@
 <?php
+
 // This is the main Web application configuration. Any writable
 // application properties can be configured here.
 return array(
@@ -24,6 +25,7 @@ return array(
         'application.controllers.*',
         'application.controllers.api.*',
         'application.controllers.api.v1.*',
+        'application.controllers.api.private.*',
     ),
     // application components
     'components'=>array(
@@ -57,6 +59,8 @@ return array(
                 //skills service
                 array('api/v1/ApiSkills/GetUserSkills', 'pattern' => 'api/skills', 'verb' => 'GET'),
                 array('api/v1/ApiSkills/ModifyCurrentUserSkill', 'pattern' => 'api/skills', 'verb' => 'PUT'),
+                //Private API
+                array('api/private/PApiUpload/Avatar', 'pattern' => 'papi/avatar', 'verb' => 'POST'),
                 //Rules for web pages
                 array('user/ShowUserProfile', 'pattern' => 'user/profile/<userid:.*>', 'verb' => 'GET'),
                 array('user/ShowUserProfile', 'pattern' => 'user/profile', 'verb' => 'GET'),

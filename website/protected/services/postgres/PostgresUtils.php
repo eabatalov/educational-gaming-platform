@@ -26,6 +26,26 @@ class PostgresUtils {
             return FALSE;
         }
     }
+
+    public static function PGDateToPhp($val) {
+        if ($val === NULL)
+            return NULL;
+        //ISO, DMY is used by default and is recomended
+        //yyyy-mm-dd
+        $parts = explode('-', $val);
+        $year = intval($parts[0]);
+        $month = intval($parts[1]);
+        $day = intval($parts[2]);
+        return new Date($year, $day, $month);
+    }
+
+    public static function PhpDateToPG(Date $val) {
+        //ISO, DMY is used by default and is recomended
+        //yyyy-mm-dd
+        return sprintf("%04d-%02d-%02d", $val->getYear(),
+            $val->getMonth(), $val->getDay());
+    }
+    
     static public function getHostName() {
         return _PG_HOST;
     }

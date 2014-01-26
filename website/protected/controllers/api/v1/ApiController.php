@@ -78,7 +78,7 @@ class ApiController extends EGPControllerBase {
 
     protected function sendBadRequest(\InvalidArgumentException $exception = NULL) {
         $message = NULL;
-        if (YII_DEBUG && ($exception != NULL)) {
+        if (/*YII_DEBUG && */($exception != NULL)) {
             $message = $exception->getMessage() . PHP_EOL .
                 "Error code: " . $exception->getCode();
         }

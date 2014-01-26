@@ -68,10 +68,23 @@ PUT: replace current user object with @user object supplied (update scenario)
 DELETE (): not implemented
 
 Javascript types:
-User: { id: String, email: String, name: String, surname: String, is_online: "true"|"false", role: UserRole }
+User: { 
+    id: String,
+    email: String,
+    name: String,
+    surname: String,
+    is_online: "true"|"false",
+    role: UserRole,
+    avatar : null | ImageName,
+    birthdate: null | Date,
+    gender : null | Gender
+}
 UserRole: "customer" or ...
 FieldsFilter: [String]
 FieldsFIlter: if set, determines fields which will be returned from server in RETURNS object.
+ImageName: name of image file name loaded preliminary
+Gender: "male" | "female" | null
+Date: { year : Int, month : Int, day : Int }
 ===============================
 service_name: friends
 HTTP methods:

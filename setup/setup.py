@@ -9,7 +9,7 @@ from optparse import OptionParser
 import postgresql.driver as pg_driver
 
 #add files to run here
-files_db = ["./create_db.sql", "./fill_db.py"] 
+files_db = ["./create_db.sql", "./fill_db.py", "./paths.sh"] 
 files_all = files_db + ["./packages.sh"]
 conn = None #DB connection to be used throught setupe process
 

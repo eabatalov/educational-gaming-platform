@@ -39,18 +39,34 @@ class UserController extends EGPWebFrontendController {
     public function actionShowUserProfile() {
         $this->pageTitle = self::$PAGE_NAME_USER;
 
+        $currentUserId = NULL;
+        if (LearzingAuth::getCurrentAccessToken() !== NULL) {
+            $userSotrage = $this->getUserStorage();
+            $authUser = $userSotrage->getAuthentificatedUserByAccessToken(
+                LearzingAuth::getCurrentAccessToken());
+            $currentUserId = $authUser->getId();
+        }
+
         $userid = Yii::app()->request->getParam("userid");
         if ($userid == NULL) {
             $this->requireAuthentification();
-            $userSotrage = new PostgresUserStorage();
+            $userSotrage = $this->getUserStorage();
             $authUser = $userSotrage->getAuthentificatedUserByAccessToken(
                 LearzingAuth::getCurrentAccessToken());
             $userid = $authUser->getId();            
         }
 
         $model = array(
-            "userid" => $userid
+            "userid" => $userid,
+            "isCurrentUser" => $currentUserId === $userid ? "true" : "false"
         );
         $this->render('Profile', $model);
     }
+
+    private function getUserStorage() {
+        if ($this->userStorage === NULL)
+            $this->userStorage = new PostgresUserStorage();
+        return $this->userStorage;
+    }
+    private $userStorage = NULL;
 }

@@ -49,7 +49,11 @@ class PostgresUserStorage implements IUserStorage {
                 $user->getEmail(),
                 PostgresUtils::boolToPGBool($user->getIsActive()),
                 $password,
-                $user->getRole()));
+                $user->getRole(),
+                $user->getAvatar(),
+                $user->getBirthDate(),
+                $user->getGender()
+        ));
         TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
     }
 
@@ -90,6 +94,11 @@ class PostgresUserStorage implements IUserStorage {
                 PostgresUtils::PGBoolToPHP($data->is_active),
                 $data->role,
                 $data->password,
+                array(
+                    User::OPT_AVATAR => $data->avatar,
+                    User::OPT_BIRTH_DATE => PostgresUtils::PGDateToPhp($data->birthday),
+                    User::OPT_GENDER => $data->gender,
+                ),
                 $data->id
         );
     }
@@ -144,7 +153,11 @@ class PostgresUserStorage implements IUserStorage {
             $authUser->getEmail(),
             PostgresUtils::boolToPGBool($authUser->getIsActive()),
             $authUser->getPassword(),
-            $authUser->getRole()));
+            $authUser->getRole(),
+            $authUser->getAvatar(),
+            $authUser->getBirthDate(),
+            $authUser->getGender()
+        ));
         TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
     }
 
@@ -161,6 +174,11 @@ class PostgresUserStorage implements IUserStorage {
                 $data->surname,
                 PostgresUtils::PGBoolToPHP($data->is_active),
                 $data->role,
+                array(
+                    User::OPT_AVATAR => $data->avatar,
+                    User::OPT_BIRTH_DATE => PostgresUtils::PGDateToPhp($data->birthday),
+                    User::OPT_GENDER => $data->gender,
+                ),
                 $data->id
         );
     }
@@ -170,22 +188,26 @@ class PostgresUserStorage implements IUserStorage {
     //SQL
     static private $SQL_INSERT =
         "INSERT INTO egp.users(
-            name, surname, email, is_active, password, role)
-        VALUES ($1, $2, $3, $4, $5, $6);";
+            name, surname, email, is_active, password, role, avatar, birthday, gender)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);";
     static private $SQL_UPDATE =
             "UPDATE egp.users
-            SET name=$2, surname=$3, email=$4, is_active=$5, password=$6, role=$7
+            SET name=$2, surname=$3, email=$4, is_active=$5, password=$6, role=$7,
+            avatar=$8, birthday=$9, gender=$10
             WHERE id=$1;";
     static private $SQL_SELECT_BY_EMAIL =
-            "SELECT id, name, surname, email, is_active, password, role
+            "SELECT id, name, surname, email, is_active, password, role,
+                avatar, birthday, gender
              FROM egp.users
              WHERE email=$1";
     static private $SQL_SELECT_BY_ID =
-            "SELECT id, name, surname, email, is_active, password, role
+            "SELECT id, name, surname, email, is_active, password, role,
+                avatar, birthday, gender
              FROM egp.users
              WHERE id=$1";
     static private $SQL_SELECT_BY_ACCESS_TOKEN =
-            "SELECT id, name, surname, email, is_active, password, role
+            "SELECT id, name, surname, email, is_active, password, role,
+                avatar, birthday, gender
              FROM egp.users
              WHERE id=(SELECT user_id
                 FROM egp.api_access_tokens
