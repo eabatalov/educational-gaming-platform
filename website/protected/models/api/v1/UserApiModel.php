@@ -62,8 +62,10 @@ class UserApiModel extends SerializableApiModel {
      */
     public function toUser() {
         $birthDate = NULL;
-        if ($this->birthdate !== NULL)
-            $birthDate = new DateApiModel($this->birthdate);
+        if ($this->birthdate !== NULL) {
+            $birthDateApi = new DateApiModel($this->birthdate);
+            $birthDate = $birthDateApi->toDate();
+        }
 
         return User::createUInstance(
                 $this->email,
@@ -90,8 +92,12 @@ class UserApiModel extends SerializableApiModel {
                 "name" => $user->getName(),
                 "surname" => $user->getSurname(),
                 "isActive" => $user->getIsActive(),
-                "role" => $user->getRole(),
-                "id" => $user->getId(),
+                /*"role" => $user->getRole(),
+                 * Temporarely disable editing role because it is security hole
+                 */
+                "avatar" => $user->getAvatar(),
+                "gender" => $user->getGender(),
+                "birthDate" => $user->getBirthDate()
         );
     }
 

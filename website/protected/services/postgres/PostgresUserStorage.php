@@ -127,25 +127,6 @@ class PostgresUserStorage implements IUserStorage {
         TU::throwIfNot($authUser->validate(), TU::INVALID_ARGUMENT_EXCEPTION,
             NULL, ModelObject::ERROR_INVALID_OBJECT);
 
-        $changes = $authUser->getValueChanges();
-        //TODO make it all in DB, fix races
-        $authEmail = array_key_exists(AuthentificatedUser::CH_EMAIL, $changes) ?
-            $changes[User::CH_EMAIL]->getOldVal() : $authUser->getEmail();
-        $authPass = array_key_exists(AuthentificatedUser::CH_PASS, $changes) ?
-            $changes[AuthentificatedUser::CH_PASS]->getOldVal() : $authUser->getPassword();
-        $authUserFromDb =
-            $this->getAuthentificatedUser($authEmail, $authPass);
-        //auth password and email are valid here
-        if (array_key_exists(User::CH_EMAIL, $changes)) {
-            $hasUserWithNewEmail = TRUE;
-            try {
-                $newEmailUser = $this->getUser($authUser->getEmail());
-                assert($newEmailUser->getId() != $authUser->getId());
-            } catch(InvalidArgumentException $ex) { $hasUserWithNewEmail = FALSE; }
-            TU::throwIf($hasUserWithNewEmail, TU::INVALID_ARGUMENT_EXCEPTION,
-                'User with such email already exists', IUserStorage::ERROR_EMAIL_EXISTS);
-        }
-
         $result = pg_query_params($this->conn, self::$SQL_UPDATE, array(
             $authUser->getId(),
             $authUser->getName(),
@@ -155,9 +136,10 @@ class PostgresUserStorage implements IUserStorage {
             $authUser->getPassword(),
             $authUser->getRole(),
             $authUser->getAvatar(),
-            $authUser->getBirthDate(),
+            PostgresUtils::PhpDateToPG($authUser->getBirthDate()),
             $authUser->getGender()
         ));
+
         TU::throwIf($result == FALSE, TU::INTERNAL_ERROR_EXCEPTION, pg_last_error());
     }
 

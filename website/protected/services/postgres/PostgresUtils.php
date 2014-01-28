@@ -39,7 +39,12 @@ class PostgresUtils {
         return new Date($year, $day, $month);
     }
 
-    public static function PhpDateToPG(Date $val) {
+    /*
+     * @param val: NULL or Date
+     */
+    public static function PhpDateToPG($val) {
+        if ($val === NULL)
+            return NULL;
         //ISO, DMY is used by default and is recomended
         //yyyy-mm-dd
         return sprintf("%04d-%02d-%02d", $val->getYear(),

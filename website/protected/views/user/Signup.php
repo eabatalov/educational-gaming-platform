@@ -11,6 +11,14 @@
                 </ul>
             </div>
 
+            <div class="validation-errors" ng-hide="otherErrors.length === 0">
+                <ul>
+                <li ng-repeat="otherError in otherErrors">
+                    {{ otherError }}
+                </li>
+                </ul>
+            </div>
+
             <label for="uName">Name</label>
             <div class="row">
                 <input type="text" name="uName" ng-model="user.name" placeholder="Name"
@@ -71,6 +79,7 @@
                 $scope.user = new LEARZ.objs.User("", "", "");
                 $scope.userPassword = "";
                 $scope.validationErrors = [];
+                $scope.otherErrors = [];
                 $scope.showSignupFormValidationErrors = false;
             };
 
@@ -91,8 +100,11 @@
             $scope.doSignupCallback = function(response) {
                 if (response.status === LEARZING_STATUS_SUCCESS) {
                     LEARZ.services.auth.login($scope.user.email, $scope.userPassword, $scope.doLoginCallback);
-                } else {
+                } else if (response.status === LEARZING_STATUS_INVALID_ARGUMENT) {
                     $scope.validationErrors = response.texts;
+                    $scope.$digest();
+                } else {
+                    $scope.otherErrors = response.texts;
                     $scope.$digest();
                 }
             };

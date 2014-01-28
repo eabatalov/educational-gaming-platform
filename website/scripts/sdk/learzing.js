@@ -213,6 +213,11 @@ function _User(email, name, surname, isOnline, role, avatar,
     this.gender = gender;
 }
 
+function _PassChange(old, nnew) {
+    this.old = old;
+    this.new = nnew;
+}
+
 /*
  * @param [String] fields
  * @returns {_FieldsFilter object}
@@ -249,15 +254,21 @@ _userService = {
             }, this
         );
     },
-    update : function(user, completionCallback) {
+    update : function(user, completionCallback, passChange) {
+        var requestData = {
+            user : user
+        };
+        if (passChange !== undefined && passChange !== null)
+            requestData.password = passChange;
+
         LEARZ._services.api.put(_API_EP_USER,
-            user,
+            requestData,
             function(apiResponse) {
                 if (completionCallback !== null)
                     completionCallback(apiResponse);
             }, this
         );
-    },
+    }
 };
 
 _friendsService = {
@@ -463,6 +474,7 @@ LEARZ = {
     /* public helper functions */
     objs : {
         User : _User,
+        PassChange : _PassChange,
         FieldsFilter : _FieldsFilter,
         SearchObjectTypes : _SearchObjectTypes,
         SearchRequest : _SearchRequest,

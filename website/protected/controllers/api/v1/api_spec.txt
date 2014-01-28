@@ -63,7 +63,7 @@ POST: register new @user object with password @password. No access token is need
     REQUEST: { user: user, password : String }
 
 PUT: replace current user object with @user object supplied (update scenario)
-    REQUEST: User
+    REQUEST: { user : User, [password : PassChange] }
 
 DELETE (): not implemented
 
@@ -85,6 +85,7 @@ FieldsFIlter: if set, determines fields which will be returned from server in RE
 ImageName: name of image file name loaded preliminary
 Gender: "male" | "female" | null
 Date: { year : Int, month : Int, day : Int }
+PassChange: { old : String, new : String }
 ===============================
 service_name: friends
 HTTP methods:

@@ -10,6 +10,7 @@ class DateApiModel {
      * @throws: InvalidArgumentException if very basic validation has failed
      */
     public function initFromArray($fieldsArray) {
+        TU::throwIfNot(is_array($fieldsArray), TU::INTERNAL_ERROR_EXCEPTION);
         $this->year = TU::getValueOrThrow("year", $fieldsArray);
         $this->month = TU::getValueOrThrow("month", $fieldsArray);
         $this->day = TU::getValueOrThrow("day", $fieldsArray);
