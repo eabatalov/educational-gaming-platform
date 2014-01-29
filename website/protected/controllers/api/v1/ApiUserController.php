@@ -66,16 +66,15 @@ class ApiUserController extends ApiController {
     public function actionModifyUser()
     {
         try {
-            //echo var_dump($this->getRequest(), true) . PHP_EOL;
             $this->requireAuthentification();
             $userApi = new UserApiModel();
             $userApi->initFromArrayOnUpdate(TU::getValueOrThrow("user", $this->getRequest()));
-            //echo var_dump($userApi, true) . PHP_EOL;
+
             $userStorage = new PostgresUserStorage();
             $user = $userStorage->getAuthentificatedUserByAccessToken(
                 LearzingAuth::getCurrentAccessToken());
             $user->setAttributes($userApi->toUserFieldsArray());
-            //echo var_dump($user, true) . PHP_EOL;
+
             if (AU::arrayHasKey($this->getRequest(), "password")) {
                 $passChange = new PasswordChangeApiModel();
                 $passChange->initFromArray(AU::arrayValue($this->getRequest(), "password"));

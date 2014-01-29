@@ -201,7 +201,7 @@ _authService = {
 };
 
 function _User(email, name, surname, isOnline, role, avatar,
-    birthdate, gender, id) {
+    birthDate, gender, id) {
     this.id = id;
     this.email = email;
     this.name = name;
@@ -209,8 +209,14 @@ function _User(email, name, surname, isOnline, role, avatar,
     this.is_online = isOnline;
     this.role = role; 
     this.avatar = avatar;
-    this.birthdate = birthdate;
+    this.birthdate = birthDate;
     this.gender = gender;
+}
+
+function _Date(day, month, year) {
+    this.day = day;
+    this.month = month;
+    this.year = year;
 }
 
 function _PassChange(old, nnew) {
@@ -475,6 +481,7 @@ LEARZ = {
     objs : {
         User : _User,
         PassChange : _PassChange,
+        Date : _Date,
         FieldsFilter : _FieldsFilter,
         SearchObjectTypes : _SearchObjectTypes,
         SearchRequest : _SearchRequest,

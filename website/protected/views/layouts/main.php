@@ -12,6 +12,7 @@
         <script src='/scripts/angular-file-upload-1.2.5/dist/angular-file-upload-shim.js'></script>
         <script src="/scripts/angular.js"></script>
         <script src='/scripts/angular-file-upload-1.2.5/dist/angular-file-upload.js'></script>
+        <script src='/scripts/jquery.inputmask-2.4.18/dist/jquery.inputmask.bundle.js'></script>
         
         <script src="/scripts/sdk/utils.js"></script>
         <script src="/scripts/sdk/skills.js"></script>

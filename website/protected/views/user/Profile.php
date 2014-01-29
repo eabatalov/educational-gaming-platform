@@ -24,7 +24,7 @@
             <p>name: {{ user.name }}</p>
             <p>surname: {{ user.surname }}</p>
             <p ng-if="user.email !== undefined && user.email !== null">email: {{ user.email }}</p>
-            <p>birth date: {{ user.birthdate }}</p>
+            <p>birth date: {{ user.birthdate | learzDateToString }}</p>
             <p>gender: {{ user.gender }}</p>
             <p>status: {{ user.is_online ? "online" : "offline" }}</p>
             <p>
@@ -83,9 +83,9 @@
 
                     <label for="uBirthDate">Birth date</label>
                     <div class="row">
-                        <input type="text" name="uBirthDate" ng-model="user.birthDateStr" placeholder="mm-dd-yyyy"/>
+                        <input type="text" name="uBirthDate" ng-model="user.birthdate" learz-date-mask/>
                         <ul ng-show="edit.showEditFormErrors && userEditForm.uBirthDate.$invalid">
-                            
+                            <li>Please enter valid date</li>
                         </ul>
                     </div>
 
@@ -154,14 +154,13 @@
 
 <script type="text/javascript">
     var LearzingUserProfilePageModule = angular.module('LearzingUserProfilePageModule',
-        ['LearzingSDKModule', 'angularFileUpload']);
+        ['LearzingSDKModule', 'angularFileUpload', 'LearzingAngularDateModule']);
 
     LearzingUserProfilePageModule.controller('LearzingUserProfilePageController',
         ['$scope', 'LEARZ', '$upload',
         function($scope, LEARZ, $upload) {
             $scope.isCurrentUser = "<?php echo $isCurrentUser; ?>";
             $scope.userId = "<?php echo $userid; ?>";
-            $scope.birthDateStr = null;
             $scope.user = null;
             $scope.friends = null;
             $scope.skills = null;
@@ -255,11 +254,6 @@
                 $scope.edit.showEditFormErrors = true;
                 if (!userEditForm.$valid) {                    
                     return;
-                }
-
-                var birthDate = null;
-                if ($scope.birthDateStr !== null) {
-                    
                 }
 
                 var passwordChange = null;

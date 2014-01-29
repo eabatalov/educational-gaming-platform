@@ -18,7 +18,7 @@ class PApiUploadController extends ApiController {
             $user = $userStorage->getAuthentificatedUserByAccessToken(
                 LearzingAuth::getCurrentAccessToken());
             $oldName = $user->getAvatar();
-            $newName = "avatar_" . strval($user->getId());
+            $newName = "avatar_" . strval($user->getId()) . Rand::gen(20);
 
             $saveSuccess = $avatarFile->saveAs($this->mkAvatarPath($newName));
             TU::throwIfNot($saveSuccess === TRUE, "Couldn't save uploaded file to server");

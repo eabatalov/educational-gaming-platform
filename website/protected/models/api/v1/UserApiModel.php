@@ -54,6 +54,11 @@ class UserApiModel extends SerializableApiModel {
         $this->role = TU::getValueOrThrow("role", $fieldArray);
         $this->avatar = TU::getValueOrNull("avatar", $fieldArray);
         $this->birthdate = TU::getValueOrNull("birthdate", $fieldArray);
+        if ($this->birthdate !== NULL) {
+            $birthDateApi = new DateApiModel();
+            $birthDateApi->initFromArray($this->birthdate);
+            $this->birthdate = $birthDateApi;
+        }
         $this->gender = TU::getValueOrNull("gender", $fieldArray);
     }
 
@@ -61,12 +66,6 @@ class UserApiModel extends SerializableApiModel {
      * @throws: InvalidArgumentException if very basic validation has failed
      */
     public function toUser() {
-        $birthDate = NULL;
-        if ($this->birthdate !== NULL) {
-            $birthDateApi = new DateApiModel($this->birthdate);
-            $birthDate = $birthDateApi->toDate();
-        }
-
         return User::createUInstance(
                 $this->email,
                 $this->name,
@@ -75,7 +74,8 @@ class UserApiModel extends SerializableApiModel {
                 self::fromAPIRole($this->role),
                 array(
                     User::OPT_AVATAR => $this->avatar,
-                    User::OPT_BIRTH_DATE => $birthDate,
+                    User::OPT_BIRTH_DATE => $this->birthdate !== NULL ?
+                        $this->birthdate->toDate() : NULL,
                     User::OPT_GENDER => self::fromApiGender($this->gender)
                 ),
                 $this->id

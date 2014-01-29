@@ -138,7 +138,7 @@ class User extends ModelObject {
             //value checking
             array('email, name, surname', 'length', 'min' => 1, 'max' => 50, 'encoding' => 'utf-8'),
             array('email', 'email'),
-            array('avatar, gender, date', 'safe')
+            array('avatar, gender, birthDate', 'safe')
     );
 
     public function rules() {
