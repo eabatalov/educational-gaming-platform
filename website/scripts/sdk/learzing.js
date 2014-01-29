@@ -90,9 +90,6 @@ _apiCommunicationService = {
     },
     _ajaxError : function(completionCallback, thisObject) {
         return function(jqXHR, textStatus, errorThrown) {
-            if (jqXHR.responseJSON.status === LEARZING_STATUS_UNAUTHORIZED) {
-                this._authService._revokeCreds();
-            }
             if (completionCallback !== null) {
                 completionCallback.call(thisObject, this._mkResponse(jqXHR.responseJSON));
             }
@@ -127,51 +124,39 @@ _AUTH_COOKIE_KEY_TOKEN = "LEARZING_API_TOKEN_KEY";
 _AUTH_COOKIE_KEY_TYPE = "LEARZING_API_TOKEN_TYPE";
 _authService = {
     login : function(email, password, completionCallback) {
-        if (this._accessTokenInfo === null) {
-            LEARZ._services.api.get(_API_EP_AUTH_TOKEN,
-                { email: email, password: password, client_id: this._clientId },
-                function(apiResponse) {
-                    if (apiResponse.status === LEARZING_STATUS_SUCCESS) {
-                        localStorage.setItem(_LOCAL_STORAGE_TOKEN_KEY, JSON.stringify(apiResponse.data));
-                        this._accessTokenInfo = apiResponse.data;
-                        $.cookie(_AUTH_COOKIE_KEY_TOKEN, apiResponse.data.access_token);
-                        $.cookie(_AUTH_COOKIE_KEY_TYPE, apiResponse.data.token_type);
-                    }
-                    if (completionCallback !== null)
-                        completionCallback(apiResponse);
-                }, this
-            );
-        } else {
-            if (completionCallback !== null) {
-                completionCallback({
-                    status : LEARZING_STATUS_INVALID_ARGUMENT,
-                    texts : ["You shouldn't be logged in to perform login action"]
-                });
-            }
+        if (this._accessTokenInfo !== null) {
+            this._revokeCreds();
         }
+        LEARZ._services.api.get(_API_EP_AUTH_TOKEN,
+            { email: email, password: password, client_id: this._clientId },
+            function(apiResponse) {
+                if (apiResponse.status === LEARZING_STATUS_SUCCESS) {
+                    localStorage.setItem(_LOCAL_STORAGE_TOKEN_KEY, JSON.stringify(apiResponse.data));
+                    this._accessTokenInfo = apiResponse.data;
+                    $.cookie(_AUTH_COOKIE_KEY_TOKEN, apiResponse.data.access_token);
+                    $.cookie(_AUTH_COOKIE_KEY_TYPE, apiResponse.data.token_type);
+                }
+                if (completionCallback !== null)
+                    completionCallback(apiResponse);
+            }, this
+        );
     },
     logout : function(completionCallback) {
-        if (this._accessTokenInfo !== null) {
-            LEARZ._services.api.del(_API_EP_AUTH_TOKEN,
-                { access_token: this._accessTokenInfo.access_token, client_id: this._clientId },
-                function(apiResponse) {
-                    if (apiResponse.status === LEARZING_STATUS_SUCCESS) {
-                        this._accessTokenInfo = null;
-                        localStorage.removeItem(_LOCAL_STORAGE_TOKEN_KEY);
-                        $.removeCookie(_AUTH_COOKIE_KEY_TOKEN);
-                        $.removeCookie(_AUTH_COOKIE_KEY_TYPE);
-                    }
-                    if (completionCallback !== null)
-                        completionCallback(apiResponse);
-                }, this
-            );
-        } else
-            if (completionCallback !== null) {
-                completionCallback({
-                    status : LEARZING_STATUS_INVALID_ARGUMENT,
-                    texts : ["You should be logged in to perform logout action"]
-                });
-            }
+        if (this._accessTokenInfo === null)
+            return;
+        LEARZ._services.api.del(_API_EP_AUTH_TOKEN,
+            { access_token: this._accessTokenInfo.access_token, client_id: this._clientId },
+            function(apiResponse) {
+                if (apiResponse.status === LEARZING_STATUS_SUCCESS) {
+                    this._accessTokenInfo = null;
+                    localStorage.removeItem(_LOCAL_STORAGE_TOKEN_KEY);
+                    $.removeCookie(_AUTH_COOKIE_KEY_TOKEN);
+                    $.removeCookie(_AUTH_COOKIE_KEY_TYPE);
+                }
+                if (completionCallback !== null)
+                    completionCallback(apiResponse);
+            },
+            this);
     },
     _init : function(clientId) {
         this._clientId = clientId;
