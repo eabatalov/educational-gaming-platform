@@ -27,10 +27,9 @@
             <p>birth date: {{ user.birthdate | learzDateToString }}</p>
             <p>gender: {{ user.gender }}</p>
             <p>status: {{ user.is_online ? "online" : "offline" }}</p>
-            <p>
+            <div ng-if="isCurrentUser">
                 <input type="button" value="edit" style="min-width: 50pt;" ng-click="editUser()"/>
-            </p>
-            <!--{{ user || json }}-->
+            </div>
         </div>
 
         <div id="divUserEdit" ng-if="edit.isInEditMode">
