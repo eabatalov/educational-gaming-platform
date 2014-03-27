@@ -17,7 +17,11 @@ class SiteController extends EGPWebFrontendController
      */
     public function actionIndex()
     {
-        $this->render("Landing");
+        $redirect = Yii::app()->getRequest()->getParam('bar', false);
+        if ($redirect !== false)
+            $this->render("Landing");
+        else
+            $this->redirect('https://angel.co/learzing');
     }
 
     /**
